@@ -1,17 +1,19 @@
 package com.quantumcoders.minorapp.activities;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 
 import com.quantumcoders.minorapp.R;
 import com.quantumcoders.minorapp.misc.ViewPagerAdapter;
 import com.quantumcoders.minorapp.fragments.Tab1;
 import com.quantumcoders.minorapp.fragments.Tab2;
 
-public class MainActivity extends AppCompatActivity implements Tab1.OnFragmentInteractionListener, Tab2.OnFragmentInteractionListener{
+public class MainActivity extends AppCompatActivity {
 
     TabLayout tabLayout;
     ViewPager viewPager;
@@ -50,10 +52,6 @@ public class MainActivity extends AppCompatActivity implements Tab1.OnFragmentIn
 
     }
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
 
 }
 
