@@ -1,8 +1,12 @@
-package com.quantumcoders.minorapp;
+package com.quantumcoders.minorapp.misc;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.widget.Toast;
+
+import com.quantumcoders.minorapp.fragments.Tab1;
+import com.quantumcoders.minorapp.fragments.Tab2;
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
     int tabCount;
