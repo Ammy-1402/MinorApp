@@ -44,8 +44,8 @@ public class CitizenSignupActivity extends AppCompatActivity {
 
         if(!fname.matches(Constants.NAME_REGEX))longToast("Invalid first name");
         else if(!lname.matches(Constants.NAME_REGEX))longToast("Invalid last name");
-        else if(!Patterns.PHONE.matcher(phone).matches())longToast("Invalid Phone number");
         else if(!Patterns.EMAIL_ADDRESS.matcher(email).matches())longToast("Invalid email address");
+        else if(!Patterns.PHONE.matcher(phone).matches())longToast("Invalid Phone number");
         else if(!password.matches(Constants.PWD_REGEX)){
             longToast("Invalid/Small Password");
         }
