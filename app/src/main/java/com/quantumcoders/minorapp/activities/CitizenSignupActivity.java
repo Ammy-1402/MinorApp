@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.quantumcoders.minorapp.R;
+import com.quantumcoders.minorapp.misc.Constants;
 import com.quantumcoders.minorapp.misc.ServerWorker;
 
 public class CitizenSignupActivity extends AppCompatActivity {
@@ -41,17 +42,17 @@ public class CitizenSignupActivity extends AppCompatActivity {
         String password = ((TextInputEditText)findViewById(R.id.password)).getText().toString();
         String cpassword = ((TextInputEditText)findViewById(R.id.cpassword)).getText().toString();
 
-        if(!fname.matches("a-zA-Z"))longToast("Invalid first name");
-        else if(!lname.matches("a-zA-Z"))longToast("Invalid last name");
+        if(!fname.matches(Constants.NAME_REGEX))longToast("Invalid first name");
+        else if(!lname.matches(Constants.NAME_REGEX))longToast("Invalid last name");
         else if(!Patterns.PHONE.matcher(phone).matches())longToast("Invalid Phone number");
         else if(!Patterns.EMAIL_ADDRESS.matcher(email).matches())longToast("Invalid email address");
-        else if(!password.matches("a-zA-Z0-9!@#$%^&*()_-+={}[]|\\:;?/>.<,`~]")){    //all characters except ' and " allowed
-                                                                                        // in password to prevent SQL Injection
-            longToast("Invalid Password");
+        else if(!password.matches(Constants.PWD_REGEX)){
+            longToast("Invalid/Small Password");
         }
         else if(!password.equals(cpassword))longToast("Passwords do not match");
         else {
             //sign up here
+            longToast("SIGNUP");
             String response = ServerWorker.signUp(fname,lname,phone,email,password);
 
             //...
