@@ -63,4 +63,8 @@ public class CitizenSignupActivity extends AppCompatActivity {
     public void longToast(String msg){
         Toast.makeText(this,msg,Toast.LENGTH_LONG).show();
     }
+
+    public void afterSignUp(String response){
+
+    }
 }

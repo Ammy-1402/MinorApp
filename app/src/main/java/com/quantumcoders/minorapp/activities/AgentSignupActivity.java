@@ -52,17 +52,16 @@ public class AgentSignupActivity extends AppCompatActivity {
         else if(!password.equals(cpassword))longToast("Passwords do not match");
 
         else {
-            //sign up here
-            //longToast("SIGNUP");
             ServerWorker.signUpAgent(AgentSignupActivity.this,fname,lname,phone,email,password);
-
-            //...
-            //...
         }
 
     }
 
     public void longToast(String msg){
         Toast.makeText(this,msg,Toast.LENGTH_LONG).show();
+    }
+
+    public void afterSignUp(String response){
+
     }
 }

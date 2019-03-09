@@ -33,7 +33,7 @@ public class ServerTask extends AsyncTask<String,String,String> {
     @Override
     protected String doInBackground(String... param) {
         String method=param[0];
-        String result="else";
+        String result="ELSE";   //"ELSE" used for debugging purposes
         if(method.equals(Constants.CTZ_SIGN_UP_METHOD)){
             try {
 
@@ -112,29 +112,25 @@ public class ServerTask extends AsyncTask<String,String,String> {
                 e.printStackTrace();
             }
         }
-        return result;
+        return result;  //return here used for debugging purposes.
 
     }
 
     @Override
-    protected void onProgressUpdate(String... values) {
+    protected void onProgressUpdate(String...values) {
         super.onProgressUpdate(values);
     }
 
     @Override
-    protected void onPostExecute(String s) {
-        if(s.equalsIgnoreCase("success")){  //for testing
+    protected void onPostExecute(final String s) {
+        System.out.println("Response - " + s);
+        if(s.equals(Constants.CTZ_SIGN_UP_SUCCESS)){  //citizen signup success
             hnd.post(new Runnable() {
                 @Override
                 public void run() {
-                    if(activity instanceof CitizenSignupActivity){
-                        System.out.println("WORKED FINE CITIZEN SIGN UP");
-                        ((CitizenSignupActivity)activity).longToast("WORKED FINE");
-                    }
+                    ((CitizenSignupActivity)activity).afterSignUp(s);
                 }
             });
-        } else {
-            System.out.println("else " + s);
         }
     }
 }
