@@ -2,7 +2,6 @@ package com.quantumcoders.minorapp.activities;
 
 import android.support.design.widget.TextInputEditText;
 import android.util.Patterns;
-import android.util.Patterns.*;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -52,8 +51,8 @@ public class CitizenSignupActivity extends AppCompatActivity {
         else if(!password.equals(cpassword))longToast("Passwords do not match");
         else {
             //sign up here
-            longToast("SIGNUP");
-            String response = ServerWorker.signUp(fname,lname,phone,email,password);
+            //longToast("SIGNUP");
+            ServerWorker.signUpCitizen(CitizenSignupActivity.this,fname,lname,phone,email,password);
 
             //...
             //...
