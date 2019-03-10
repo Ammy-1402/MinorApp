@@ -3,17 +3,22 @@ package com.quantumcoders.minorapp.activities;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import com.quantumcoders.minorapp.R;
+import com.quantumcoders.minorapp.misc.Constants;
 import com.quantumcoders.minorapp.misc.ViewPagerAdapter;
 import com.quantumcoders.minorapp.fragments.Tab1;
 import com.quantumcoders.minorapp.fragments.Tab2;
+import static com.quantumcoders.minorapp.misc.Constants.*;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,15 +26,29 @@ public class MainActivity extends AppCompatActivity {
     ViewPager viewPager;
     ViewPagerAdapter adapter;
 
+    public String email="",password="",type=""; //Will be set by Fragment Tab1 or Tab2
+    public boolean clickedOnce=false;   //Will be used by fragments Tab1 and Tab2
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //check session existance
+        SharedPreferences pref = getApplicationContext().getSharedPreferences(Constants.SESSION_FILE,MODE_PRIVATE);
+        SharedPreferences.Editor edit = pref.edit();
+        if(pref.contains(TYPE_KEY) && pref.contains(EMAIL_ID_KEY) && pref.contains(PWD_KEY)){
+            Toast.makeText(this,"SESSION-"+pref.getString(TYPE_KEY,""),Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"EMAIL-"+pref.getString(EMAIL_ID_KEY,""),Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"PWD-"+pref.getString(PWD_KEY,""),Toast.LENGTH_SHORT).show();
+            // go to logged in activity on the bases of the type
+            // ...
+            //finish this activity
+        }
+
+
         tabLayout = findViewById(R.id.tabLayout);
-
         viewPager = findViewById(R.id.id_viewPager);
-
-        //System.out.println(" --- No of tabs in tab layout --- "+tabLayout.getTabCount());
 
         adapter = new ViewPagerAdapter(getSupportFragmentManager(),tabLayout.getTabCount());
         //Setting adapter to view pager
@@ -42,14 +61,10 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-
-            }
+            public void onTabUnselected(TabLayout.Tab tab) {}
 
             @Override
-            public void onTabReselected(TabLayout.Tab tab) {
-
-            }
+            public void onTabReselected(TabLayout.Tab tab) {}
         });
 
     }
@@ -59,22 +74,35 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Are you sure you want to Exit")
                 .setCancelable(false)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                        System.exit(0);
-                    }
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    finish();
+                    System.exit(0);
                 })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
+                .setNegativeButton("No", (dialog, which) -> dialog.cancel());
 
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+    public void loginSuccess(String response){
+        getApplicationContext().getSharedPreferences(SESSION_FILE,MODE_PRIVATE).edit()
+                .putString(EMAIL_ID_KEY,email).putString(PWD_KEY,password)
+                .putString(TYPE_KEY,type).commit();
+
+        longToast(response);
+        clickedOnce=false;
+
+        //start logged in activity corresponding to 'response'
+        //...
+    }
+
+    public void loginFailed(String response){
+        longToast(response);
+        clickedOnce=false;
+    }
+
+    public void longToast(String msg){
+        Toast.makeText(this,msg,Toast.LENGTH_LONG).show();
     }
 
 

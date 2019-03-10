@@ -1,23 +1,26 @@
 package com.quantumcoders.minorapp.fragments;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.quantumcoders.minorapp.R;
 import com.quantumcoders.minorapp.activities.CitizenSignupActivity;
+import com.quantumcoders.minorapp.activities.MainActivity;
+import com.quantumcoders.minorapp.misc.Constants;
+import com.quantumcoders.minorapp.misc.ServerWorker;
 
 public class Tab1 extends Fragment {
 
-    public Tab1() {
-        // Required empty public constructor
-    }
+    public Tab1() {}
 
 
     @Override
@@ -28,6 +31,7 @@ public class Tab1 extends Fragment {
 
         Button btnSignup = view.findViewById(R.id.btnSignup);
         Button btnLogin = view.findViewById(R.id.btnLogin);
+
 
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,10 +44,31 @@ public class Tab1 extends Fragment {
             @Override
             public void onClick(View view) {
                 //login code here
+                if(!((MainActivity)getActivity()).clickedOnce){     //if not already clicked on this button
+                    ((MainActivity)getActivity()).clickedOnce=true;
+                    String email = ((TextInputEditText)getView().findViewById(R.id.email)).getText().toString();
+                    String password = ((TextInputEditText)getView().findViewById(R.id.password)).getText().toString();
+
+                    if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+                        longToast("Invalid Email");
+                    } else if(!password.matches(Constants.PWD_REGEX)) {
+                        longToast("Invalid password");
+                    } else {
+                        ((MainActivity)getActivity()).email=email;
+                        ((MainActivity)getActivity()).password=password;
+                        ((MainActivity)getActivity()).type=Constants.CITIZEN;
+
+                        ServerWorker.loginCitizen((AppCompatActivity) getActivity(),email,password);
+                    }
+                } else System.out.println("Already clicked");
             }
         });
 
         return view;
+    }
+
+    public void longToast(String msg){
+        Toast.makeText(getActivity(),msg,Toast.LENGTH_LONG).show();
     }
 
 

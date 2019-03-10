@@ -1,5 +1,6 @@
 package com.quantumcoders.minorapp.activities;
 
+import android.content.SharedPreferences;
 import android.support.design.widget.TextInputEditText;
 import android.util.Patterns;
 import android.support.v7.app.AppCompatActivity;
@@ -12,7 +13,11 @@ import com.quantumcoders.minorapp.R;
 import com.quantumcoders.minorapp.misc.Constants;
 import com.quantumcoders.minorapp.misc.ServerWorker;
 
+import static com.quantumcoders.minorapp.misc.Constants.*;
+
 public class CitizenSignupActivity extends AppCompatActivity {
+
+    String email="",password="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,10 +55,9 @@ public class CitizenSignupActivity extends AppCompatActivity {
         }
         else if(!password.equals(cpassword))longToast("Passwords do not match");
         else {
-            //sign up here
-            //longToast("SIGNUP");
+            this.email=email;
+            this.password=password;
             ServerWorker.signUpCitizen(CitizenSignupActivity.this,fname,lname,phone,email,password);
-
             //...
             //...
         }
@@ -64,7 +68,21 @@ public class CitizenSignupActivity extends AppCompatActivity {
         Toast.makeText(this,msg,Toast.LENGTH_LONG).show();
     }
 
-    public void afterSignUp(String response){
+    public void signUpSuccess(String response){
         longToast("Welcome Citizen");
+
+        //save session code
+        SharedPreferences pref = getApplicationContext().getSharedPreferences(SESSION_FILE,MODE_PRIVATE);
+        SharedPreferences.Editor edit = pref.edit();
+        edit.putString(TYPE_KEY,CITIZEN).putString(EMAIL_ID_KEY,email).putString(PWD_KEY,password).commit();
+
+        //code to start AgentActivity (auto login)
+        //...
     }
+
+    public void signUpFailed(String response){
+        longToast("Sign up failed. User exists.");
+        // ...
+    }
+
 }
