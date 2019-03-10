@@ -19,7 +19,6 @@ public class AgentSignupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_citizen_signup);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
@@ -62,6 +61,7 @@ public class AgentSignupActivity extends AppCompatActivity {
     }
 
     public void afterSignUp(String response){
+        longToast("Welcome Agent");
 
     }
 }

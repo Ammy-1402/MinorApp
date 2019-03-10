@@ -65,6 +65,6 @@ public class CitizenSignupActivity extends AppCompatActivity {
     }
 
     public void afterSignUp(String response){
-
+        longToast("Welcome Citizen");
     }
 }

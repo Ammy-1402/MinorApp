@@ -93,6 +93,7 @@
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/phone"
                     android:layout_width="match_parent"
+                    android:digits="0123456789"
                     android:layout_height="match_parent"
                     android:hint="Phone"
                     android:inputType="phone"

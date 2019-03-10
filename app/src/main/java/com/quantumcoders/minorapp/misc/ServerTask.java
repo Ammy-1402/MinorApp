@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
+import com.quantumcoders.minorapp.activities.AgentSignupActivity;
 import com.quantumcoders.minorapp.activities.CitizenSignupActivity;
 
 import java.io.BufferedReader;
@@ -129,6 +130,13 @@ public class ServerTask extends AsyncTask<String,String,String> {
                 @Override
                 public void run() {
                     ((CitizenSignupActivity)activity).afterSignUp(s);
+                }
+            });
+        }else if(s.equals(Constants.AGT_SIGN_UP_SUCCESS)){  //citizen signup success
+            hnd.post(new Runnable() {
+                @Override
+                public void run() {
+                    ((AgentSignupActivity)activity).afterSignUp(s);
                 }
             });
         }
