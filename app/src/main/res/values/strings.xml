@@ -3,4 +3,12 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="dropDownCategory">
+        <item>Choose Category</item>
+        <item>Demo A</item>
+        <item>Demo B</item>
+        <item>Demo C</item>
+        <item>Demo D</item>
+    </string-array>
 </resources>

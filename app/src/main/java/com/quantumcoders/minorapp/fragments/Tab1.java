@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.quantumcoders.minorapp.R;
+import com.quantumcoders.minorapp.activities.CitizenMainActivity;
 import com.quantumcoders.minorapp.activities.CitizenSignupActivity;
 
 public class Tab1 extends Fragment {
@@ -39,7 +40,7 @@ public class Tab1 extends Fragment {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //login code here
+                startActivity(new Intent(getActivity(), CitizenMainActivity.class));
             }
         });
 

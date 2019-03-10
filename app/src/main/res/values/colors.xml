@@ -3,9 +3,11 @@
     <color name="colorPrimary">#000000</color>
     <color name="colorPrimaryCopy">#F44336</color>
     <color name="old_colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <!--<color name="colorPrimaryDark">#303F9F</color>      ( don't delete this )      -->
+    <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorBlack">#000000</color>
     <color name="colorYellow">#eaf903</color>
+    <color name="colorDarkYellow">#999900</color>
 
 </resources>

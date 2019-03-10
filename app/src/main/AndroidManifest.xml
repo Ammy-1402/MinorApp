@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.quantumcoders.minorapp">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -12,10 +12,20 @@
         android:roundIcon="@mipmap/ic_launcher_road_assist_icon_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.AgentSignupActivity" android:screenOrientation="portrait" android:label="New Agent Registration"></activity>
-        <activity android:name=".activities.CitizenSignupActivity" android:screenOrientation="portrait" android:label="New User Registration"/>
-        <activity android:name=".activities.MainActivity" android:screenOrientation="portrait"
-            android:label="Road Assist">
+        <activity android:name=".activities.CitizenMainActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activities.AgentSignupActivity"
+            android:label="New Agent Registration"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.CitizenSignupActivity"
+            android:label="New User Registration"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.MainActivity"
+            android:label="Road Assist"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
