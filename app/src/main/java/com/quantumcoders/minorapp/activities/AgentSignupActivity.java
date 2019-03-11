@@ -1,5 +1,6 @@
 package com.quantumcoders.minorapp.activities;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.design.widget.TextInputEditText;
@@ -72,15 +73,19 @@ public class AgentSignupActivity extends AppCompatActivity {
         //save session code
         SharedPreferences pref = getApplicationContext().getSharedPreferences(SESSION_FILE,MODE_PRIVATE);
         SharedPreferences.Editor edit = pref.edit();
-        edit.putString(TYPE_KEY,CITIZEN).putString(EMAIL_ID_KEY,email).putString(PWD_KEY,password).commit();
+        edit.putString(TYPE_KEY,AGENT).putString(EMAIL_ID_KEY,email).putString(PWD_KEY,password).commit();
 
         //code to start AgentActivity (auto login)
-        //...
+        startActivity(new Intent(this,AgentMainActivity.class));
+        finish();   //end this activity
     }
 
     public void signUpFailed(String response){
         longToast("User already exists.");
-        // ...
+    }
+
+    public void noInternet(){
+        longToast("Please turn on INTERNET");
     }
 
 }

@@ -1,12 +1,7 @@
 package com.quantumcoders.minorapp.misc;
 
-import android.content.Context;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 
 
 /* This class is used to deal with communication with the server. It provides an abstraction

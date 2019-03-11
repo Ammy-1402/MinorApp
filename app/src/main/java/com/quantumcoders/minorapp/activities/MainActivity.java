@@ -41,12 +41,20 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this,"SESSION-"+pref.getString(TYPE_KEY,""),Toast.LENGTH_SHORT).show();
             Toast.makeText(this,"EMAIL-"+pref.getString(EMAIL_ID_KEY,""),Toast.LENGTH_SHORT).show();
             Toast.makeText(this,"PWD-"+pref.getString(PWD_KEY,""),Toast.LENGTH_SHORT).show();
+
             // go to logged in activity on the bases of the type
-            // ...
+            if(pref.getString(TYPE_KEY,"").equals(CITIZEN)){
+                startActivity(new Intent(this,CitizenMainActivity.class));
+            } else {
+                startActivity(new Intent(this,AgentMainActivity.class));
+            }
+
             //finish this activity
+            finish();
         }
 
 
+        //setup layout
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.id_viewPager);
 
@@ -71,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        //are you sure to quit
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Are you sure you want to Exit")
                 .setCancelable(false)
@@ -93,11 +102,23 @@ public class MainActivity extends AppCompatActivity {
         clickedOnce=false;
 
         //start logged in activity corresponding to 'response'
-        //...
+        if(response.equals(CTZ_LOGIN_SUCCESS)){
+            startActivity(new Intent(this,CitizenMainActivity.class));
+        } else {
+            startActivity(new Intent(this,AgentMainActivity.class));
+        }
+
+        //end this activity
+        finish();
     }
 
     public void loginFailed(String response){
         longToast(response);
+        clickedOnce=false;
+    }
+
+    public void noInternet(){
+        longToast("Please turn on INTERNET");
         clickedOnce=false;
     }
 

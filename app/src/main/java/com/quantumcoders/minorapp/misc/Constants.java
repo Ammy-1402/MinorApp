@@ -26,6 +26,7 @@ public interface Constants {
     public static final String AGT_SIGN_UP_SUCCESS="AgentSignupSuccess";
     public static final String CTZ_LOGIN_SUCCESS="CitizenLoginSuccess";
     public static final String AGT_LOGIN_SUCCESS="AgentLoginSuccess";
+    public static final String NO_INTERNET="NoInternet";
 
 
     public static final String CTZ_SIGN_UP_FAILED="CitizenSignupFailed";

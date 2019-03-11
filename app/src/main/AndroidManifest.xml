@@ -12,8 +12,10 @@
         android:roundIcon="@mipmap/ic_launcher_road_assist_icon_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.CitizenMainActivity"
-            android:screenOrientation="portrait"></activity>
+        <activity android:name=".activities.AgentMainActivity"></activity>
+        <activity
+            android:name=".activities.CitizenMainActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activities.AgentSignupActivity"
             android:label="New Agent Registration"

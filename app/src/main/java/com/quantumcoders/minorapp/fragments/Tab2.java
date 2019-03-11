@@ -49,7 +49,6 @@ public class Tab2 extends Fragment {
             @Override
             public void onClick(View view) {
                 //login code here
-                //login code here
                 if(!((MainActivity)getActivity()).clickedOnce){     //if not already clicked on this button
                     ((MainActivity)getActivity()).clickedOnce=true;
                     String email = ((TextInputEditText)getView().findViewById(R.id.email)).getText().toString();
