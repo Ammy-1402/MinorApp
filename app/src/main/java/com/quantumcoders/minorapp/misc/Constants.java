@@ -33,5 +33,9 @@ public interface Constants {
     public static final String AGT_SIGN_UP_FAILED="AgentSignupFailed";
     public static final String CTZ_LOGIN_FAILED="CitizenLoginFailed";
     public static final String AGT_LOGIN_FAILED="AgentLoginFailed";
+
+    public static final String NO_SUCH_USER="NoSuchUser";
+    public static final String INVALID_CREDENTIALS="InvalidCredentials";
+
 }
 
