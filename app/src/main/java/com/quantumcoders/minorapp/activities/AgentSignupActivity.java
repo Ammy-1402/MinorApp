@@ -67,7 +67,7 @@ public class AgentSignupActivity extends AppCompatActivity {
         Toast.makeText(this,msg,Toast.LENGTH_LONG).show();
     }
 
-    public void signUpSuccess(String response){
+    public void signUpSuccess(String[] response){
         longToast("Welcome Agent");
 
         //save session code
@@ -80,7 +80,7 @@ public class AgentSignupActivity extends AppCompatActivity {
         finish();   //end this activity
     }
 
-    public void signUpFailed(String response){
+    public void signUpFailed(String[] response){
         longToast("User already exists.");
     }
 

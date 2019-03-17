@@ -93,12 +93,12 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    public void loginSuccess(String response){
+    public void loginSuccess(String[] response){
         getApplicationContext().getSharedPreferences(SESSION_FILE,MODE_PRIVATE).edit()
                 .putString(EMAIL_ID_KEY,email).putString(PWD_KEY,password)
                 .putString(TYPE_KEY,type).commit();
 
-        longToast(response);
+        longToast(response[0]);
         clickedOnce=false;
 
         //start logged in activity corresponding to 'response'
@@ -112,8 +112,9 @@ public class MainActivity extends AppCompatActivity {
         finish();
     }
 
-    public void loginFailed(String response){
-        longToast(response);
+    public void loginFailed(String[] response){
+        if(response[1].equals(NO_SUCH_USER))longToast("No Such User");
+        else longToast("Wrong password");
         clickedOnce=false;
     }
 

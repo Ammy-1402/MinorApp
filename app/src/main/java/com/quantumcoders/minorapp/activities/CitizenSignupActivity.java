@@ -69,7 +69,7 @@ public class CitizenSignupActivity extends AppCompatActivity {
         Toast.makeText(this,msg,Toast.LENGTH_LONG).show();
     }
 
-    public void signUpSuccess(String response){
+    public void signUpSuccess(String[] response){
         longToast("Welcome Citizen");
 
         //save session code
@@ -82,7 +82,7 @@ public class CitizenSignupActivity extends AppCompatActivity {
         finish();   //END THIS ACTIVITY
     }
 
-    public void signUpFailed(String response){
+    public void signUpFailed(String[] response){
         longToast("Sign up failed. User exists.");
         // ...
     }
