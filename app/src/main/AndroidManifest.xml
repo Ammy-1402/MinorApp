@@ -2,8 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.quantumcoders.minorapp">
 
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-feature android:glEsVersion="0x00020000" android:required="true" />
+    <uses-feature android:name="android.hardware.camera" android:required="true" />
+    
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -12,7 +19,24 @@
         android:roundIcon="@mipmap/ic_launcher_road_assist_icon_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.AgentMainActivity"></activity>
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.quantumcoders.minorapp"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"></meta-data>
+        </provider>
+
+
+
+        <service
+            android:name=".misc.FetchAddressIntentService"
+            android:exported="false"></service>
+
+        <activity android:name=".activities.AgentMainActivity" />
         <activity
             android:name=".activities.CitizenMainActivity"
             android:screenOrientation="portrait" />
@@ -34,6 +58,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyDyKLBQWEbWLva8J2oFfeFgP_Ro5XfM9_M"/>
+
     </application>
 
 </manifest>

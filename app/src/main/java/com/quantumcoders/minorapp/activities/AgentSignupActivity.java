@@ -1,5 +1,6 @@
 package com.quantumcoders.minorapp.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
@@ -19,6 +20,7 @@ import static com.quantumcoders.minorapp.misc.Constants.*;
 public class AgentSignupActivity extends AppCompatActivity {
 
     String email="",password="";
+    boolean clickedOnce=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,11 @@ public class AgentSignupActivity extends AppCompatActivity {
     }
 
     public void btnSignupClicked(View view){
+        if(clickedOnce)return;
+
+        //if not already clicked
+        clickedOnce=true;
+
         String fname = ((TextInputEditText)findViewById(R.id.fname)).getText().toString();
         String lname = ((TextInputEditText)findViewById(R.id.lname)).getText().toString();
         String phone = ((TextInputEditText)findViewById(R.id.phone)).getText().toString();
@@ -77,10 +84,17 @@ public class AgentSignupActivity extends AppCompatActivity {
 
         //code to start AgentActivity (auto login)
         startActivity(new Intent(this,AgentMainActivity.class));
+
+
+        //send signal to stop the MainActivity
+        setResult(Activity.RESULT_OK);
+
         finish();   //end this activity
+        clickedOnce=false;
     }
 
     public void signUpFailed(String[] response){
+        clickedOnce=false;
         longToast("User already exists.");
     }
 
@@ -89,3 +103,6 @@ public class AgentSignupActivity extends AppCompatActivity {
     }
 
 }
+
+
+

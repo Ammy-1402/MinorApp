@@ -1,10 +1,12 @@
 package com.quantumcoders.minorapp.activities;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -44,9 +46,9 @@ public class MainActivity extends AppCompatActivity {
 
             // go to logged in activity on the bases of the type
             if(pref.getString(TYPE_KEY,"").equals(CITIZEN)){
-                startActivity(new Intent(this,CitizenMainActivity.class));
+                startActivityForResult(new Intent(this,CitizenMainActivity.class),1);
             } else {
-                startActivity(new Intent(this,AgentMainActivity.class));
+                startActivityForResult(new Intent(this,AgentMainActivity.class),1);
             }
 
             //finish this activity
@@ -91,6 +93,17 @@ public class MainActivity extends AppCompatActivity {
 
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if(requestCode==1){     //whether sign up was successful so as to finish this activity or not
+            if(resultCode== Activity.RESULT_OK){
+                System.out.println("Finishing MainActivity");
+                finish();
+            }
+        }
     }
 
     public void loginSuccess(String[] response){

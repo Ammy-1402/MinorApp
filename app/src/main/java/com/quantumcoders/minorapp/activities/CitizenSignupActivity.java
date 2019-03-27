@@ -1,5 +1,6 @@
 package com.quantumcoders.minorapp.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.design.widget.TextInputEditText;
@@ -19,6 +20,7 @@ import static com.quantumcoders.minorapp.misc.Constants.*;
 public class CitizenSignupActivity extends AppCompatActivity {
 
     String email="",password="";
+    boolean clickedOnce=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,11 @@ public class CitizenSignupActivity extends AppCompatActivity {
     }
 
     public void btnSignupClicked(View view){
+        if(clickedOnce)return;
+
+        //else if not already clicked
+        clickedOnce=true;
+
         String fname = ((TextInputEditText)findViewById(R.id.fname)).getText().toString();
         String lname = ((TextInputEditText)findViewById(R.id.lname)).getText().toString();
         String phone = ((TextInputEditText)findViewById(R.id.phone)).getText().toString();
@@ -79,12 +86,19 @@ public class CitizenSignupActivity extends AppCompatActivity {
 
         //code to start CitizenActivity (auto login)
         startActivity(new Intent(this,CitizenMainActivity.class));
+
+
+        //send signal to stop the MainActivity
+        setResult(Activity.RESULT_OK);
+
         finish();   //END THIS ACTIVITY
+
+        clickedOnce=false;
     }
 
     public void signUpFailed(String[] response){
         longToast("Sign up failed. User exists.");
-        // ...
+        clickedOnce=false;
     }
 
     public void noInternet(){
