@@ -113,9 +113,9 @@ public class MainActivity extends AppCompatActivity {
 
         longToast(response[0]);
         clickedOnce=false;
-
+        System.out.println("------------------->>>>>>>>>><<<<<<<<------------"+response[0]);
         //start logged in activity corresponding to 'response'
-        if(response.equals(CTZ_LOGIN_SUCCESS)){
+        if(response[0].equals(CTZ_LOGIN_SUCCESS)){
             startActivity(new Intent(this,CitizenMainActivity.class));
         } else {
             startActivity(new Intent(this,AgentMainActivity.class));

@@ -37,5 +37,8 @@ public interface Constants {
     public static final String NO_SUCH_USER="NoSuchUser";
     public static final String INVALID_CREDENTIALS="InvalidCredentials";
 
+    //
+    public static final int PICK_IMAGE=100;
+
 }
 

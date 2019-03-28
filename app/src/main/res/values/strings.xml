@@ -6,9 +6,11 @@
 
     <string-array name="dropDownCategory">
         <item>Choose Category</item>
-        <item>Demo A</item>
-        <item>Demo B</item>
-        <item>Demo C</item>
-        <item>Demo D</item>
+        <item>Pot Holes</item>
+        <item>Cracks</item>
+        <item>Accident</item>
+        <item>Delayed Road Work</item>
+        <item>Poor Maintenance</item>
+        <item>Natural Calamities</item>
     </string-array>
 </resources>
