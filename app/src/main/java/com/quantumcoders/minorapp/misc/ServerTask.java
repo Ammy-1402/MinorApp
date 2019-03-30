@@ -250,7 +250,6 @@ public class ServerTask extends AsyncTask<String,String[],String[]> {
         writer.write(str);
         writer.flush();
 
-
         //read result
         BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
         String[] response=new String[2];
