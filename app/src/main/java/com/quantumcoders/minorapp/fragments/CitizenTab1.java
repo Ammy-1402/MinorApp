@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,7 +14,6 @@ import android.support.v4.content.FileProvider;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -21,29 +21,27 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.quantumcoders.minorapp.R;
 import com.quantumcoders.minorapp.activities.CitizenMainActivity;
 
-import org.w3c.dom.Text;
-
-import java.io.BufferedWriter;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.sql.SQLOutput;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
@@ -62,7 +60,7 @@ public class CitizenTab1 extends Fragment {
     final int IMAGE_CAPTURE_REQ=1;
     Uri imageUri = null;
     File imageFile = null;
-
+    Handler testHandler = new Handler();
 
     public CitizenTab1() {
         // Required empty public constructor
@@ -121,6 +119,7 @@ public class CitizenTab1 extends Fragment {
                         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                         conn.setRequestMethod("POST");
                         conn.setDoOutput(true);
+//                        conn.setRequestProperty("Connection","Keep-Alive");
 
 
                         File storageDirectory = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
@@ -133,26 +132,35 @@ public class CitizenTab1 extends Fragment {
                                 file=f;break;
                             }
                         }
-                        FileInputStream fr = new FileInputStream(file);
+                        FileInputStream fis = new FileInputStream(file);
+                        BufferedInputStream bis = new BufferedInputStream(fis);
                         long l = file.length();
 
                         conn.getOutputStream().write("data=".getBytes());
 
                         System.out.println("File length = " + file.length());
-                        for(long i=0;i<l;i++){
-                            conn.getOutputStream().write(fr.read());
+
+                        long count=0;
+                        int b = bis.read();
+                        while(b!=-1){
+                            conn.getOutputStream().write(b);
+                            System.out.println("read " + count++);
                             conn.getOutputStream().flush();
+                            b=bis.read();
                         }
-//                        conn.getOutputStream().write("superwork".getBytes());
-//                        conn.getOutputStream().flush();
-//                        conn.disconnect();
 
-                        Scanner sc  = new Scanner(conn.getInputStream());
                         System.out.println("done");
-                        do{
-                            System.out.print(sc.next());
-                        }while(sc.hasNext());
+                        testHandler.post(()->{
+                            Toast.makeText(getActivity(),"DONE IMAGE",Toast.LENGTH_SHORT).show();
+                        });
 
+
+                        do{
+                            System.out.print((char) conn.getInputStream().read());
+                        }while(conn.getInputStream().available()>0);
+
+                        System.out.println("end");
+                        conn.disconnect();
 
                     } catch (MalformedURLException e) {
                         e.printStackTrace();
