@@ -6,16 +6,49 @@
     android:layout_height="match_parent"
     tools:context=".activities.AgentMainActivity">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="45dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="AGENT MAIN ACTIVITY"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <android.support.design.widget.TabLayout
+        android:id="@+id/agentTabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <android.support.design.widget.TabItem
+            android:id="@+id/id_agentTab1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="View Complaint" />
+
+        <android.support.design.widget.TabItem
+            android:id="@+id/id_agentTab2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Profile" />
+
+        <android.support.design.widget.TabItem
+            android:id="@+id/id_agentTab3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="FOR\nEXTRA WORK" />
+
+    </android.support.design.widget.TabLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/id_agentViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="664dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="136dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/agentTabLayout"
+        app:layout_constraintVertical_bias="0.0" />
 </android.support.constraint.ConstraintLayout>

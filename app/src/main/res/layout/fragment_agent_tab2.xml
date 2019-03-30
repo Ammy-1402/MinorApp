@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.CitizenTab3">
+    tools:context=".fragments.AgentTab2">
 
     <!-- TODO: Update blank fragment layout -->
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/agentImageView"
         android:layout_width="match_parent"
         android:layout_height="155dp"
         android:layout_marginStart="2dp"
@@ -23,7 +23,7 @@
 
 
     <ScrollView
-        android:id="@+id/scrollView3"
+        android:id="@+id/agentScrollView3"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
@@ -32,7 +32,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
+        app:layout_constraintTop_toBottomOf="@+id/agentImageView"
         app:layout_constraintVertical_bias="0.154">
 
         <android.support.constraint.ConstraintLayout
@@ -55,7 +55,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <android.support.design.widget.TextInputEditText
-                android:id="@+id/id_name"
+                android:id="@+id/id_agentName"
                 android:layout_width="300dp"
                 android:textSize="20dp"
                 android:layout_height="50dp"
@@ -74,12 +74,12 @@
                 android:textAlignment="center"
                 android:textSize="15dp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="@+id/id_name"
-                app:layout_constraintStart_toStartOf="@+id/id_name"
-                app:layout_constraintTop_toBottomOf="@+id/id_name" />
+                app:layout_constraintEnd_toEndOf="@+id/id_agentName"
+                app:layout_constraintStart_toStartOf="@+id/id_agentName"
+                app:layout_constraintTop_toBottomOf="@+id/id_agentName" />
 
             <android.support.design.widget.TextInputEditText
-                android:id="@+id/id_email"
+                android:id="@+id/id_agentEmail"
                 android:layout_width="300dp"
                 android:layout_height="50dp"
                 android:textSize="20dp"
@@ -100,25 +100,24 @@
                 android:textAlignment="center"
                 android:textSize="15dp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="@+id/id_email"
+                app:layout_constraintEnd_toEndOf="@+id/id_agentEmail"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="@+id/id_email"
-                app:layout_constraintTop_toBottomOf="@+id/id_email" />
+                app:layout_constraintStart_toStartOf="@+id/id_agentEmail"
+                app:layout_constraintTop_toBottomOf="@+id/id_agentEmail" />
 
             <android.support.design.widget.TextInputEditText
-                android:layout_width="300dp"
                 android:id="@+id/id_contact"
+                android:layout_width="300dp"
                 android:layout_height="50dp"
-                android:textSize="20dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginBottom="250dp"
                 android:editable="false"
+                android:textSize="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/textView5"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/textView5"
-                app:layout_constraintTop_toBottomOf="@+id/textView5"
-                app:layout_constraintVertical_bias="1.0" />
+                app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
 
         </android.support.constraint.ConstraintLayout>
@@ -135,11 +134,11 @@
         android:layout_marginBottom="8dp"
         android:clickable="true"
         android:src="@drawable/ic_camera_alt_black_24dp"
-        app:layout_constraintBottom_toTopOf="@+id/scrollView3"
-        app:layout_constraintEnd_toEndOf="@+id/imageView"
+        app:layout_constraintBottom_toTopOf="@+id/agentScrollView3"
+        app:layout_constraintEnd_toEndOf="@+id/agentImageView"
         app:layout_constraintHorizontal_bias="0.674"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/scrollView3"
+        app:layout_constraintTop_toTopOf="@+id/agentScrollView3"
         app:layout_constraintVertical_bias="0.469" />
 
 
