@@ -29,7 +29,7 @@ public class CitizenTab3 extends Fragment {
     public CitizenTab3() {
         // Required empty public constructor
     }
-    TextInputEditText fname , lname, email, contact;
+    TextInputEditText name, email, contact;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,15 +37,13 @@ public class CitizenTab3 extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_citizen_tab3, container, false);
 
-        fname = view.findViewById(R.id.id_firstname);
-        lname = view.findViewById(R.id.id_lastname);
+        name = view.findViewById(R.id.id_name);
         email = view.findViewById(R.id.id_email);
         contact = view.findViewById(R.id.id_contact);
 
-        //DEMO DATA FOR fname, lname, email, contact FIELDS
+        //DEMO DATA FOR name, email, contact FIELDS
 
-        fname.setText("First Name Here");
-        lname.setText("Last Name Here");
+        name.setText("First Name Here");
         email.setText("Email Here");
         contact.setText("Contact Here");
 

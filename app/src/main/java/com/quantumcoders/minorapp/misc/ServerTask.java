@@ -81,6 +81,7 @@ public class ServerTask extends AsyncTask<String,String[],String[]> {
     protected void onPostExecute(final String[] response) {
         String s = response[0];
         System.out.println("Response - " + response);
+        System.out.println("Response **  -  " + s);
         if(s.equals(CTZ_SIGN_UP_SUCCESS)){  //citizen signup success
 
             hnd.post(() -> ((CitizenSignupActivity)activity).signUpSuccess(response));
