@@ -9,11 +9,13 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.quantumcoders.minorapp.activities.AgentMainActivity;
 import com.quantumcoders.minorapp.activities.AgentSignupActivity;
+import com.quantumcoders.minorapp.activities.CitizenMainActivity;
 import com.quantumcoders.minorapp.activities.CitizenSignupActivity;
 import com.quantumcoders.minorapp.activities.MainActivity;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -27,10 +29,15 @@ import static com.quantumcoders.minorapp.misc.Constants.*;
 public class ServerTask extends AsyncTask<String,String[],String[]> {
     Handler hnd=null;
     AppCompatActivity activity=null;
+    File toUpload=null;
 
-    public ServerTask(AppCompatActivity activity,Handler hnd){
+    public ServerTask(AppCompatActivity activity,Handler hnd,File file){
         this.hnd = hnd;
         this.activity = activity;
+        this.toUpload=file;
+    }
+    public ServerTask(AppCompatActivity activity,Handler hnd){
+        this(activity,hnd,null);
     }
 
     @Override
@@ -63,6 +70,10 @@ public class ServerTask extends AsyncTask<String,String[],String[]> {
             } else if(method.equals(AGT_LOGIN_METHOD)){
 
                 return loginAgent(param);
+
+            } else if(method.equals(FILE_COMPLAINT_METHOD)){
+
+                //file complaint code here
 
             }
         } catch(IOException ex){
@@ -115,7 +126,9 @@ public class ServerTask extends AsyncTask<String,String[],String[]> {
                 ((AgentSignupActivity)activity).noInternet();
             } else if(activity instanceof  CitizenSignupActivity){
                 ((CitizenSignupActivity)activity).noInternet();
-            } else {
+            } else if(activity instanceof CitizenMainActivity){
+                ((CitizenMainActivity)activity).noInternet();
+            }else {
                 System.out.println("Unknown class");
             }
         } else {

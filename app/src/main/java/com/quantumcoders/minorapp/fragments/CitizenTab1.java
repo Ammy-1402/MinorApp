@@ -9,6 +9,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.view.LayoutInflater;
@@ -29,6 +30,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.quantumcoders.minorapp.R;
 import com.quantumcoders.minorapp.activities.CitizenMainActivity;
+
+import org.apache.http.impl.client.HttpClientBuilder;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
@@ -113,69 +116,31 @@ public class CitizenTab1 extends Fragment {
         ((Button) view.findViewById(R.id.id_registerComplaint)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new Thread(()->{
-                    try {
-                        URL url = new URL("http://chaitanya1999.000webhostapp.com/setclipboard.php");
-                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                        conn.setRequestMethod("POST");
-                        conn.setDoOutput(true);
-//                        conn.setRequestProperty("Connection","Keep-Alive");
+                int pos = ((Spinner)view.findViewById(R.id.spinner)).getSelectedItemPosition();
+                String desc = ((TextInputEditText)view.findViewById(R.id.id_description)).getText().toString().trim();
 
+                if(pos==1)mainActivity.longToast("Choose a category");
+                else if(desc.equals("")){
+                    mainActivity.longToast("Describe your problem");
+                } else if(imageUri==null){
+                    mainActivity.longToast("Image not captured");
+                } else if(mainActivity.count<10 || ((TextView)view.findViewById(R.id.locDesc)).getText().toString().isEmpty()){
+                    mainActivity.longToast("Location not loaded");
+                } else {
 
-                        File storageDirectory = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-                        System.out.println(storageDirectory.listFiles());
-                        File file=null;
-                        for(File f:storageDirectory.listFiles()){
-                            System.out.println(f.getName());
-                            if(f.getName().equals("abcd.jpg")){
-                                System.out.println("found");
-                                file=f;break;
-                            }
-                        }
-                        FileInputStream fis = new FileInputStream(file);
-                        BufferedInputStream bis = new BufferedInputStream(fis);
-                        long l = file.length();
-
-                        conn.getOutputStream().write("data=".getBytes());
-
-                        System.out.println("File length = " + file.length());
-
-                        long count=0;
-                        int b = bis.read();
-                        while(b!=-1){
-                            conn.getOutputStream().write(b);
-                            System.out.println("read " + count++);
-                            conn.getOutputStream().flush();
-                            b=bis.read();
-                        }
-
-                        System.out.println("done");
-                        testHandler.post(()->{
-                            Toast.makeText(getActivity(),"DONE IMAGE",Toast.LENGTH_SHORT).show();
-                        });
-
-
-                        do{
-                            System.out.print((char) conn.getInputStream().read());
-                        }while(conn.getInputStream().available()>0);
-
-                        System.out.println("end");
-                        conn.disconnect();
-
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }).start();
+                }
 
             }
         });
 
-
-
         return view;
     }
+
+
+    public void complaint_reg_failed(){
+        mainActivity.longToast("Complaint reg failed");
+    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

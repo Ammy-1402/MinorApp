@@ -21,6 +21,7 @@ public interface Constants {
     public static final String AGT_SIGN_UP_METHOD="signUpAgent";
     public static final String CTZ_LOGIN_METHOD="loginCitizen";
     public static final String AGT_LOGIN_METHOD="loginAgent";
+    public static final String FILE_COMPLAINT_METHOD="fileComplaint";
 
     public static final String CTZ_SIGN_UP_SUCCESS="CitizenSignupSuccess";
     public static final String AGT_SIGN_UP_SUCCESS="AgentSignupSuccess";

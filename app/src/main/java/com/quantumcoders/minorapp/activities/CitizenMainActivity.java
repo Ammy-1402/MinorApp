@@ -35,7 +35,7 @@ public class CitizenMainActivity extends AppCompatActivity implements LocationLi
     boolean locationPermitted=false;
 
     float latsum=0.0f,lngsum=0.0f;
-    int count=0;
+    public int count=0;
     float avglat=0.0f,avglng=0.0f;
 
     int TIME_TO_UPDATE=1000;
@@ -164,5 +164,9 @@ public class CitizenMainActivity extends AppCompatActivity implements LocationLi
 
     public void longToast(String msg){
         Toast.makeText(this,msg,Toast.LENGTH_LONG).show();
+    }
+
+    public void noInternet(){
+
     }
 }
