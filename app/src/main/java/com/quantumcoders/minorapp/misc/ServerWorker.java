@@ -34,9 +34,9 @@ public class ServerWorker {
         tsk.execute(Constants.AGT_LOGIN_METHOD,email,password);
     }
 
-    public static void fileComplaint(AppCompatActivity activity, String category, String desc, File image,float lat,float lng, String address){
+    public static void fileComplaint(AppCompatActivity activity, String category, String desc, File image,float lat,float lng, String address,String userid){
         ServerTask tsk = new ServerTask(activity,new Handler(),image);
-        tsk.execute(Constants.FILE_COMPLAINT_METHOD,category,desc,String.valueOf(lat),String.valueOf(lng),address);
+        tsk.execute(Constants.FILE_COMPLAINT_METHOD,category,desc,String.valueOf(lat),String.valueOf(lng),address,userid);
     }
 
 

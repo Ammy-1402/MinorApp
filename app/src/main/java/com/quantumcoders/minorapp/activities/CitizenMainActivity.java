@@ -36,7 +36,7 @@ public class CitizenMainActivity extends AppCompatActivity implements LocationLi
 
     float latsum=0.0f,lngsum=0.0f;
     public int count=0;
-    float avglat=0.0f,avglng=0.0f;
+    public float avglat=0.0f,avglng=0.0f;
 
     int TIME_TO_UPDATE=1000;
     int DIST_TO_UPDATE=0;
@@ -49,6 +49,7 @@ public class CitizenMainActivity extends AppCompatActivity implements LocationLi
         @Override
         protected void onReceiveResult(int resultCode, Bundle resultData) {
             if(resultCode==1){
+                System.out.println("address found = " + resultData.getString("address"));
                 tab1.updateLocation(avglat,avglng,resultData.getString("address"));
             }
         }

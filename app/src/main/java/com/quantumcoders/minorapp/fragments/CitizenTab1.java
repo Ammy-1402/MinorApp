@@ -2,6 +2,7 @@ package com.quantumcoders.minorapp.fragments;
 
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -30,24 +31,16 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.quantumcoders.minorapp.R;
 import com.quantumcoders.minorapp.activities.CitizenMainActivity;
+import com.quantumcoders.minorapp.misc.ServerWorker;
 
-import org.apache.http.impl.client.HttpClientBuilder;
-
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Scanner;
+
+import static android.app.Activity.RESULT_OK;
+import static com.quantumcoders.minorapp.misc.Constants.SESSION_FILE;
+import static com.quantumcoders.minorapp.misc.Constants.USER_ID_KEY;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -63,6 +56,7 @@ public class CitizenTab1 extends Fragment {
     final int IMAGE_CAPTURE_REQ=1;
     Uri imageUri = null;
     File imageFile = null;
+    boolean imageCaptured=false;
     Handler testHandler = new Handler();
 
     public CitizenTab1() {
@@ -119,15 +113,22 @@ public class CitizenTab1 extends Fragment {
                 int pos = ((Spinner)view.findViewById(R.id.spinner)).getSelectedItemPosition();
                 String desc = ((TextInputEditText)view.findViewById(R.id.id_description)).getText().toString().trim();
 
-                if(pos==1)mainActivity.longToast("Choose a category");
+                if(pos==0)mainActivity.longToast("Choose a category");
                 else if(desc.equals("")){
                     mainActivity.longToast("Describe your problem");
-                } else if(imageUri==null){
+                } else if(!imageCaptured){
                     mainActivity.longToast("Image not captured");
                 } else if(mainActivity.count<10 || ((TextView)view.findViewById(R.id.locDesc)).getText().toString().isEmpty()){
                     mainActivity.longToast("Location not loaded");
                 } else {
 
+                    System.out.println("filing complaint");
+
+                    String category = ((Spinner)view.findViewById(R.id.spinner)).getSelectedItem().toString();
+                    String address = ((TextView)view.findViewById(R.id.locDesc)).getText().toString();
+                    String userid = mainActivity.getApplicationContext().getSharedPreferences(SESSION_FILE, Context.MODE_PRIVATE).getString(USER_ID_KEY,"");
+
+                    ServerWorker.fileComplaint(mainActivity,category,desc,imageFile,mainActivity.avglat,mainActivity.avglng,address,userid);
                 }
 
             }
@@ -145,7 +146,10 @@ public class CitizenTab1 extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode==IMAGE_CAPTURE_REQ){
-            ((ImageView)getView().findViewById(R.id.imageView3)).setImageURI(imageUri);
+            if(resultCode==RESULT_OK){
+                ((ImageView)getView().findViewById(R.id.imageView3)).setImageURI(imageUri);
+                imageCaptured=true;
+            }
         }
     }
 
