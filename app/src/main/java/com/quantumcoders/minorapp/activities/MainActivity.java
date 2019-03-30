@@ -36,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        System.out.println("BEGIN");
+
         //check session existance
         SharedPreferences pref = getApplicationContext().getSharedPreferences(Constants.SESSION_FILE,MODE_PRIVATE);
         SharedPreferences.Editor edit = pref.edit();
@@ -43,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this,"SESSION-"+pref.getString(TYPE_KEY,""),Toast.LENGTH_SHORT).show();
             Toast.makeText(this,"EMAIL-"+pref.getString(EMAIL_ID_KEY,""),Toast.LENGTH_SHORT).show();
             Toast.makeText(this,"PWD-"+pref.getString(PWD_KEY,""),Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"ID-"+pref.getString(USER_ID_KEY,""),Toast.LENGTH_SHORT).show();
 
             // go to logged in activity on the bases of the type
             if(pref.getString(TYPE_KEY,"").equals(CITIZEN)){
@@ -109,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
     public void loginSuccess(String[] response){
         getApplicationContext().getSharedPreferences(SESSION_FILE,MODE_PRIVATE).edit()
                 .putString(EMAIL_ID_KEY,email).putString(PWD_KEY,password)
-                .putString(TYPE_KEY,type).commit();
+                .putString(TYPE_KEY,type).putString(USER_ID_KEY,response[1].trim()).commit();
 
         longToast(response[0]);
         clickedOnce=false;

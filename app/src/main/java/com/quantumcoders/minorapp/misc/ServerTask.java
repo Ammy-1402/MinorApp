@@ -7,30 +7,57 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
-import com.quantumcoders.minorapp.activities.AgentMainActivity;
 import com.quantumcoders.minorapp.activities.AgentSignupActivity;
+import com.quantumcoders.minorapp.activities.CitizenMainActivity;
 import com.quantumcoders.minorapp.activities.CitizenSignupActivity;
 import com.quantumcoders.minorapp.activities.MainActivity;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.Arrays;
 
-import static com.quantumcoders.minorapp.misc.Constants.*;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
+import static com.quantumcoders.minorapp.misc.Constants.AGT_LOGIN_FAILED;
+import static com.quantumcoders.minorapp.misc.Constants.AGT_LOGIN_METHOD;
+import static com.quantumcoders.minorapp.misc.Constants.AGT_LOGIN_SUCCESS;
+import static com.quantumcoders.minorapp.misc.Constants.AGT_SIGN_UP_FAILED;
+import static com.quantumcoders.minorapp.misc.Constants.AGT_SIGN_UP_METHOD;
+import static com.quantumcoders.minorapp.misc.Constants.AGT_SIGN_UP_SUCCESS;
+import static com.quantumcoders.minorapp.misc.Constants.COMPLAINT_REG_SUCCESS;
+import static com.quantumcoders.minorapp.misc.Constants.CTZ_LOGIN_FAILED;
+import static com.quantumcoders.minorapp.misc.Constants.CTZ_LOGIN_METHOD;
+import static com.quantumcoders.minorapp.misc.Constants.CTZ_LOGIN_SUCCESS;
+import static com.quantumcoders.minorapp.misc.Constants.CTZ_SIGN_UP_FAILED;
+import static com.quantumcoders.minorapp.misc.Constants.CTZ_SIGN_UP_METHOD;
+import static com.quantumcoders.minorapp.misc.Constants.CTZ_SIGN_UP_SUCCESS;
+import static com.quantumcoders.minorapp.misc.Constants.FILE_COMPLAINT_METHOD;
+import static com.quantumcoders.minorapp.misc.Constants.FILE_COMPLAINT_URL;
+import static com.quantumcoders.minorapp.misc.Constants.NO_INTERNET;
 
 public class ServerTask extends AsyncTask<String,String[],String[]> {
     Handler hnd=null;
     AppCompatActivity activity=null;
+    File toUpload=null;
 
-    public ServerTask(AppCompatActivity activity,Handler hnd){
+    public ServerTask(AppCompatActivity activity,Handler hnd,File file){
         this.hnd = hnd;
         this.activity = activity;
+        this.toUpload=file;
+    }
+    public ServerTask(AppCompatActivity activity,Handler hnd){
+        this(activity,hnd,null);
     }
 
     @Override
@@ -50,11 +77,11 @@ public class ServerTask extends AsyncTask<String,String[],String[]> {
             }
             else if(method.equals(CTZ_SIGN_UP_METHOD)){
 
-                return stringArrayOf(signUpCitizen(param));
+                return (signUpCitizen(param));
 
             } else if(method.equals(AGT_SIGN_UP_METHOD)){
 
-                return stringArrayOf(signUpAgent(param));
+                return (signUpAgent(param));
 
             } else if(method.equals(CTZ_LOGIN_METHOD)){
 
@@ -63,6 +90,10 @@ public class ServerTask extends AsyncTask<String,String[],String[]> {
             } else if(method.equals(AGT_LOGIN_METHOD)){
 
                 return loginAgent(param);
+
+            } else if(method.equals(FILE_COMPLAINT_METHOD)){
+
+                return fileComplaint(param);
 
             }
         } catch(IOException ex){
@@ -80,7 +111,7 @@ public class ServerTask extends AsyncTask<String,String[],String[]> {
     @Override
     protected void onPostExecute(final String[] response) {
         String s = response[0];
-        System.out.println("Response - " + response);
+//        System.out.println("Response - " + response[1]);
         System.out.println("Response **  -  " + s);
         if(s.equals(CTZ_SIGN_UP_SUCCESS)){  //citizen signup success
 
@@ -116,7 +147,9 @@ public class ServerTask extends AsyncTask<String,String[],String[]> {
                 ((AgentSignupActivity)activity).noInternet();
             } else if(activity instanceof  CitizenSignupActivity){
                 ((CitizenSignupActivity)activity).noInternet();
-            } else {
+            } else if(activity instanceof CitizenMainActivity){
+                ((CitizenMainActivity)activity).noInternet();
+            }else {
                 System.out.println("Unknown class");
             }
         } else {
@@ -126,7 +159,7 @@ public class ServerTask extends AsyncTask<String,String[],String[]> {
 
 
 
-    private String signUpCitizen(String...param) throws IOException {
+    private String[] signUpCitizen(String...param) throws IOException {
 
         //setup connection
         URL url = new URL(Constants.SIGNUP_URL_CITIZEN);
@@ -155,14 +188,16 @@ public class ServerTask extends AsyncTask<String,String[],String[]> {
 
         //read result
         BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-        String response=br.readLine();
+        String response[] = new String[2];
+        response[0]=br.readLine();
+        if(response[0].equals(CTZ_SIGN_UP_SUCCESS))response[1]=br.readLine();
 
         //return result
         return response;
 
     }
 
-    private String signUpAgent(String...param) throws IOException {
+    private String[] signUpAgent(String...param) throws IOException {
         //setup connection
         URL url = new URL(Constants.SIGNUP_URL_AGENT);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -190,7 +225,9 @@ public class ServerTask extends AsyncTask<String,String[],String[]> {
 
         //read result
         BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-        String response=br.readLine();
+        String response[] = new String[2];
+        response[0]=br.readLine();
+        if(response[0].equals(AGT_SIGN_UP_SUCCESS))response[1] = br.readLine();
 
 
         //return result
@@ -221,9 +258,10 @@ public class ServerTask extends AsyncTask<String,String[],String[]> {
 
         //read result
         BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-        String[] response=new String[2];
+        String[] response=new String[3];
         response[0] = br.readLine();
         response[1] = br.readLine();
+        if(response[0].equals(CTZ_LOGIN_SUCCESS))response[2]=br.readLine();
 
 
         //return result
@@ -252,15 +290,41 @@ public class ServerTask extends AsyncTask<String,String[],String[]> {
 
         //read result
         BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-        String[] response=new String[2];
+        String[] response=new String[3];
         response[0] = br.readLine();
         response[1] = br.readLine();
+        if(response[0].equals(AGT_LOGIN_SUCCESS))response[2] = br.readLine();
 
 
         //return result
         return response;
     }
 
+    private String[] fileComplaint(String...param) throws IOException{
+
+
+        OkHttpClient client = new OkHttpClient();
+        RequestBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("category",param[1])
+                .addFormDataPart("desc",param[2])
+                .addFormDataPart("lat",param[3])
+                .addFormDataPart("lng",param[4])
+                .addFormDataPart("address",param[5])
+                .addFormDataPart("userid",param[6])
+                .addFormDataPart("image",toUpload.getName(),RequestBody.create(MediaType.parse("image/jpeg"),toUpload))
+                .build();
+
+        Request req = new Request.Builder().url(FILE_COMPLAINT_URL).post(requestBody).build();
+
+        Response response = client.newCall(req).execute();
+
+        System.out.println(response.body().string());
+
+
+        return stringArrayOf(COMPLAINT_REG_SUCCESS);
+
+    }
 
     public String[] stringArrayOf(String...str){
         return str;

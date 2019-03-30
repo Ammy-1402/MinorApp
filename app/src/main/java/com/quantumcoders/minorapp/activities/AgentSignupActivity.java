@@ -80,7 +80,7 @@ public class AgentSignupActivity extends AppCompatActivity {
         //save session code
         SharedPreferences pref = getApplicationContext().getSharedPreferences(SESSION_FILE,MODE_PRIVATE);
         SharedPreferences.Editor edit = pref.edit();
-        edit.putString(TYPE_KEY,AGENT).putString(EMAIL_ID_KEY,email).putString(PWD_KEY,password).commit();
+        edit.putString(TYPE_KEY,AGENT).putString(EMAIL_ID_KEY,email).putString(PWD_KEY,password).putString(USER_ID_KEY,response[1].trim()).commit();
 
         //code to start AgentActivity (auto login)
         startActivity(new Intent(this,AgentMainActivity.class));

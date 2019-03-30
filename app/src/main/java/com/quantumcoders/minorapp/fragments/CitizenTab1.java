@@ -2,6 +2,7 @@ package com.quantumcoders.minorapp.fragments;
 
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.view.LayoutInflater;
@@ -29,22 +31,16 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.quantumcoders.minorapp.R;
 import com.quantumcoders.minorapp.activities.CitizenMainActivity;
+import com.quantumcoders.minorapp.misc.ServerWorker;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Scanner;
+
+import static android.app.Activity.RESULT_OK;
+import static com.quantumcoders.minorapp.misc.Constants.SESSION_FILE;
+import static com.quantumcoders.minorapp.misc.Constants.USER_ID_KEY;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,6 +56,7 @@ public class CitizenTab1 extends Fragment {
     final int IMAGE_CAPTURE_REQ=1;
     Uri imageUri = null;
     File imageFile = null;
+    boolean imageCaptured=false;
     Handler testHandler = new Handler();
 
     public CitizenTab1() {
@@ -113,74 +110,46 @@ public class CitizenTab1 extends Fragment {
         ((Button) view.findViewById(R.id.id_registerComplaint)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new Thread(()->{
-                    try {
-                        URL url = new URL("http://chaitanya1999.000webhostapp.com/setclipboard.php");
-                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                        conn.setRequestMethod("POST");
-                        conn.setDoOutput(true);
-//                        conn.setRequestProperty("Connection","Keep-Alive");
+                int pos = ((Spinner)view.findViewById(R.id.spinner)).getSelectedItemPosition();
+                String desc = ((TextInputEditText)view.findViewById(R.id.id_description)).getText().toString().trim();
 
+                if(pos==0)mainActivity.longToast("Choose a category");
+                else if(desc.equals("")){
+                    mainActivity.longToast("Describe your problem");
+                } else if(!imageCaptured){
+                    mainActivity.longToast("Image not captured");
+                } else if(mainActivity.count<10 || ((TextView)view.findViewById(R.id.locDesc)).getText().toString().isEmpty()){
+                    mainActivity.longToast("Location not loaded");
+                } else {
 
-                        File storageDirectory = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-                        System.out.println(storageDirectory.listFiles());
-                        File file=null;
-                        for(File f:storageDirectory.listFiles()){
-                            System.out.println(f.getName());
-                            if(f.getName().equals("abcd.jpg")){
-                                System.out.println("found");
-                                file=f;break;
-                            }
-                        }
-                        FileInputStream fis = new FileInputStream(file);
-                        BufferedInputStream bis = new BufferedInputStream(fis);
-                        long l = file.length();
+                    System.out.println("filing complaint");
 
-                        conn.getOutputStream().write("data=".getBytes());
+                    String category = ((Spinner)view.findViewById(R.id.spinner)).getSelectedItem().toString();
+                    String address = ((TextView)view.findViewById(R.id.locDesc)).getText().toString();
+                    String userid = mainActivity.getApplicationContext().getSharedPreferences(SESSION_FILE, Context.MODE_PRIVATE).getString(USER_ID_KEY,"");
 
-                        System.out.println("File length = " + file.length());
-
-                        long count=0;
-                        int b = bis.read();
-                        while(b!=-1){
-                            conn.getOutputStream().write(b);
-                            System.out.println("read " + count++);
-                            conn.getOutputStream().flush();
-                            b=bis.read();
-                        }
-
-                        System.out.println("done");
-                        testHandler.post(()->{
-                            Toast.makeText(getActivity(),"DONE IMAGE",Toast.LENGTH_SHORT).show();
-                        });
-
-
-                        do{
-                            System.out.print((char) conn.getInputStream().read());
-                        }while(conn.getInputStream().available()>0);
-
-                        System.out.println("end");
-                        conn.disconnect();
-
-                    } catch (MalformedURLException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }).start();
+                    ServerWorker.fileComplaint(mainActivity,category,desc,imageFile,mainActivity.avglat,mainActivity.avglng,address,userid);
+                }
 
             }
         });
 
-
-
         return view;
     }
+
+
+    public void complaint_reg_failed(){
+        mainActivity.longToast("Complaint reg failed");
+    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode==IMAGE_CAPTURE_REQ){
-            ((ImageView)getView().findViewById(R.id.imageView3)).setImageURI(imageUri);
+            if(resultCode==RESULT_OK){
+                ((ImageView)getView().findViewById(R.id.imageView3)).setImageURI(imageUri);
+                imageCaptured=true;
+            }
         }
     }
 
