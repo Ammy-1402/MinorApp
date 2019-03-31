@@ -1,4 +1,4 @@
-package com.quantumcoders.minorapp.misc;
+package com.quantumcoders.minorapp.adapters;
 
 public class ListItemCardView  {
 

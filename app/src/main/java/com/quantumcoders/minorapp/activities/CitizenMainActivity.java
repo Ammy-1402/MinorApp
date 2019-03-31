@@ -2,14 +2,11 @@ package com.quantumcoders.minorapp.activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.location.LocationProvider;
 import android.os.Handler;
 import android.os.ResultReceiver;
 import android.support.annotation.NonNull;
@@ -23,7 +20,7 @@ import android.widget.Toast;
 
 import com.quantumcoders.minorapp.R;
 import com.quantumcoders.minorapp.fragments.CitizenTab1;
-import com.quantumcoders.minorapp.misc.CitizenViewPagerAdapter;
+import com.quantumcoders.minorapp.adapters.CitizenViewPagerAdapter;
 import com.quantumcoders.minorapp.misc.FetchAddressIntentService;
 
 public class CitizenMainActivity extends AppCompatActivity implements LocationListener {

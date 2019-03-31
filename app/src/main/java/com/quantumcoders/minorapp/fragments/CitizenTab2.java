@@ -2,7 +2,6 @@ package com.quantumcoders.minorapp.fragments;
 
 
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,8 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.quantumcoders.minorapp.R;
-import com.quantumcoders.minorapp.misc.ListItemCardView;
-import com.quantumcoders.minorapp.misc.MyRecyclerAdapter;
+import com.quantumcoders.minorapp.adapters.ListItemCardView;
+import com.quantumcoders.minorapp.adapters.MyRecyclerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -2,17 +2,15 @@ package com.quantumcoders.minorapp.activities;
 
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.quantumcoders.minorapp.R;
 import com.quantumcoders.minorapp.fragments.AgentTab1;
 import com.quantumcoders.minorapp.fragments.AgentTab2;
 import com.quantumcoders.minorapp.fragments.AgentTab3;
-import com.quantumcoders.minorapp.misc.AgentViewPagerAdapter;
+import com.quantumcoders.minorapp.adapters.AgentViewPagerAdapter;
 
 public class AgentMainActivity extends AppCompatActivity {
 

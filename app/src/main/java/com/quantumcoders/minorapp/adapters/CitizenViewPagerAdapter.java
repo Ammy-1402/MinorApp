@@ -1,4 +1,4 @@
-package com.quantumcoders.minorapp.misc;
+package com.quantumcoders.minorapp.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
