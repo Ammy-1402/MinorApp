@@ -10,8 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.quantumcoders.minorapp.R;
-import com.quantumcoders.minorapp.misc.ListItemCardView;
-import com.quantumcoders.minorapp.misc.MyRecyclerAdapter;
+import com.quantumcoders.minorapp.adapters.ListItemCardView;
+import com.quantumcoders.minorapp.adapters.MyRecyclerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

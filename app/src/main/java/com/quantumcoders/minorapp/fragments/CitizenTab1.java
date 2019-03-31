@@ -110,8 +110,12 @@ public class CitizenTab1 extends Fragment {
         ((Button) view.findViewById(R.id.id_registerComplaint)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                System.out.println("register complaint clicked");
+
                 int pos = ((Spinner)view.findViewById(R.id.spinner)).getSelectedItemPosition();
                 String desc = ((TextInputEditText)view.findViewById(R.id.id_description)).getText().toString().trim();
+
+                System.out.println("$$ register complaint clicked " + pos + " | " + desc);
 
                 if(pos==0)mainActivity.longToast("Choose a category");
                 else if(desc.equals("")){
@@ -188,6 +192,7 @@ public class CitizenTab1 extends Fragment {
     public void onStart() {
         super.onStart();
         map.onStart();
+        getView().findViewById(R.id.id_description).clearFocus();
     }
 
     @Override

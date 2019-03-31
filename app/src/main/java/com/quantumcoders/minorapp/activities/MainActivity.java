@@ -2,24 +2,19 @@ package com.quantumcoders.minorapp.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Toast;
 
 import com.quantumcoders.minorapp.R;
 import com.quantumcoders.minorapp.misc.Constants;
-import com.quantumcoders.minorapp.misc.ViewPagerAdapter;
-import com.quantumcoders.minorapp.fragments.Tab1;
-import com.quantumcoders.minorapp.fragments.Tab2;
+import com.quantumcoders.minorapp.adapters.ViewPagerAdapter;
+
 import static com.quantumcoders.minorapp.misc.Constants.*;
 
 public class MainActivity extends AppCompatActivity {
