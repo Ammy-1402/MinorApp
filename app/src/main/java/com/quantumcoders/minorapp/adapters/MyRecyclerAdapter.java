@@ -9,16 +9,17 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.quantumcoders.minorapp.R;
+import com.quantumcoders.minorapp.misc.Constants;
 
 import java.util.List;
 
 
 public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.ViewHolder> {
 
-    private List<ListItemCardView> listItems;
+    private List<ListItemComplaint> listItems;
     private Context ctxt;
 
-    public MyRecyclerAdapter(List<ListItemCardView> listItems, Context ctxt) {
+    public MyRecyclerAdapter(List<ListItemComplaint> listItems, Context ctxt) {
         this.listItems = listItems;
         this.ctxt = ctxt;
     }
@@ -34,12 +35,27 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
-        ListItemCardView listItemCardView = listItems.get(position);
+        ListItemComplaint listItemComplaint = listItems.get(position);
 
-        viewHolder.textViewComplaintId.setText(listItemCardView.getComplaintNo());  //getComplaintNo() is the getComplaintId()
-        viewHolder.textViewRegisteredOn.setText(listItemCardView.getRegisteredOn());
-        viewHolder.textViewCategory.setText(listItemCardView.getCategory());
-        viewHolder.textViewDescription.setText(listItemCardView.getDescription());
+        viewHolder.textViewComplaintId.setText(listItemComplaint.getComplaintNo());  //getComplaintNo() is the getComplaintId()
+        viewHolder.textViewRegisteredOn.setText(listItemComplaint.getRegisteredOn());
+        viewHolder.textViewCategory.setText(listItemComplaint.getCategory());
+        viewHolder.textViewDescription.setText(listItemComplaint.getDescription());
+
+        if(listItemComplaint.getStatus().equals(Constants.STATUS_PENDING)){
+
+            viewHolder.textViewStatus.setBackgroundResource(R.drawable.status_pending);
+
+        } else if(listItemComplaint.getStatus().equals(Constants.STATUS_WORK_IN_PROGRESS)){
+
+            viewHolder.textViewStatus.setBackgroundResource(R.drawable.status_wip);
+
+        } else {
+
+            viewHolder.textViewStatus.setBackgroundResource(R.drawable.status_complete);
+
+        }
+
 
     }
 
@@ -53,7 +69,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView textViewComplaintId , textViewRegisteredOn , textViewCategory , textViewDescription ;
+        public TextView textViewComplaintId , textViewRegisteredOn , textViewCategory , textViewDescription, textViewStatus;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -62,7 +78,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
             textViewComplaintId = (TextView)itemView.findViewById(R.id.id_complaintNo);  //complaintNo is the complaintId
             textViewRegisteredOn = (TextView)itemView.findViewById(R.id.id_complaintRegistrationTime);
             textViewDescription = (TextView)itemView.findViewById(R.id.id_descriptionDetails);
-
+            textViewStatus = (TextView) itemView.findViewById(R.id.id_status);
         }
     }
 }

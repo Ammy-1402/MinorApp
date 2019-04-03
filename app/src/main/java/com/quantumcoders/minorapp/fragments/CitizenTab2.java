@@ -10,8 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.quantumcoders.minorapp.R;
-import com.quantumcoders.minorapp.adapters.ListItemCardView;
+import com.quantumcoders.minorapp.adapters.ListItemComplaint;
 import com.quantumcoders.minorapp.adapters.MyRecyclerAdapter;
+import com.quantumcoders.minorapp.misc.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,10 +22,10 @@ import java.util.List;
  */
 public class CitizenTab2 extends Fragment {
 
-    private RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter;
+    public RecyclerView recyclerView;
+    public RecyclerView.Adapter adapter;
 
-    private List<ListItemCardView> listItemCardViews;
+    public List<ListItemComplaint> listItemComplaint;
 
     public CitizenTab2() {
         // Required empty public constructor
@@ -40,22 +41,25 @@ public class CitizenTab2 extends Fragment {
         recyclerView = view.findViewById(R.id.id_recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        listItemCardViews = new ArrayList<>();
+        listItemComplaint = new ArrayList<>();
+
+        String statuses[] = new String[]{Constants.STATUS_COMPLETED,Constants.STATUS_WORK_IN_PROGRESS,Constants.STATUS_PENDING};
 
         for(int i=1 ; i<9 ; i++){
 
             System.out.println("i ========= "+ i);
 
-            ListItemCardView listItemCardView = new ListItemCardView(
+            ListItemComplaint listItemComplaint = new ListItemComplaint(
                     ""+i,  //complaintNo is the complaintId
                     "Timestamp Value "+i,
                     "ABC "+i,
-                    "Hey Demo data Description .. "+i);
+                    "Hey Demo data Description .. "+i,
+                     statuses[i%3]);
 
-            listItemCardViews.add(listItemCardView);
+            this.listItemComplaint.add(listItemComplaint);
         }
 
-        adapter = new MyRecyclerAdapter(listItemCardViews,getActivity());
+        adapter = new MyRecyclerAdapter(listItemComplaint,getActivity());
         recyclerView.setAdapter(adapter);
 
         return view;

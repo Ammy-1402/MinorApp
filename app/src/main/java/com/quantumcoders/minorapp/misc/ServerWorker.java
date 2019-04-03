@@ -40,4 +40,8 @@ public class ServerWorker {
     }
 
 
+    public static void reloadComplaintsListCitizen(AppCompatActivity activity,String userid) {
+        ServerTask tsk = new ServerTask(activity,new Handler());
+        tsk.execute(Constants.CTZ_RELOAD_COMPLAINT_LIST_METHOD,userid);
+    }
 }
