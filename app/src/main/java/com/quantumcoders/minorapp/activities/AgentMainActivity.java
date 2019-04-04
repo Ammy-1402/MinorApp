@@ -47,11 +47,10 @@ public class AgentMainActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 agentViewPager.setCurrentItem(tab.getPosition());
-                if(tab.getPosition()==1){   //view complaint list fragment/page
+                if(tab.getPosition()==0){   //view complaint list fragment/page
                     String agentid = getApplicationContext().getSharedPreferences(Constants.SESSION_FILE,MODE_PRIVATE).getString(Constants.USER_ID_KEY,"");
                     ServerWorker.reloadComplaintsListAgent(AgentMainActivity.this,agentid);
                 }
-
             }
 
             @Override
@@ -90,6 +89,7 @@ public class AgentMainActivity extends AppCompatActivity {
         tab1.agentListItemComplaints = list;
         tab1.adapter = new AgentMyRecyclerAdapter(list, this);
         tab1.recyclerView.setAdapter(tab1.adapter);
+
         longToast("AGENT COMPLAINT LIST UPDATED");
     }
 
