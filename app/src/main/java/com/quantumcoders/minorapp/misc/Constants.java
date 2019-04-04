@@ -19,6 +19,7 @@ public interface Constants {
     public static final String LOGIN_URL_CITIZEN = SERVER_URL+"/citizen_login.php";
     public static final String FILE_COMPLAINT_URL = SERVER_URL+"/demo_complaint.php";
     public static final String RELOAD_COMPLAINTS_URL = SERVER_URL+"/demo_complaint_list_citizen.php";
+    public static final String RELOAD_COMPLAINTS_AGENT_URL = SERVER_URL+"/demo_complaint_list_agent.php";
 
     public static final String CTZ_SIGN_UP_METHOD="signUpCitizen";
     public static final String AGT_SIGN_UP_METHOD="signUpAgent";

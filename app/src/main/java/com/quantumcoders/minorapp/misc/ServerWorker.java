@@ -44,4 +44,12 @@ public class ServerWorker {
         ServerTask tsk = new ServerTask(activity,new Handler());
         tsk.execute(Constants.CTZ_RELOAD_COMPLAINT_LIST_METHOD,userid);
     }
+
+    public static void reloadComplaintsListAgent(AppCompatActivity activity,String agentid){
+        ServerTask tsk = new ServerTask(activity,new Handler());
+        tsk.execute(Constants.AGT_RELOAD_COMPLAINT_LIST_METHOD,agentid);
+    }
+
+
+
 }
