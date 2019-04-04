@@ -1,6 +1,7 @@
 package com.quantumcoders.minorapp.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.quantumcoders.minorapp.R;
+import com.quantumcoders.minorapp.activities.CitizenComplaintDetailsActivity;
 import com.quantumcoders.minorapp.misc.Constants;
 
 import java.util.List;
@@ -41,6 +43,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
         viewHolder.textViewRegisteredOn.setText(listItemComplaint.getRegisteredOn());
         viewHolder.textViewCategory.setText(listItemComplaint.getCategory());
         viewHolder.textViewDescription.setText(listItemComplaint.getDescription());
+        viewHolder.complaint = listItemComplaint;
 
         if(listItemComplaint.getStatus().equals(Constants.STATUS_PENDING)){
 
@@ -56,6 +59,15 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
 
         }
 
+        viewHolder.itemView.findViewById(R.id.clickLayout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ctxt, CitizenComplaintDetailsActivity.class);
+                intent.putExtra("complaint_no",viewHolder.complaint.getComplaintNo());
+                ctxt.startActivity(intent);
+            }
+        });
+
 
     }
 
@@ -70,6 +82,8 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView textViewComplaintId , textViewRegisteredOn , textViewCategory , textViewDescription, textViewStatus;
+        public ListItemComplaint complaint=null;
+        public View itemView = null;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -79,6 +93,8 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
             textViewRegisteredOn = (TextView)itemView.findViewById(R.id.id_complaintRegistrationTime);
             textViewDescription = (TextView)itemView.findViewById(R.id.id_descriptionDetails);
             textViewStatus = (TextView) itemView.findViewById(R.id.id_status);
+
+            this.itemView = itemView;
         }
     }
 }
