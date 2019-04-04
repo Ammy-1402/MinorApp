@@ -64,7 +64,6 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
         return listItems.size();
     }
 
-
     //ViewHolder Class
 
     public class ViewHolder extends RecyclerView.ViewHolder {

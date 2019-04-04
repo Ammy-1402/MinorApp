@@ -196,7 +196,7 @@ public class CitizenMainActivity extends AppCompatActivity implements LocationLi
         tab2.listItemComplaint = list;
         tab2.adapter = new MyRecyclerAdapter(list, this);
         tab2.recyclerView.setAdapter(tab2.adapter);
-        longToast("COMPLAINT LIST UPDATED");
+        longToast("CITIZEN COMPLAINT LIST UPDATED");
     }
 
 }

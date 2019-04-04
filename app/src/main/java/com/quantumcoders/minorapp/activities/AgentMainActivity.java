@@ -5,12 +5,21 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.quantumcoders.minorapp.R;
+import com.quantumcoders.minorapp.adapters.AgentListItemComplaint;
+import com.quantumcoders.minorapp.adapters.AgentMyRecyclerAdapter;
+import com.quantumcoders.minorapp.adapters.ListItemComplaint;
+import com.quantumcoders.minorapp.adapters.MyRecyclerAdapter;
 import com.quantumcoders.minorapp.fragments.AgentTab1;
 import com.quantumcoders.minorapp.fragments.AgentTab2;
 import com.quantumcoders.minorapp.fragments.AgentTab3;
 import com.quantumcoders.minorapp.adapters.AgentViewPagerAdapter;
+import com.quantumcoders.minorapp.misc.Constants;
+import com.quantumcoders.minorapp.misc.ServerWorker;
+
+import java.util.ArrayList;
 
 public class AgentMainActivity extends AppCompatActivity {
 
@@ -38,6 +47,11 @@ public class AgentMainActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 agentViewPager.setCurrentItem(tab.getPosition());
+                if(tab.getPosition()==1){   //view complaint list fragment/page
+                    String agentid = getApplicationContext().getSharedPreferences(Constants.SESSION_FILE,MODE_PRIVATE).getString(Constants.USER_ID_KEY,"");
+                    ServerWorker.reloadComplaintsListAgent(AgentMainActivity.this,agentid);
+                }
+
             }
 
             @Override
@@ -62,6 +76,21 @@ public class AgentMainActivity extends AppCompatActivity {
         }else if(fragment instanceof AgentTab3){
             tab3 = (AgentTab3) fragment;
         }
+    }
+
+    public void longToast(String msg){
+        Toast.makeText(this,msg,Toast.LENGTH_LONG).show();
+    }
+
+    public void complaintListObtainedAgent(String...data){
+        ArrayList<AgentListItemComplaint> list = new ArrayList<>();
+        for(int i=1;i<data.length;i+=5){
+            list.add(new AgentListItemComplaint(data[i],data[i+1],data[i+2],data[i+3],data[i+4]));
+        }
+        tab1.agentListItemComplaints = list;
+        tab1.adapter = new AgentMyRecyclerAdapter(list, this);
+        tab1.recyclerView.setAdapter(tab1.adapter);
+        longToast("AGENT COMPLAINT LIST UPDATED");
     }
 
 }
