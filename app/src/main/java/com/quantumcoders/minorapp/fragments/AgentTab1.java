@@ -45,22 +45,22 @@ public class AgentTab1 extends Fragment {
 
         agentListItemComplaints = new ArrayList<>();
 
-        String statuses[] = new String[]{Constants.STATUS_COMPLETED,Constants.STATUS_WORK_IN_PROGRESS,Constants.STATUS_PENDING};
+        String statuses[] = new String[]{Constants.STATUS_COMPLETED, Constants.STATUS_WORK_IN_PROGRESS, Constants.STATUS_PENDING};
 
-        for(int i=0;i<9;i++){
+        for (int i = 1; i < 9; i++) {
 
             AgentListItemComplaint agentListItemComplaint = new AgentListItemComplaint(
-                    ""+i,
-                    ""+5*i,
-                    "ABC.."+i,
-                    "Location "+i,
-                    statuses[i%3]
+                    "" + i,
+                    "" + 5 * i,
+                    "ABC.." + i,
+                    "Location " + i,
+                    statuses[i % 3]
             );
 
             this.agentListItemComplaints.add(agentListItemComplaint);
         }
 
-        adapter = new AgentMyRecyclerAdapter(agentListItemComplaints,getActivity());
+        adapter = new AgentMyRecyclerAdapter(agentListItemComplaints, getActivity());
         recyclerView.setAdapter(adapter);
 
         return view;
