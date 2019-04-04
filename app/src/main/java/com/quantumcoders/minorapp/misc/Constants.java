@@ -18,12 +18,15 @@ public interface Constants {
     public static final String LOGIN_URL_AGENT = SERVER_URL+"/agent_login.php";
     public static final String LOGIN_URL_CITIZEN = SERVER_URL+"/citizen_login.php";
     public static final String FILE_COMPLAINT_URL = SERVER_URL+"/demo_complaint.php";
+    public static final String RELOAD_COMPLAINTS_URL = SERVER_URL+"/demo_complaint_list_citizen.php";
 
     public static final String CTZ_SIGN_UP_METHOD="signUpCitizen";
     public static final String AGT_SIGN_UP_METHOD="signUpAgent";
     public static final String CTZ_LOGIN_METHOD="loginCitizen";
     public static final String AGT_LOGIN_METHOD="loginAgent";
     public static final String FILE_COMPLAINT_METHOD="fileComplaint";
+    public static final String CTZ_RELOAD_COMPLAINT_LIST_METHOD = "reloadComplaintListCitizen";
+    public static final String AGT_RELOAD_COMPLAINT_LIST_METHOD = "reloadComplaintListAgent";
 
     public static final String CTZ_SIGN_UP_SUCCESS="CitizenSignupSuccess";
     public static final String AGT_SIGN_UP_SUCCESS="AgentSignupSuccess";
@@ -31,7 +34,8 @@ public interface Constants {
     public static final String AGT_LOGIN_SUCCESS="AgentLoginSuccess";
     public static final String NO_INTERNET="NoInternet";
     public static final String COMPLAINT_REG_SUCCESS="ComplaintRegSuccess";
-
+    public static final String CTZ_COMPLAINT_LIST_OBTAINED ="ComplaintListObtainedCitizen";
+    public static final String AGT_COMPLAINT_LIST_OBTAINED ="ComplaintListObtainedAgent";
 
     public static final String CTZ_SIGN_UP_FAILED="CitizenSignupFailed";
     public static final String AGT_SIGN_UP_FAILED="AgentSignupFailed";
@@ -43,6 +47,11 @@ public interface Constants {
 
     //
     public static final int PICK_IMAGE=100;
+
+    public static final String STATUS_PENDING="PENDING";
+    public static final String STATUS_WORK_IN_PROGRESS="WORK_IN_PROGRESS";
+    public static final String STATUS_COMPLETED="COMPLETED";
+
 
 }
 

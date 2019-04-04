@@ -127,6 +127,7 @@ public class CitizenTab1 extends Fragment {
                 } else {
 
                     System.out.println("filing complaint");
+                    desc = desc.replace("\n","<br/>");
 
                     String category = ((Spinner)view.findViewById(R.id.spinner)).getSelectedItem().toString();
                     String address = ((TextView)view.findViewById(R.id.locDesc)).getText().toString();

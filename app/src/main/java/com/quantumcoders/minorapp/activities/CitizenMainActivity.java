@@ -16,12 +16,21 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.quantumcoders.minorapp.R;
+import com.quantumcoders.minorapp.adapters.ListItemComplaint;
+import com.quantumcoders.minorapp.adapters.MyRecyclerAdapter;
 import com.quantumcoders.minorapp.fragments.CitizenTab1;
 import com.quantumcoders.minorapp.adapters.CitizenViewPagerAdapter;
+import com.quantumcoders.minorapp.fragments.CitizenTab2;
+import com.quantumcoders.minorapp.fragments.CitizenTab3;
+import com.quantumcoders.minorapp.misc.Constants;
 import com.quantumcoders.minorapp.misc.FetchAddressIntentService;
+import com.quantumcoders.minorapp.misc.ServerWorker;
+
+import java.util.ArrayList;
 
 public class CitizenMainActivity extends AppCompatActivity implements LocationListener {
 
@@ -39,6 +48,9 @@ public class CitizenMainActivity extends AppCompatActivity implements LocationLi
     int DIST_TO_UPDATE=0;
 
     CitizenTab1 tab1 = null;
+    CitizenTab2 tab2 = null;
+    CitizenTab3 tab3 = null;
+
 
 
 
@@ -69,6 +81,10 @@ public class CitizenMainActivity extends AppCompatActivity implements LocationLi
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
+                if(tab.getPosition()==1){   //view complaint list fragment/page
+                    String userid = getApplicationContext().getSharedPreferences(Constants.SESSION_FILE,MODE_PRIVATE).getString(Constants.USER_ID_KEY,"");
+                    ServerWorker.reloadComplaintsListCitizen(CitizenMainActivity.this,userid);
+                }
             }
 
             @Override
@@ -128,6 +144,10 @@ public class CitizenMainActivity extends AppCompatActivity implements LocationLi
     public void onAttachFragment(Fragment fragment) {
         if(fragment instanceof CitizenTab1){
             tab1 = (CitizenTab1) fragment;
+        } else if(fragment instanceof CitizenTab2){
+            tab2= (CitizenTab2) fragment;
+        } else {
+            tab3 = (CitizenTab3) fragment;
         }
     }
 
@@ -165,6 +185,18 @@ public class CitizenMainActivity extends AppCompatActivity implements LocationLi
     }
 
     public void noInternet(){
-
+        longToast("Please turn on INTERNET");
     }
+
+    public void complaintListObtainedCitizen(String...data){
+        ArrayList<ListItemComplaint> list = new ArrayList<>();
+        for(int i=1;i<data.length;i+=5){
+            list.add(new ListItemComplaint(data[i],data[i+1],data[i+2],data[i+3],data[i+4]));
+        }
+        tab2.listItemComplaint = list;
+        tab2.adapter = new MyRecyclerAdapter(list, this);
+        tab2.recyclerView.setAdapter(tab2.adapter);
+        longToast("COMPLAINT LIST UPDATED");
+    }
+
 }

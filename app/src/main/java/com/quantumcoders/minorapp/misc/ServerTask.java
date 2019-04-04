@@ -21,6 +21,7 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Scanner;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -35,6 +36,7 @@ import static com.quantumcoders.minorapp.misc.Constants.AGT_LOGIN_SUCCESS;
 import static com.quantumcoders.minorapp.misc.Constants.AGT_SIGN_UP_FAILED;
 import static com.quantumcoders.minorapp.misc.Constants.AGT_SIGN_UP_METHOD;
 import static com.quantumcoders.minorapp.misc.Constants.AGT_SIGN_UP_SUCCESS;
+import static com.quantumcoders.minorapp.misc.Constants.CTZ_COMPLAINT_LIST_OBTAINED;
 import static com.quantumcoders.minorapp.misc.Constants.COMPLAINT_REG_SUCCESS;
 import static com.quantumcoders.minorapp.misc.Constants.CTZ_LOGIN_FAILED;
 import static com.quantumcoders.minorapp.misc.Constants.CTZ_LOGIN_METHOD;
@@ -45,6 +47,8 @@ import static com.quantumcoders.minorapp.misc.Constants.CTZ_SIGN_UP_SUCCESS;
 import static com.quantumcoders.minorapp.misc.Constants.FILE_COMPLAINT_METHOD;
 import static com.quantumcoders.minorapp.misc.Constants.FILE_COMPLAINT_URL;
 import static com.quantumcoders.minorapp.misc.Constants.NO_INTERNET;
+import static com.quantumcoders.minorapp.misc.Constants.RELOAD_COMPLAINTS_URL;
+import static com.quantumcoders.minorapp.misc.Constants.CTZ_RELOAD_COMPLAINT_LIST_METHOD;
 
 public class ServerTask extends AsyncTask<String,String[],String[]> {
     Handler hnd=null;
@@ -95,6 +99,10 @@ public class ServerTask extends AsyncTask<String,String[],String[]> {
 
                 return fileComplaint(param);
 
+            } else if(method.equals(CTZ_RELOAD_COMPLAINT_LIST_METHOD)){
+
+                return reloadComplaintList(param);
+
             }
         } catch(IOException ex){
             ex.printStackTrace();
@@ -102,6 +110,7 @@ public class ServerTask extends AsyncTask<String,String[],String[]> {
         }
         return new String[]{"DefaultReturn"};
     }
+
 
     @Override
     protected void onProgressUpdate(String[]...values) {
@@ -140,7 +149,12 @@ public class ServerTask extends AsyncTask<String,String[],String[]> {
 
             hnd.post(()-> ((MainActivity)activity).loginFailed(response));
 
-        } else if(s.equals(NO_INTERNET)){
+        } else if(s.equals(CTZ_COMPLAINT_LIST_OBTAINED)){
+            hnd.post(()->{
+                ((CitizenMainActivity)activity).complaintListObtainedCitizen(response);
+            });
+
+        }else if(s.equals(NO_INTERNET)){
             if(activity instanceof MainActivity){
                 ((MainActivity)activity).noInternet();
             } else if(activity instanceof AgentSignupActivity){
@@ -245,6 +259,7 @@ public class ServerTask extends AsyncTask<String,String[],String[]> {
 
         //get parameters
         String email = param[1];
+
         String password = param[2];
 
         //send parameters
@@ -326,8 +341,40 @@ public class ServerTask extends AsyncTask<String,String[],String[]> {
 
     }
 
+
+    private String[] reloadComplaintList(String...param) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+        RequestBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("userid",param[1])
+                .build();
+
+        Request request = new Request.Builder().url(RELOAD_COMPLAINTS_URL).post(requestBody).build();
+
+        Response response = client.newCall(request).execute();
+        String body = response.body().string();
+        Scanner sc = new Scanner(body);
+
+        int n = sc.nextInt();
+        System.out.println("num complt = " + n);
+        sc.nextLine();
+        String[] ret = new String[5*n+1];
+        ret[0]=Constants.CTZ_COMPLAINT_LIST_OBTAINED;
+
+        for(int i=1;i<5*n+1;i++){
+            ret[i]=sc.nextLine();
+            System.out.println(ret[i]);
+        }
+
+        return ret;
+    }
+
+
     public String[] stringArrayOf(String...str){
         return str;
     }
+
+
+
 
 }
