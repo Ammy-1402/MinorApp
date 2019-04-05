@@ -12,14 +12,19 @@ public interface Constants {
     public static final String CITIZEN="Citizen";
     public static final String AGENT="Agent";
 
+    public static final String TEMP_IMAGE_FILE_NAME="tempImageFile";
+    public static final String PARAM_COMPLT_ID="complaintId";
+
     public static final String SERVER_URL = "http://quantumcoders.000webhostapp.com";   //doesn't includes a / at the end
     public static final String SIGNUP_URL_CITIZEN = SERVER_URL + "/citizen_signup.php"; //demo php for citizen
     public static final String SIGNUP_URL_AGENT = SERVER_URL+"/agent_signup.php"; //demo php for agent
     public static final String LOGIN_URL_AGENT = SERVER_URL+"/agent_login.php";
     public static final String LOGIN_URL_CITIZEN = SERVER_URL+"/citizen_login.php";
     public static final String FILE_COMPLAINT_URL = SERVER_URL+"/demo_complaint.php";
-    public static final String RELOAD_COMPLAINTS_URL = SERVER_URL+"/demo_complaint_list_citizen.php";
+    public static final String RELOAD_COMPLAINTS_CITIZEN_URL = SERVER_URL+"/demo_complaint_list_citizen.php";
     public static final String RELOAD_COMPLAINTS_AGENT_URL = SERVER_URL+"/demo_complaint_list_agent.php";
+    public static final String LOAD_COMPLAINT_DETAILS_CITIZEN_URL = SERVER_URL+"/demo_complaint_details_citizen.php";
+    public static final String LOAD_COMPLAINT_DETAILS_AGENT_URL = SERVER_URL+"/demo_complaint_details_agent.php";
 
     public static final String CTZ_SIGN_UP_METHOD="signUpCitizen";
     public static final String AGT_SIGN_UP_METHOD="signUpAgent";
@@ -28,6 +33,8 @@ public interface Constants {
     public static final String FILE_COMPLAINT_METHOD="fileComplaint";
     public static final String CTZ_RELOAD_COMPLAINT_LIST_METHOD = "reloadComplaintListCitizen";
     public static final String AGT_RELOAD_COMPLAINT_LIST_METHOD = "reloadComplaintListAgent";
+    public static final String CTZ_LOAD_COMPLAINT_DETAILS = "loadComplaintDetailsCitizen";
+    public static final String AGT_LOAD_COMPLAINT_DETAILS = "loadComplaintDetailsAgent";
 
     public static final String CTZ_SIGN_UP_SUCCESS="CitizenSignupSuccess";
     public static final String AGT_SIGN_UP_SUCCESS="AgentSignupSuccess";
@@ -37,6 +44,8 @@ public interface Constants {
     public static final String COMPLAINT_REG_SUCCESS="ComplaintRegSuccess";
     public static final String CTZ_COMPLAINT_LIST_OBTAINED ="ComplaintListObtainedCitizen";
     public static final String AGT_COMPLAINT_LIST_OBTAINED ="ComplaintListObtainedAgent";
+    public static final String CTZ_COMPLAINT_DETAILS_OBTAINED="ComplaintDetailsObtainedCitizen";
+    public static final String AGT_COMPLAINT_DETAILS_OBTAINED="ComplaintDetailsObtainedAgent";
 
     public static final String CTZ_SIGN_UP_FAILED="CitizenSignupFailed";
     public static final String AGT_SIGN_UP_FAILED="AgentSignupFailed";

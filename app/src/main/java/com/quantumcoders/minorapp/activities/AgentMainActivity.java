@@ -64,6 +64,10 @@ public class AgentMainActivity extends AppCompatActivity {
             }
         });
 
+        //Deselecting tab 0 and reselecting it to reload list at startup
+        agentViewPager.setCurrentItem(1);
+        agentViewPager.setCurrentItem(0);
+
     }
 
     @Override

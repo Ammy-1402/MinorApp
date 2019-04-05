@@ -50,6 +50,11 @@ public class ServerWorker {
         tsk.execute(Constants.AGT_RELOAD_COMPLAINT_LIST_METHOD,agentid);
     }
 
+    public static void loadComplaintDetails(AppCompatActivity activity, String complaint_id){
+        ServerTask tsk = new ServerTask(activity,new Handler());
+        tsk.execute(Constants.CTZ_LOAD_COMPLAINT_DETAILS,complaint_id);
+    }
+
 
 
 }

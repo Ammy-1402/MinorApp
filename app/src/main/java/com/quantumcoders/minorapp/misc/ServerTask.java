@@ -4,11 +4,13 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
 import com.quantumcoders.minorapp.activities.AgentMainActivity;
 import com.quantumcoders.minorapp.activities.AgentSignupActivity;
+import com.quantumcoders.minorapp.activities.CitizenComplaintDetailsActivity;
 import com.quantumcoders.minorapp.activities.CitizenMainActivity;
 import com.quantumcoders.minorapp.activities.CitizenSignupActivity;
 import com.quantumcoders.minorapp.activities.MainActivity;
@@ -16,6 +18,7 @@ import com.quantumcoders.minorapp.activities.MainActivity;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -39,20 +42,25 @@ import static com.quantumcoders.minorapp.misc.Constants.AGT_RELOAD_COMPLAINT_LIS
 import static com.quantumcoders.minorapp.misc.Constants.AGT_SIGN_UP_FAILED;
 import static com.quantumcoders.minorapp.misc.Constants.AGT_SIGN_UP_METHOD;
 import static com.quantumcoders.minorapp.misc.Constants.AGT_SIGN_UP_SUCCESS;
-import static com.quantumcoders.minorapp.misc.Constants.CTZ_COMPLAINT_LIST_OBTAINED;
 import static com.quantumcoders.minorapp.misc.Constants.COMPLAINT_REG_SUCCESS;
+import static com.quantumcoders.minorapp.misc.Constants.CTZ_COMPLAINT_DETAILS_OBTAINED;
+import static com.quantumcoders.minorapp.misc.Constants.CTZ_COMPLAINT_LIST_OBTAINED;
+import static com.quantumcoders.minorapp.misc.Constants.CTZ_LOAD_COMPLAINT_DETAILS;
 import static com.quantumcoders.minorapp.misc.Constants.CTZ_LOGIN_FAILED;
 import static com.quantumcoders.minorapp.misc.Constants.CTZ_LOGIN_METHOD;
 import static com.quantumcoders.minorapp.misc.Constants.CTZ_LOGIN_SUCCESS;
+import static com.quantumcoders.minorapp.misc.Constants.CTZ_RELOAD_COMPLAINT_LIST_METHOD;
 import static com.quantumcoders.minorapp.misc.Constants.CTZ_SIGN_UP_FAILED;
 import static com.quantumcoders.minorapp.misc.Constants.CTZ_SIGN_UP_METHOD;
 import static com.quantumcoders.minorapp.misc.Constants.CTZ_SIGN_UP_SUCCESS;
 import static com.quantumcoders.minorapp.misc.Constants.FILE_COMPLAINT_METHOD;
 import static com.quantumcoders.minorapp.misc.Constants.FILE_COMPLAINT_URL;
+import static com.quantumcoders.minorapp.misc.Constants.LOAD_COMPLAINT_DETAILS_CITIZEN_URL;
 import static com.quantumcoders.minorapp.misc.Constants.NO_INTERNET;
+import static com.quantumcoders.minorapp.misc.Constants.PARAM_COMPLT_ID;
 import static com.quantumcoders.minorapp.misc.Constants.RELOAD_COMPLAINTS_AGENT_URL;
-import static com.quantumcoders.minorapp.misc.Constants.RELOAD_COMPLAINTS_URL;
-import static com.quantumcoders.minorapp.misc.Constants.CTZ_RELOAD_COMPLAINT_LIST_METHOD;
+import static com.quantumcoders.minorapp.misc.Constants.RELOAD_COMPLAINTS_CITIZEN_URL;
+import static com.quantumcoders.minorapp.misc.Constants.TEMP_IMAGE_FILE_NAME;
 
 public class ServerTask extends AsyncTask<String, String[], String[]> {
     Handler hnd = null;
@@ -110,6 +118,9 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
             } else if (method.equals(AGT_RELOAD_COMPLAINT_LIST_METHOD)) {
 
                 return reloadComplaintListAgent(param);
+            } else if(method.equals(CTZ_LOAD_COMPLAINT_DETAILS)){
+
+                return loadComplaintDetailsCitizen(param);
             }
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -168,7 +179,11 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
                 ((AgentMainActivity) activity).complaintListObtainedAgent(response);
             });
 
-        } else if (s.equals(NO_INTERNET)) {
+        } else if(s.equals(CTZ_COMPLAINT_DETAILS_OBTAINED)){
+
+            ((CitizenComplaintDetailsActivity)activity).onLoadComplaintDetails(response);
+
+        }else if (s.equals(NO_INTERNET)) {
             if (activity instanceof MainActivity) {
                 ((MainActivity) activity).noInternet();
             } else if (activity instanceof AgentSignupActivity) {
@@ -354,7 +369,6 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
 
     }
 
-
     private String[] reloadComplaintListCitizen(String... param) throws IOException {
         OkHttpClient client = new OkHttpClient();
         RequestBody requestBody = new MultipartBody.Builder()
@@ -362,7 +376,7 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
                 .addFormDataPart("userid", param[1])
                 .build();
 
-        Request request = new Request.Builder().url(RELOAD_COMPLAINTS_URL).post(requestBody).build();
+        Request request = new Request.Builder().url(RELOAD_COMPLAINTS_CITIZEN_URL).post(requestBody).build();
 
         Response response = client.newCall(request).execute();
         String body = response.body().string();
@@ -407,6 +421,42 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
         }
 
         return ret;
+    }
+
+    private String[] loadComplaintDetailsCitizen(String... param) throws IOException {
+
+        System.out.println("okhttpclient " + param[1]);
+
+        OkHttpClient client = new OkHttpClient();
+        RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                .addFormDataPart(PARAM_COMPLT_ID,param[1]).build();
+        Request request = new Request.Builder().url(LOAD_COMPLAINT_DETAILS_CITIZEN_URL).post(requestBody).build();
+        Response response = client.newCall(request).execute();
+
+        BufferedReader br = new BufferedReader(response.body().charStream());
+        String result[] = new String[8];
+        result[0]=CTZ_COMPLAINT_DETAILS_OBTAINED;
+
+        //get other parameters
+        for(int i=1;i<8;i++)result[i]=br.readLine();
+
+        //get image from string, store it in a temp file
+        File storageDirectory = activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File tempFile = new File(storageDirectory.getAbsolutePath()+"/"+TEMP_IMAGE_FILE_NAME+".jpg");
+
+//        FileWriter fw = new FileWriter(tempFile);
+//        try{
+//            char buff[] = new char[100];
+//            while(br.ready()){
+//                int read = br.read(buff);
+//                fw.write(buff,0,read);
+//            }
+//        } catch(IOException ex){    //IOException means that no data is available to be read in the stream
+//
+//        }
+
+        return result;
+
     }
 
 

@@ -63,7 +63,8 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ctxt, CitizenComplaintDetailsActivity.class);
-                intent.putExtra("complaint_no",viewHolder.complaint.getComplaintNo());
+                intent.putExtra(Constants.PARAM_COMPLT_ID,viewHolder.complaint.getComplaintNo());
+                System.out.println("intent extra " + viewHolder.complaint.getComplaintNo());
                 ctxt.startActivity(intent);
             }
         });
