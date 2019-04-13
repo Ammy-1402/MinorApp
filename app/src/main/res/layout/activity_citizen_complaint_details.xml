@@ -17,7 +17,10 @@
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:minHeight="250dp"
+            app:layout_constraintBottom_toTopOf="@+id/textView14"
+            app:layout_constraintTop_toTopOf="@+id/textView14">
 
             <TextView
                 android:id="@+id/textView7"
@@ -204,6 +207,43 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_description" />
+
+
+            <View
+                android:id="@+id/seperator"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="20dp"
+                android:background="#929292"
+                app:layout_constraintTop_toBottomOf="@id/complaintPhoto" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="25dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/seperator"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent">
+
+                <ImageView
+                    android:id="@+id/resp_image"
+                    android:layout_width="125dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:adjustViewBounds="true" />
+
+                <TextView
+                    android:id="@+id/resp_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:text="test response description" />
+
+            </LinearLayout>
+
 
         </android.support.constraint.ConstraintLayout>
 

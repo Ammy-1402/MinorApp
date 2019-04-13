@@ -20,7 +20,7 @@ public interface Constants {
     public static final String SIGNUP_URL_AGENT = SERVER_URL+"/agent_signup.php"; //demo php for agent
     public static final String LOGIN_URL_AGENT = SERVER_URL+"/agent_login.php";
     public static final String LOGIN_URL_CITIZEN = SERVER_URL+"/citizen_login.php";
-    public static final String FILE_COMPLAINT_URL = SERVER_URL+"/demo_complaint.php";
+    public static final String FILE_COMPLAINT_URL = SERVER_URL+"/complaint_register.php";
     public static final String RELOAD_COMPLAINTS_CITIZEN_URL = SERVER_URL+"/demo_complaint_list_citizen.php";
     public static final String RELOAD_COMPLAINTS_AGENT_URL = SERVER_URL+"/demo_complaint_list_agent.php";
     public static final String LOAD_COMPLAINT_DETAILS_CITIZEN_URL = SERVER_URL+"/demo_complaint_details_citizen.php";

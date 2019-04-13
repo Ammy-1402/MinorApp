@@ -2,6 +2,7 @@ package com.quantumcoders.minorapp.fragments;
 
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -134,6 +135,12 @@ public class CitizenTab1 extends Fragment {
                     String userid = mainActivity.getApplicationContext().getSharedPreferences(SESSION_FILE, Context.MODE_PRIVATE).getString(USER_ID_KEY,"");
 
                     ServerWorker.fileComplaint(mainActivity,category,desc,imageFile,mainActivity.avglat,mainActivity.avglng,address,userid);
+                    ((Spinner)view.findViewById(R.id.spinner)).setSelection(0);
+                    ((TextInputEditText)view.findViewById(R.id.id_description)).setText("");
+                    ((ImageView)mainActivity.findViewById(R.id.imageView3)).setImageResource(android.R.color.transparent);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(mainActivity);
+                    builder.setMessage("Complaint has been registered. It will be visible after some time.").setPositiveButton("Ok",(d,w)->{d.dismiss();});
+                    builder.create().show();
                 }
 
             }
