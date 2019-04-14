@@ -22,7 +22,8 @@
         android:roundIcon="@mipmap/ic_launcher_road_assist_icon_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".misc.SplashScreen"></activity>
+        <activity android:name=".activities.AgentComplaintGroupDetailsActivity"></activity>
+        <activity android:name=".misc.SplashScreen" />
         <activity
             android:name=".activities.CitizenComplaintDetailsActivity"
             android:label="Complaint Details" />

@@ -1,6 +1,7 @@
 package com.quantumcoders.minorapp.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.quantumcoders.minorapp.R;
+import com.quantumcoders.minorapp.activities.AgentComplaintGroupDetailsActivity;
 import com.quantumcoders.minorapp.misc.Constants;
 
 import java.util.List;
@@ -17,6 +19,8 @@ public class AgentMyRecyclerAdapter extends RecyclerView.Adapter<AgentMyRecycler
 
     private List<AgentListItemComplaint> listItems;
     private Context ctxt;
+
+
 
     public AgentMyRecyclerAdapter(List<AgentListItemComplaint> listItems, Context ctxt) {
         this.listItems = listItems;
@@ -42,6 +46,10 @@ public class AgentMyRecyclerAdapter extends RecyclerView.Adapter<AgentMyRecycler
         viewHolder.textViewCategory.setText(agentListItemComplaint.getCategory());
         viewHolder.textViewLocation.setText(agentListItemComplaint.getLocation());
 
+        viewHolder.groupIdComplaint = agentListItemComplaint;
+        viewHolder.groupIdCategory = agentListItemComplaint;
+
+
         if(agentListItemComplaint.getAgentStatus().equals(Constants.STATUS_PENDING)){
 
             viewHolder.textViewAgentStatus.setBackgroundResource(R.drawable.status_pending);
@@ -56,6 +64,16 @@ public class AgentMyRecyclerAdapter extends RecyclerView.Adapter<AgentMyRecycler
 
         }
 
+        viewHolder.itemView.findViewById(R.id.clickAgentLayout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ctxt, AgentComplaintGroupDetailsActivity.class);
+                intent.putExtra(Constants.PARAM_GROUP_ID,viewHolder.groupIdComplaint.getGroupId());
+                intent.putExtra(Constants.PARAM_CATEGORY,viewHolder.groupIdCategory.getCategory());
+                //System.out.println("intent extra : "+viewHolder.groupIdComplaint.getGroupId());
+                ctxt.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -66,6 +84,8 @@ public class AgentMyRecyclerAdapter extends RecyclerView.Adapter<AgentMyRecycler
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView textViewGroupId , textViewNoOfComplaints , textViewCategory , textViewLocation, textViewAgentStatus;
+        public AgentListItemComplaint groupIdComplaint=null,groupIdCategory=null;
+        public View itemView = null;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -74,6 +94,8 @@ public class AgentMyRecyclerAdapter extends RecyclerView.Adapter<AgentMyRecycler
             textViewCategory = itemView.findViewById(R.id.id_agentCategory);
             textViewLocation = itemView.findViewById(R.id.id_agentLocation);
             textViewAgentStatus = itemView.findViewById(R.id.id_agentStatus);
+
+            this.itemView = itemView;
         }
     }
 }

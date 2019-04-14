@@ -3,6 +3,7 @@ package com.quantumcoders.minorapp.misc;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
+import com.quantumcoders.minorapp.activities.AgentComplaintGroupDetailsActivity;
 import com.quantumcoders.minorapp.activities.CitizenComplaintDetailsActivity;
 
 import java.io.File;
@@ -52,14 +53,21 @@ public class ServerWorker {
         tsk.execute(Constants.AGT_RELOAD_COMPLAINT_LIST_METHOD,agentid);
     }
 
+
     public static void loadComplaintDetails(AppCompatActivity activity, String complaint_id){
         ServerTask tsk = new ServerTask(activity,new Handler());
         tsk.execute(Constants.CTZ_LOAD_COMPLAINT_DETAILS,complaint_id);
     }
 
+    //this is for every Group details (group complaint data)
+    public static void loadGroupIdDetails(AppCompatActivity activity, String groupid) {
+        ServerTask tsk = new ServerTask(activity, new Handler());
+        tsk.execute(Constants.AGT_LOAD_GROUP_ID_COMPLAINT_DETAILS,groupid);
+    }
 
     public static void loadComplaintImage(AppCompatActivity activity, String complaint_id) {
         ServerTask tsk = new ServerTask(activity,new Handler());
         tsk.execute(Constants.LOAD_COMPLAINT_IMAGE,complaint_id);
     }
+
 }

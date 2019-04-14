@@ -8,6 +8,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
+import com.quantumcoders.minorapp.activities.AgentComplaintGroupDetailsActivity;
 import com.quantumcoders.minorapp.activities.AgentMainActivity;
 import com.quantumcoders.minorapp.activities.AgentSignupActivity;
 import com.quantumcoders.minorapp.activities.Base;
@@ -39,6 +40,8 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 import static com.quantumcoders.minorapp.misc.Constants.AGT_COMPLAINT_LIST_OBTAINED;
+import static com.quantumcoders.minorapp.misc.Constants.AGT_GROUP_ID_COMPLAINT_DETAILS_OBTAINED;
+import static com.quantumcoders.minorapp.misc.Constants.AGT_LOAD_GROUP_ID_COMPLAINT_DETAILS;
 import static com.quantumcoders.minorapp.misc.Constants.AGT_LOGIN_FAILED;
 import static com.quantumcoders.minorapp.misc.Constants.AGT_LOGIN_METHOD;
 import static com.quantumcoders.minorapp.misc.Constants.AGT_LOGIN_SUCCESS;
@@ -64,8 +67,10 @@ import static com.quantumcoders.minorapp.misc.Constants.FILE_COMPLAINT_URL;
 import static com.quantumcoders.minorapp.misc.Constants.LOAD_COMPLAINT_DETAILS_CITIZEN_URL;
 import static com.quantumcoders.minorapp.misc.Constants.LOAD_COMPLAINT_IMAGE;
 import static com.quantumcoders.minorapp.misc.Constants.LOAD_COMPLAINT_IMAGE_URL;
+import static com.quantumcoders.minorapp.misc.Constants.LOAD_GROUP_ID_COMPLAINT_DETAILS_AGENT_URL;
 import static com.quantumcoders.minorapp.misc.Constants.NO_INTERNET;
 import static com.quantumcoders.minorapp.misc.Constants.PARAM_COMPLT_ID;
+import static com.quantumcoders.minorapp.misc.Constants.PARAM_GROUP_ID;
 import static com.quantumcoders.minorapp.misc.Constants.RELOAD_COMPLAINTS_AGENT_URL;
 import static com.quantumcoders.minorapp.misc.Constants.RELOAD_COMPLAINTS_CITIZEN_URL;
 import static com.quantumcoders.minorapp.misc.Constants.STATUS_COMPLETED;
@@ -95,6 +100,7 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
     @Override
     protected String[] doInBackground(String... param) {
         String method = param[0];
+        System.out.println("doInBackground method value: "+method);
         try {
             ConnectivityManager cm = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo networkInfo = cm.getActiveNetworkInfo();
@@ -131,6 +137,9 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
             } else if(method.equals(CTZ_LOAD_COMPLAINT_DETAILS)){
 
                 return loadComplaintDetailsCitizen(param);
+            }else if(method.equals(AGT_LOAD_GROUP_ID_COMPLAINT_DETAILS)){
+
+                return loadGroupIdComplaintDetails(param);
             } else if(method.equals(LOAD_COMPLAINT_IMAGE)){
 
                 return loadComplaintImage(param);
@@ -152,7 +161,7 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
     @Override
     protected void onPostExecute(final String[] response) {
         String s = response[0];
-        System.out.println("Response tag - " + response[0]);
+        System.out.println("onPostExecute Response tag - " + response[0]);
 //        System.out.println("Response **  -  " + s);
         if (s.equals(CTZ_SIGN_UP_SUCCESS)) {  //citizen signup success
 
@@ -200,6 +209,12 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
         } else if(s.equals(COMPLAINT_IMAGE_OBTAINED)){
 
             ((CitizenComplaintDetailsActivity)activity).onLoadComplaintImage();
+
+        }else if(s.equals(AGT_GROUP_ID_COMPLAINT_DETAILS_OBTAINED)){
+
+           hnd.post(() ->{
+               ((AgentComplaintGroupDetailsActivity)activity).onLoadGroupIdComplaintDetails(response);
+           });
 
         } else if (s.equals(NO_INTERNET)) {
             ((Base)activity).noInternet();
@@ -406,10 +421,11 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
     }
 
     private String[] reloadComplaintListAgent(String... param) throws IOException {
+        System.out.println("--- > "+param[1]);
         OkHttpClient client = new OkHttpClient();
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
-                .addFormDataPart("agentid", param[1])
+                .addFormDataPart("Agent_d", param[1])
                 .build();
 
         Request request = new Request.Builder().url(RELOAD_COMPLAINTS_AGENT_URL).post(requestBody).build();
@@ -417,7 +433,9 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
         Response response = client.newCall(request).execute();
         String body = response.body().string();
         Scanner sc = new Scanner(body);
-
+        //System.out.println("--- <1> " +sc.nextLine());
+        //System.out.println("--- <2> " +sc.nextLine());
+        //System.out.println("--- <3> " +sc.nextLine());
         int n = sc.nextInt();
         System.out.println("agent num complt = " + n);
         sc.nextLine();
@@ -448,8 +466,35 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
 
         if(result[5]==STATUS_COMPLETED)result[8]=br.readLine();
 
+
         return result;
 
+    }
+
+
+    private String[] loadGroupIdComplaintDetails(String... param) throws IOException{
+        System.out.println("loadGroupIdComplaintDetails param[1] value : "+param[1]);
+        OkHttpClient client = new OkHttpClient();
+        RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                .addFormDataPart(PARAM_GROUP_ID,param[1]).build();
+        Request request = new Request.Builder().url(LOAD_GROUP_ID_COMPLAINT_DETAILS_AGENT_URL).post(requestBody).build();
+        Response response = client.newCall(request).execute();
+        String body = response.body().string();
+
+        Scanner sc = new Scanner(body);
+        int n = sc.nextInt();
+        System.out.println("agent groupId complt num = " + n);
+        sc.nextLine();
+
+        String[] ret = new String[3 * n + 1];
+        ret[0]=AGT_GROUP_ID_COMPLAINT_DETAILS_OBTAINED;
+
+        for(int i=1;i < 3*n+1 ;i++){
+            ret[i] = sc.nextLine();
+            System.out.println("--here -- "+ret[i]);
+        }
+
+        return ret;
     }
 
     public String[] loadComplaintImage(String...param) throws IOException {
