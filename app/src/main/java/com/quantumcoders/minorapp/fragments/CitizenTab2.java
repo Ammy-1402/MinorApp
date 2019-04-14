@@ -43,21 +43,6 @@ public class CitizenTab2 extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         listItemComplaint = new ArrayList<>();
 
-        String statuses[] = new String[]{Constants.STATUS_COMPLETED,Constants.STATUS_WORK_IN_PROGRESS,Constants.STATUS_PENDING};
-
-        for(int i=1 ; i<9 ; i++){
-
-            System.out.println("i ========= "+ i);
-
-            ListItemComplaint listItemComplaint = new ListItemComplaint(
-                    ""+i,  //complaintNo is the complaintId
-                    "Timestamp Value "+i,
-                    "ABC "+i,
-                    "Hey Demo data Description .. "+i,
-                     statuses[i%3]);
-
-            this.listItemComplaint.add(listItemComplaint);
-        }
 
         adapter = new MyRecyclerAdapter(listItemComplaint,getActivity());
         recyclerView.setAdapter(adapter);

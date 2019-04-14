@@ -17,7 +17,7 @@ import com.quantumcoders.minorapp.misc.Constants;
 import com.quantumcoders.minorapp.misc.ServerWorker;
 import static com.quantumcoders.minorapp.misc.Constants.*;
 
-public class AgentSignupActivity extends AppCompatActivity {
+public class AgentSignupActivity extends AppCompatActivity implements Base{
 
     String email="",password="";
     boolean clickedOnce=false;
@@ -98,6 +98,7 @@ public class AgentSignupActivity extends AppCompatActivity {
         longToast("User already exists.");
     }
 
+    @Override
     public void noInternet(){
         longToast("Please turn on INTERNET");
     }

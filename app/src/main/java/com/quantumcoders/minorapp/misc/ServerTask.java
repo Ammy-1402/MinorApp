@@ -10,16 +10,20 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.quantumcoders.minorapp.activities.AgentMainActivity;
 import com.quantumcoders.minorapp.activities.AgentSignupActivity;
+import com.quantumcoders.minorapp.activities.Base;
 import com.quantumcoders.minorapp.activities.CitizenComplaintDetailsActivity;
 import com.quantumcoders.minorapp.activities.CitizenMainActivity;
 import com.quantumcoders.minorapp.activities.CitizenSignupActivity;
 import com.quantumcoders.minorapp.activities.MainActivity;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
@@ -42,6 +46,7 @@ import static com.quantumcoders.minorapp.misc.Constants.AGT_RELOAD_COMPLAINT_LIS
 import static com.quantumcoders.minorapp.misc.Constants.AGT_SIGN_UP_FAILED;
 import static com.quantumcoders.minorapp.misc.Constants.AGT_SIGN_UP_METHOD;
 import static com.quantumcoders.minorapp.misc.Constants.AGT_SIGN_UP_SUCCESS;
+import static com.quantumcoders.minorapp.misc.Constants.COMPLAINT_IMAGE_OBTAINED;
 import static com.quantumcoders.minorapp.misc.Constants.COMPLAINT_REG_SUCCESS;
 import static com.quantumcoders.minorapp.misc.Constants.CTZ_COMPLAINT_DETAILS_OBTAINED;
 import static com.quantumcoders.minorapp.misc.Constants.CTZ_COMPLAINT_LIST_OBTAINED;
@@ -56,11 +61,15 @@ import static com.quantumcoders.minorapp.misc.Constants.CTZ_SIGN_UP_SUCCESS;
 import static com.quantumcoders.minorapp.misc.Constants.FILE_COMPLAINT_METHOD;
 import static com.quantumcoders.minorapp.misc.Constants.FILE_COMPLAINT_URL;
 import static com.quantumcoders.minorapp.misc.Constants.LOAD_COMPLAINT_DETAILS_CITIZEN_URL;
+import static com.quantumcoders.minorapp.misc.Constants.LOAD_COMPLAINT_IMAGE;
+import static com.quantumcoders.minorapp.misc.Constants.LOAD_COMPLAINT_IMAGE_URL;
 import static com.quantumcoders.minorapp.misc.Constants.NO_INTERNET;
 import static com.quantumcoders.minorapp.misc.Constants.PARAM_COMPLT_ID;
 import static com.quantumcoders.minorapp.misc.Constants.RELOAD_COMPLAINTS_AGENT_URL;
 import static com.quantumcoders.minorapp.misc.Constants.RELOAD_COMPLAINTS_CITIZEN_URL;
+import static com.quantumcoders.minorapp.misc.Constants.STATUS_COMPLETED;
 import static com.quantumcoders.minorapp.misc.Constants.TEMP_IMAGE_FILE_NAME;
+import static com.quantumcoders.minorapp.misc.Constants.TEMP_IMAGE_FILE_NAME_2;
 
 public class ServerTask extends AsyncTask<String, String[], String[]> {
     Handler hnd = null;
@@ -121,6 +130,10 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
             } else if(method.equals(CTZ_LOAD_COMPLAINT_DETAILS)){
 
                 return loadComplaintDetailsCitizen(param);
+            } else if(method.equals(LOAD_COMPLAINT_IMAGE)){
+
+                return loadComplaintImage(param);
+
             }
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -138,8 +151,8 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
     @Override
     protected void onPostExecute(final String[] response) {
         String s = response[0];
-//        System.out.println("Response - " + response[1]);
-        System.out.println("Response **  -  " + s);
+        System.out.println("Response tag - " + response[1]);
+//        System.out.println("Response **  -  " + s);
         if (s.equals(CTZ_SIGN_UP_SUCCESS)) {  //citizen signup success
 
             hnd.post(() -> ((CitizenSignupActivity) activity).signUpSuccess(response));
@@ -183,18 +196,12 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
 
             ((CitizenComplaintDetailsActivity)activity).onLoadComplaintDetails(response);
 
-        }else if (s.equals(NO_INTERNET)) {
-            if (activity instanceof MainActivity) {
-                ((MainActivity) activity).noInternet();
-            } else if (activity instanceof AgentSignupActivity) {
-                ((AgentSignupActivity) activity).noInternet();
-            } else if (activity instanceof CitizenSignupActivity) {
-                ((CitizenSignupActivity) activity).noInternet();
-            } else if (activity instanceof CitizenMainActivity) {
-                ((CitizenMainActivity) activity).noInternet();
-            } else {
-                System.out.println("Unknown class");
-            }
+        } else if(s.equals(COMPLAINT_IMAGE_OBTAINED)){
+
+            ((CitizenComplaintDetailsActivity)activity).onLoadComplaintImage();
+
+        } else if (s.equals(NO_INTERNET)) {
+            ((Base)activity).noInternet();
         } else {
             System.out.println(s);
         }
@@ -381,9 +388,10 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
         Response response = client.newCall(request).execute();
         String body = response.body().string();
         Scanner sc = new Scanner(body);
+//        System.out.println("Reload complt list CITIZEN response:-"+body);
 
         int n = sc.nextInt();
-        System.out.println("citizen num complt = " + n);
+//        System.out.println("citizen num complt = " + n);
         sc.nextLine();
         String[] ret = new String[5 * n + 1];
         ret[0] = Constants.CTZ_COMPLAINT_LIST_OBTAINED;
@@ -424,9 +432,6 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
     }
 
     private String[] loadComplaintDetailsCitizen(String... param) throws IOException {
-
-        System.out.println("okhttpclient " + param[1]);
-
         OkHttpClient client = new OkHttpClient();
         RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
                 .addFormDataPart(PARAM_COMPLT_ID,param[1]).build();
@@ -434,29 +439,53 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
         Response response = client.newCall(request).execute();
 
         BufferedReader br = new BufferedReader(response.body().charStream());
-        String result[] = new String[8];
+        String result[] = new String[9];
         result[0]=CTZ_COMPLAINT_DETAILS_OBTAINED;
 
         //get other parameters
-        for(int i=1;i<8;i++)result[i]=br.readLine();
+        for(int i=1;i<=7;i++)result[i]=br.readLine();
 
-        //get image from string, store it in a temp file
-        File storageDirectory = activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File tempFile = new File(storageDirectory.getAbsolutePath()+"/"+TEMP_IMAGE_FILE_NAME+".jpg");
-
-//        FileWriter fw = new FileWriter(tempFile);
-//        try{
-//            char buff[] = new char[100];
-//            while(br.ready()){
-//                int read = br.read(buff);
-//                fw.write(buff,0,read);
-//            }
-//        } catch(IOException ex){    //IOException means that no data is available to be read in the stream
-//
-//        }
+        if(result[5]==STATUS_COMPLETED)result[8]=br.readLine();
 
         return result;
 
+    }
+
+    public String[] loadComplaintImage(String...param) throws IOException {
+        System.out.println("Load complaint image " + param[1]);
+
+        OkHttpClient client = new OkHttpClient();
+        RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                .addFormDataPart(PARAM_COMPLT_ID,param[1]).build();
+
+        Request request = new Request.Builder().url(LOAD_COMPLAINT_IMAGE_URL).post(requestBody).build();
+        Response response = client.newCall(request).execute();
+
+        InputStream is = response.body().byteStream();
+        BufferedInputStream bis = new BufferedInputStream(is);
+
+        File storage = activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File imageFile = new File(storage.getAbsolutePath()+"/"+TEMP_IMAGE_FILE_NAME+".jpg");
+
+        FileOutputStream fos = new FileOutputStream(imageFile);
+
+        byte bytearr[] = new byte[100];
+        long bcount=0;
+
+        try{
+            while(true){
+                int read = bis.read(bytearr);
+                if(read<=0)break;
+                bcount+=read;
+                fos.write(bytearr,0,read);
+            }
+        }catch(Exception ex){}
+
+        System.out.println("Written " + bcount + " bytes");
+
+        fos.flush();
+        fos.close();
+        return stringArrayOf(COMPLAINT_IMAGE_OBTAINED);
     }
 
 

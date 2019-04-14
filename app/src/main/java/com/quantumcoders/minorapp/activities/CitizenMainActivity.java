@@ -32,7 +32,7 @@ import com.quantumcoders.minorapp.misc.ServerWorker;
 
 import java.util.ArrayList;
 
-public class CitizenMainActivity extends AppCompatActivity implements LocationListener {
+public class CitizenMainActivity extends AppCompatActivity implements LocationListener,Base {
 
     TabLayout tabLayout;
     ViewPager viewPager;
@@ -184,6 +184,7 @@ public class CitizenMainActivity extends AppCompatActivity implements LocationLi
         Toast.makeText(this,msg,Toast.LENGTH_LONG).show();
     }
 
+    @Override
     public void noInternet(){
         longToast("Please turn on INTERNET");
     }

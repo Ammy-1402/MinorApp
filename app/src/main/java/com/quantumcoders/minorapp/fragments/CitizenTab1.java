@@ -69,7 +69,6 @@ public class CitizenTab1 extends Fragment {
         locDesc.setText(desc);
         if(map!=null){
             gmap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat,lng),18));
-            gmap.addMarker(new MarkerOptions().position(new LatLng(lat,lng)).title("Your Location"));
         }
     }
 
@@ -111,12 +110,10 @@ public class CitizenTab1 extends Fragment {
         ((Button) view.findViewById(R.id.id_registerComplaint)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("register complaint clicked");
-
                 int pos = ((Spinner)view.findViewById(R.id.spinner)).getSelectedItemPosition();
                 String desc = ((TextInputEditText)view.findViewById(R.id.id_description)).getText().toString().trim();
 
-                System.out.println("$$ register complaint clicked " + pos + " | " + desc);
+                System.out.println("Register complaint button clicked " + pos + "|" + desc);
 
                 if(pos==0)mainActivity.longToast("Choose a category");
                 else if(desc.equals("")){
@@ -127,7 +124,7 @@ public class CitizenTab1 extends Fragment {
                     mainActivity.longToast("Location not loaded");
                 } else {
 
-                    System.out.println("filing complaint");
+                    System.out.println("Filing complaint now");
                     desc = desc.replace("\n","<br/>");
 
                     String category = ((Spinner)view.findViewById(R.id.spinner)).getSelectedItem().toString();
@@ -186,7 +183,6 @@ public class CitizenTab1 extends Fragment {
         map.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
-                Toast.makeText(getActivity(),"Map Ready",Toast.LENGTH_SHORT).show();
                 gmap=googleMap;
 
             }

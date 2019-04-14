@@ -3,6 +3,8 @@ package com.quantumcoders.minorapp.misc;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
+import com.quantumcoders.minorapp.activities.CitizenComplaintDetailsActivity;
+
 import java.io.File;
 
 
@@ -56,5 +58,8 @@ public class ServerWorker {
     }
 
 
-
+    public static void loadComplaintImage(AppCompatActivity activity, String complaint_id) {
+        ServerTask tsk = new ServerTask(activity,new Handler());
+        tsk.execute(Constants.LOAD_COMPLAINT_IMAGE,complaint_id);
+    }
 }

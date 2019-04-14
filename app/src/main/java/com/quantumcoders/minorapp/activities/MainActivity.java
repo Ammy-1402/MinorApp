@@ -17,7 +17,7 @@ import com.quantumcoders.minorapp.adapters.ViewPagerAdapter;
 
 import static com.quantumcoders.minorapp.misc.Constants.*;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Base {
 
     TabLayout tabLayout;
     ViewPager viewPager;
@@ -37,10 +37,10 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences pref = getApplicationContext().getSharedPreferences(Constants.SESSION_FILE,MODE_PRIVATE);
         SharedPreferences.Editor edit = pref.edit();
         if(pref.contains(TYPE_KEY) && pref.contains(EMAIL_ID_KEY) && pref.contains(PWD_KEY)){
-            Toast.makeText(this,"SESSION-"+pref.getString(TYPE_KEY,""),Toast.LENGTH_SHORT).show();
-            Toast.makeText(this,"EMAIL-"+pref.getString(EMAIL_ID_KEY,""),Toast.LENGTH_SHORT).show();
-            Toast.makeText(this,"PWD-"+pref.getString(PWD_KEY,""),Toast.LENGTH_SHORT).show();
-            Toast.makeText(this,"ID-"+pref.getString(USER_ID_KEY,""),Toast.LENGTH_SHORT).show();
+            System.out.println("SESSION-"+pref.getString(TYPE_KEY,""));
+            System.out.println("EMAIL-"+pref.getString(EMAIL_ID_KEY,""));
+            System.out.println("PWD-"+pref.getString(PWD_KEY,""));
+            System.out.println("ID-"+pref.getString(USER_ID_KEY,""));
 
             // go to logged in activity on the bases of the type
             if(pref.getString(TYPE_KEY,"").equals(CITIZEN)){
@@ -129,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
         clickedOnce=false;
     }
 
+    @Override
     public void noInternet(){
         longToast("Please turn on INTERNET");
         clickedOnce=false;

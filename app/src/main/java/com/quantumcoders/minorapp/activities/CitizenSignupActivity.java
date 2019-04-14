@@ -17,7 +17,7 @@ import com.quantumcoders.minorapp.misc.ServerWorker;
 
 import static com.quantumcoders.minorapp.misc.Constants.*;
 
-public class CitizenSignupActivity extends AppCompatActivity {
+public class CitizenSignupActivity extends AppCompatActivity implements Base {
 
     String email="",password="";
     boolean clickedOnce=false;
@@ -101,6 +101,7 @@ public class CitizenSignupActivity extends AppCompatActivity {
         clickedOnce=false;
     }
 
+    @Override
     public void noInternet(){
         longToast("Please turn on INTERNET");
     }
