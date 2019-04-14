@@ -48,6 +48,7 @@ import static com.quantumcoders.minorapp.misc.Constants.AGT_SIGN_UP_METHOD;
 import static com.quantumcoders.minorapp.misc.Constants.AGT_SIGN_UP_SUCCESS;
 import static com.quantumcoders.minorapp.misc.Constants.COMPLAINT_IMAGE_OBTAINED;
 import static com.quantumcoders.minorapp.misc.Constants.COMPLAINT_REG_SUCCESS;
+import static com.quantumcoders.minorapp.misc.Constants.COMPLT_IMAGE_PREFIX;
 import static com.quantumcoders.minorapp.misc.Constants.CTZ_COMPLAINT_DETAILS_OBTAINED;
 import static com.quantumcoders.minorapp.misc.Constants.CTZ_COMPLAINT_LIST_OBTAINED;
 import static com.quantumcoders.minorapp.misc.Constants.CTZ_LOAD_COMPLAINT_DETAILS;
@@ -151,7 +152,7 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
     @Override
     protected void onPostExecute(final String[] response) {
         String s = response[0];
-        System.out.println("Response tag - " + response[1]);
+        System.out.println("Response tag - " + response[0]);
 //        System.out.println("Response **  -  " + s);
         if (s.equals(CTZ_SIGN_UP_SUCCESS)) {  //citizen signup success
 
@@ -465,7 +466,8 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
         BufferedInputStream bis = new BufferedInputStream(is);
 
         File storage = activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File imageFile = new File(storage.getAbsolutePath()+"/"+TEMP_IMAGE_FILE_NAME+".jpg");
+        File imageFile = new File(storage.getAbsolutePath()+"/"+COMPLT_IMAGE_PREFIX + param[1]+".jpg");
+        System.out.println("Writing image to file "+imageFile.getName());
 
         FileOutputStream fos = new FileOutputStream(imageFile);
 

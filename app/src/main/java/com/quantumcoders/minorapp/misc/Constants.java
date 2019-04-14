@@ -14,6 +14,7 @@ public interface Constants {
 
     public static final String TEMP_IMAGE_FILE_NAME="tempImageFile";
     public static final String TEMP_IMAGE_FILE_NAME_2="tempImageFile2";
+    public static final String COMPLT_IMAGE_PREFIX="compltImage_";
     public static final String PARAM_COMPLT_ID="Complain_no";
 
     public static final String SERVER_URL = "http://quantumcoders.000webhostapp.com";   //doesn't includes a / at the end
