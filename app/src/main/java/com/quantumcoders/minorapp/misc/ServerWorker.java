@@ -70,4 +70,8 @@ public class ServerWorker {
         tsk.execute(Constants.LOAD_COMPLAINT_IMAGE,complaint_id);
     }
 
+    public static void loadResponseImage(AppCompatActivity activity, String complaint_id) {
+        ServerTask tsk = new ServerTask(activity,new Handler());
+        tsk.execute(Constants.LOAD_RESPONSE_IMAGE,complaint_id);
+    }
 }

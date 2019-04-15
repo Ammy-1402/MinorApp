@@ -21,16 +21,20 @@ import java.io.File;
 import static android.view.View.VISIBLE;
 import static com.quantumcoders.minorapp.misc.Constants.COMPLT_IMAGE_PREFIX;
 import static com.quantumcoders.minorapp.misc.Constants.PARAM_COMPLT_ID;
+import static com.quantumcoders.minorapp.misc.Constants.RESP_IMAGE_PREFIX;
 import static com.quantumcoders.minorapp.misc.Constants.STATUS_COMPLETED;
 
 public class CitizenComplaintDetailsActivity extends AppCompatActivity {
     LinearLayout respLayout = null;
     File compltImage=null;
+    File respImage=null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_citizen_complaint_details);
+
         respLayout = findViewById(R.id.linearLayout);
         respLayout.setVisibility(View.GONE);
         String cno = getIntent().getStringExtra(PARAM_COMPLT_ID);
@@ -38,8 +42,15 @@ public class CitizenComplaintDetailsActivity extends AppCompatActivity {
 
         //only load image if doesn't exists
         compltImage = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + COMPLT_IMAGE_PREFIX + cno + ".jpg");
-        if(compltImage!=null && !compltImage.exists()) ServerWorker.loadComplaintImage(this, cno);
+        respImage = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/" + RESP_IMAGE_PREFIX + cno + ".jpg");
+
+        if(compltImage==null || !compltImage.exists()) ServerWorker.loadComplaintImage(this, cno);
         else onLoadComplaintImage();
+
+        if(respImage==null || !respImage.exists()) ServerWorker.loadResponseImage(this,cno);
+        else onLoadResponseImage();
+
+        //response image will be loaded in onLoadComplaintDetails
     }
 
     public void onLoadComplaintDetails(String... response) {
@@ -72,5 +83,11 @@ public class CitizenComplaintDetailsActivity extends AppCompatActivity {
     public void onLoadComplaintImage() {
         System.out.println("onLoadComplaintImage");
         ((ImageView) findViewById(R.id.complaintImage)).setImageURI(FileProvider.getUriForFile(this, getPackageName(), compltImage));
+    }
+
+
+    public void onLoadResponseImage() {
+        System.out.println("onLoadResponseImage");
+        ((ImageView) respLayout.findViewById(R.id.resp_image)).setImageURI(FileProvider.getUriForFile(this, getPackageName(), respImage));
     }
 }

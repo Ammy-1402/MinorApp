@@ -15,10 +15,12 @@ public interface Constants {
     public static final String TEMP_IMAGE_FILE_NAME="tempImageFile";
     public static final String TEMP_IMAGE_FILE_NAME_2="tempImageFile2";
     public static final String COMPLT_IMAGE_PREFIX="compltImage_";
+    public static final String RESP_IMAGE_PREFIX = "respImage_";
     public static final String PARAM_COMPLT_ID="Complain_no";
     public static final String PARAM_GROUP_ID="Group_id";
     public static final String PARAM_CATEGORY="Category";
     public static final String PARAM_COMPLNT_NO="COMPLNT_NO";
+    public static final String PARAM_GRP_ID="Grp_id";
 
     public static final String SERVER_URL = "http://quantumcoders.000webhostapp.com";   //doesn't includes a / at the end
     public static final String SIGNUP_URL_CITIZEN = SERVER_URL + "/citizen_signup.php"; //demo php for citizen
@@ -31,6 +33,7 @@ public interface Constants {
     public static final String LOAD_COMPLAINT_DETAILS_CITIZEN_URL = SERVER_URL+"/complaint_details_citizen.php";
     public static final String LOAD_GROUP_ID_COMPLAINT_DETAILS_AGENT_URL = SERVER_URL+"/demo_GroupId_details.php";
     public static final String LOAD_COMPLAINT_IMAGE_URL = SERVER_URL+"/complaint_image.php";
+    public static final String LOAD_RESPONSE_IMAGE_URL = SERVER_URL+"/response_image.php";
     public static final String LOAD_COMPLAINT_DETAILS_AGENT_URL = SERVER_URL+"/demo_complaint_details_agent.php";
 
     public static final String CTZ_SIGN_UP_METHOD="signUpCitizen";
@@ -43,6 +46,7 @@ public interface Constants {
     public static final String CTZ_LOAD_COMPLAINT_DETAILS = "loadComplaintDetailsCitizen";
     public static final String AGT_LOAD_COMPLAINT_DETAILS = "loadComplaintDetailsAgent";
     public static final String LOAD_COMPLAINT_IMAGE = "loadComplaintImage";
+    public static final String LOAD_RESPONSE_IMAGE = "loadResponseImage";
     public static final String AGT_LOAD_GROUP_ID_COMPLAINT_DETAILS = "loadGroupIdComplaintDetailsAgent";
 
     public static final String CTZ_SIGN_UP_SUCCESS="CitizenSignupSuccess";
@@ -56,6 +60,7 @@ public interface Constants {
     public static final String CTZ_COMPLAINT_DETAILS_OBTAINED="ComplaintDetailsObtainedCitizen";
     public static final String AGT_GROUP_ID_COMPLAINT_DETAILS_OBTAINED="ComplaintDetailsObtainedAgent";
     public static final String COMPLAINT_IMAGE_OBTAINED="ComplaintImageObtained";
+    public static final String RESPONSE_IMAGE_OBTAINED="ResponseImageObtained";
 
     public static final String CTZ_SIGN_UP_FAILED="CitizenSignupFailed";
     public static final String AGT_SIGN_UP_FAILED="AgentSignupFailed";
