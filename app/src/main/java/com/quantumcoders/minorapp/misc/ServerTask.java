@@ -68,11 +68,15 @@ import static com.quantumcoders.minorapp.misc.Constants.LOAD_COMPLAINT_DETAILS_C
 import static com.quantumcoders.minorapp.misc.Constants.LOAD_COMPLAINT_IMAGE;
 import static com.quantumcoders.minorapp.misc.Constants.LOAD_COMPLAINT_IMAGE_URL;
 import static com.quantumcoders.minorapp.misc.Constants.LOAD_GROUP_ID_COMPLAINT_DETAILS_AGENT_URL;
+import static com.quantumcoders.minorapp.misc.Constants.LOAD_RESPONSE_IMAGE;
+import static com.quantumcoders.minorapp.misc.Constants.LOAD_RESPONSE_IMAGE_URL;
 import static com.quantumcoders.minorapp.misc.Constants.NO_INTERNET;
 import static com.quantumcoders.minorapp.misc.Constants.PARAM_COMPLT_ID;
 import static com.quantumcoders.minorapp.misc.Constants.PARAM_GROUP_ID;
 import static com.quantumcoders.minorapp.misc.Constants.RELOAD_COMPLAINTS_AGENT_URL;
 import static com.quantumcoders.minorapp.misc.Constants.RELOAD_COMPLAINTS_CITIZEN_URL;
+import static com.quantumcoders.minorapp.misc.Constants.RESPONSE_IMAGE_OBTAINED;
+import static com.quantumcoders.minorapp.misc.Constants.RESP_IMAGE_PREFIX;
 import static com.quantumcoders.minorapp.misc.Constants.STATUS_COMPLETED;
 import static com.quantumcoders.minorapp.misc.Constants.TEMP_IMAGE_FILE_NAME;
 import static com.quantumcoders.minorapp.misc.Constants.TEMP_IMAGE_FILE_NAME_2;
@@ -137,13 +141,16 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
             } else if(method.equals(CTZ_LOAD_COMPLAINT_DETAILS)){
 
                 return loadComplaintDetailsCitizen(param);
-            }else if(method.equals(AGT_LOAD_GROUP_ID_COMPLAINT_DETAILS)){
+            } else if(method.equals(AGT_LOAD_GROUP_ID_COMPLAINT_DETAILS)){
 
                 return loadGroupIdComplaintDetails(param);
             } else if(method.equals(LOAD_COMPLAINT_IMAGE)){
 
                 return loadComplaintImage(param);
 
+            } else if(method.equals(LOAD_RESPONSE_IMAGE)){
+
+                return loadResponseImage(param);
             }
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -215,6 +222,12 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
            hnd.post(() ->{
                ((AgentComplaintGroupDetailsActivity)activity).onLoadGroupIdComplaintDetails(response);
            });
+
+        } else if(s.equals(RESPONSE_IMAGE_OBTAINED)){
+
+            hnd.post(()->{
+                ((CitizenComplaintDetailsActivity)activity).onLoadResponseImage();
+            });
 
         } else if (s.equals(NO_INTERNET)) {
             ((Base)activity).noInternet();
@@ -464,7 +477,7 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
         //get other parameters
         for(int i=1;i<=7;i++)result[i]=br.readLine();
 
-        if(result[5]==STATUS_COMPLETED)result[8]=br.readLine();
+        if(result[5].equals(STATUS_COMPLETED))result[8]=br.readLine();
 
 
         return result;
@@ -533,6 +546,44 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
         fos.flush();
         fos.close();
         return stringArrayOf(COMPLAINT_IMAGE_OBTAINED);
+    }
+
+    public String[] loadResponseImage(String...param) throws IOException{
+        System.out.println("Load response image " + param[1]);
+
+        OkHttpClient client = new OkHttpClient();
+        RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                .addFormDataPart(PARAM_COMPLT_ID,param[1]).build();
+
+        Request request = new Request.Builder().url(LOAD_RESPONSE_IMAGE_URL).post(requestBody).build();
+        Response response = client.newCall(request).execute();
+
+        InputStream is = response.body().byteStream();
+        BufferedInputStream bis = new BufferedInputStream(is);
+
+        File storage = activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File imageFile = new File(storage.getAbsolutePath()+"/"+RESP_IMAGE_PREFIX + param[1]+".jpg");
+        System.out.println("Writing image to file "+imageFile.getName());
+
+        FileOutputStream fos = new FileOutputStream(imageFile);
+
+        byte bytearr[] = new byte[100];
+        long bcount=0;
+
+        try{
+            while(true){
+                int read = bis.read(bytearr);
+                if(read<=0)break;
+                bcount+=read;
+                fos.write(bytearr,0,read);
+            }
+        }catch(Exception ex){}
+
+        System.out.println("Written " + bcount + " bytes");
+
+        fos.flush();
+        fos.close();
+        return stringArrayOf(RESPONSE_IMAGE_OBTAINED);
     }
 
 
