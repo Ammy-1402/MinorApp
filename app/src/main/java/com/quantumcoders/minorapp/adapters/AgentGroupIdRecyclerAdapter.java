@@ -1,6 +1,7 @@
 package com.quantumcoders.minorapp.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.quantumcoders.minorapp.R;
+import com.quantumcoders.minorapp.activities.AgentComplaintDetailsActivity;
+import com.quantumcoders.minorapp.misc.Constants;
 
 import java.util.List;
 
@@ -38,7 +41,18 @@ public class AgentGroupIdRecyclerAdapter extends RecyclerView.Adapter<AgentGroup
         viewHolder.textViewComplaintNo.setText(agentListItemGroupIdComplaint.getGroupIdComplaintNo());
         viewHolder.textViewRegisteredBy.setText(agentListItemGroupIdComplaint.getRegisteredBy());
         viewHolder.textViewRegisteredOn.setText(agentListItemGroupIdComplaint.getRegisteredOn());
-
+        viewHolder.complaintNo = agentListItemGroupIdComplaint;
+        viewHolder.itemView.findViewById(R.id.agentGroupIdItemListClickLayout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ctxt, AgentComplaintDetailsActivity.class);
+                intent.putExtra(Constants.PARAM_COMPLNT_NO,viewHolder.complaintNo.getGroupIdComplaintNo());
+                intent.putExtra(Constants.PARAM_REGISTERED_BY,viewHolder.complaintNo.getRegisteredBy());
+                intent.putExtra(Constants.PARAM_REGISTERED_ON,viewHolder.complaintNo.getRegisteredOn());
+                //System.out.println("AgentGroupIdRecyclerAdapter intent extra: "+viewHolder.complaintNo.groupIdComplaintNo);
+                ctxt.startActivity(intent);
+            }
+        });
 
     }
 
@@ -50,7 +64,7 @@ public class AgentGroupIdRecyclerAdapter extends RecyclerView.Adapter<AgentGroup
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         public TextView textViewComplaintNo , textViewRegisteredBy , textViewRegisteredOn ;
-
+        public AgentListItemGroupIdComplaint complaintNo;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             textViewComplaintNo = itemView.findViewById(R.id.id_complaintNoInGroupId);

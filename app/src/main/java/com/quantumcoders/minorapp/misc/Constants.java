@@ -18,7 +18,9 @@ public interface Constants {
     public static final String PARAM_COMPLT_ID="Complain_no";
     public static final String PARAM_GROUP_ID="Group_id";
     public static final String PARAM_CATEGORY="Category";
-    public static final String PARAM_COMPLNT_NO="COMPLNT_NO";
+    public static final String PARAM_COMPLNT_NO="Complnt_no";
+    public static final String PARAM_REGISTERED_BY="Registered By";
+    public static final String PARAM_REGISTERED_ON="Registered On";
 
     public static final String SERVER_URL = "http://quantumcoders.000webhostapp.com";   //doesn't includes a / at the end
     public static final String SIGNUP_URL_CITIZEN = SERVER_URL + "/citizen_signup.php"; //demo php for citizen
