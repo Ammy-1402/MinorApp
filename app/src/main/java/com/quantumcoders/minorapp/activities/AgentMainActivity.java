@@ -1,5 +1,6 @@
 package com.quantumcoders.minorapp.activities;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -21,7 +22,9 @@ import com.quantumcoders.minorapp.misc.ServerWorker;
 
 import java.util.ArrayList;
 
-public class AgentMainActivity extends AppCompatActivity {
+import static com.quantumcoders.minorapp.misc.Constants.REQ_RELOAD_LIST;
+
+public class AgentMainActivity extends AppCompatActivity implements Base{
 
     TabLayout agentTabLayout;
     ViewPager agentViewPager;
@@ -30,6 +33,8 @@ public class AgentMainActivity extends AppCompatActivity {
     AgentTab1 tab1 = null;
     AgentTab2 tab2 = null;
     AgentTab3 tab3 = null;
+
+    String agentid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +53,7 @@ public class AgentMainActivity extends AppCompatActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 agentViewPager.setCurrentItem(tab.getPosition());
                 if(tab.getPosition()==0){   //view complaint list fragment/page
-                    String agentid = getApplicationContext().getSharedPreferences(Constants.SESSION_FILE,MODE_PRIVATE).getString(Constants.USER_ID_KEY,"");
+                    agentid = getApplicationContext().getSharedPreferences(Constants.SESSION_FILE,MODE_PRIVATE).getString(Constants.USER_ID_KEY,"");
                     ServerWorker.reloadComplaintsListAgent(AgentMainActivity.this,agentid);
                 }
             }
@@ -97,4 +102,23 @@ public class AgentMainActivity extends AppCompatActivity {
         longToast("AGENT COMPLAINT LIST UPDATED");
     }
 
+    public void noInternet(){
+        longToast("Please turn on the INTERNET");
+    }
+
+    @Override
+    public void onRequestTimeout(){
+        longToast("Request timed out");
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode==REQ_RELOAD_LIST){
+            tab1.agentListItemComplaints=new ArrayList<>();
+            tab1.adapter=new AgentMyRecyclerAdapter(tab1.agentListItemComplaints,this);
+            tab1.recyclerView.setAdapter(tab1.adapter);
+            adapter.notifyDataSetChanged();
+            ServerWorker.reloadComplaintsListAgent(this,agentid);
+        }
+    }
 }

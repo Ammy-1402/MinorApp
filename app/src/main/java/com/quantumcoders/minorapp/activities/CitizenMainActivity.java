@@ -2,6 +2,7 @@ package com.quantumcoders.minorapp.activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -40,9 +41,9 @@ public class CitizenMainActivity extends AppCompatActivity implements LocationLi
     LocationManager lm=null;
     boolean locationPermitted=false;
 
-    float latsum=0.0f,lngsum=0.0f;
+    double latsum=0.0f,lngsum=0.0f;
     public int count=0;
-    public float avglat=0.0f,avglng=0.0f;
+    public double avglat=0.0f,avglng=0.0f;
 
     int TIME_TO_UPDATE=1000;
     int DIST_TO_UPDATE=0;
@@ -66,6 +67,7 @@ public class CitizenMainActivity extends AppCompatActivity implements LocationLi
 
 
 
+    @SuppressLint("MissingPermission")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,46 +101,22 @@ public class CitizenMainActivity extends AppCompatActivity implements LocationLi
         });
 
         lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            //request for permissions
-            String permissions[] = {Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION};
-            ActivityCompat.requestPermissions(this,permissions,1);
+        if(lm.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, TIME_TO_UPDATE, DIST_TO_UPDATE, this);
+            locationPermitted=true;
+            System.out.println("Location - Using GPS Provider");
+        } else if(lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
+            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, TIME_TO_UPDATE, DIST_TO_UPDATE, this);
+            locationPermitted=true;
+            System.out.println("Location - Using Network Provider");
         } else {
-            if(lm.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-                lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, TIME_TO_UPDATE, DIST_TO_UPDATE, this);
-                locationPermitted=true;
-                System.out.println("Location - Using GPS Provider");
-            } else if(lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
-                lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, TIME_TO_UPDATE, DIST_TO_UPDATE, this);
-                locationPermitted=true;
-                System.out.println("Location - Using Network Provider");
-            } else {
-                System.out.println("Location - No provider enabled");
-            }
+            System.out.println("Location - No provider enabled");
         }
+
     }
 
 
 
-    @SuppressLint("MissingPermission")
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if(requestCode==1){
-            if(grantResults[0]==PackageManager.PERMISSION_GRANTED && grantResults[1]==PackageManager.PERMISSION_GRANTED){
-                if(lm.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-                    lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, TIME_TO_UPDATE, DIST_TO_UPDATE, this);
-                    locationPermitted=true;
-                    System.out.println("Location - Using GPS Provider");
-                } else if(lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
-                    lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, TIME_TO_UPDATE, DIST_TO_UPDATE, this);
-                    locationPermitted=true;
-                    System.out.println("Location - Using Network Provider");
-                } else {
-                    System.out.println("Location - No provider enabled");
-                }
-            }
-        }
-    }
 
     @Override
     public void onAttachFragment(Fragment fragment) {
@@ -189,6 +167,11 @@ public class CitizenMainActivity extends AppCompatActivity implements LocationLi
         longToast("Please turn on INTERNET");
     }
 
+    @Override
+    public void onRequestTimeout(){
+        longToast("Request timed out");
+    }
+
     public void complaintListObtainedCitizen(String...data){
         ArrayList<ListItemComplaint> list = new ArrayList<>();
         for(int i=1;i<data.length;i+=5){
@@ -198,6 +181,23 @@ public class CitizenMainActivity extends AppCompatActivity implements LocationLi
         tab2.adapter = new MyRecyclerAdapter(list, this);
         tab2.recyclerView.setAdapter(tab2.adapter);
         longToast("CITIZEN COMPLAINT LIST UPDATED");
+    }
+
+
+
+    public void complaintRegSuccess(){
+        System.out.println("Complaint Registration Success");
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Complaint has been registered. It will be visible after some time in the list.").setPositiveButton("Ok",(d,w)->{d.dismiss();});
+        builder.create().show();
+    }
+
+    public void complaintRegFailed(){
+        System.out.println("Complaint Registration FAILED");
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Complaint registration failed. Some error occured.").setPositiveButton("Ok",(d,w)->{d.dismiss();});
+        builder.create().show();
+
     }
 
 }

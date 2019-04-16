@@ -20,7 +20,7 @@ public class FetchAddressIntentService extends IntentService {
     }
 
 
-    public static void fetch(Context context, float lat, float lng, ResultReceiver resultReceiver) {
+    public static void fetch(Context context, double lat, double lng, ResultReceiver resultReceiver) {
         Intent intent = new Intent(context, FetchAddressIntentService.class);
         intent.putExtra("LATITUDE", lat);
         intent.putExtra("LONGITUDE", lng);
@@ -31,8 +31,8 @@ public class FetchAddressIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
-            float lat = intent.getFloatExtra("LATITUDE",0.0f);
-            float lng = intent.getFloatExtra("LONGITUDE",0.0f);
+            double lat = intent.getDoubleExtra("LATITUDE",0.0f);
+            double lng = intent.getDoubleExtra("LONGITUDE",0.0f);
 
             if(lat!=0.0f && lng!=0.0f){
 

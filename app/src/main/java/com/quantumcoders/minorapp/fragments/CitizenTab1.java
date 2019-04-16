@@ -3,6 +3,7 @@ package com.quantumcoders.minorapp.fragments;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -65,7 +66,7 @@ public class CitizenTab1 extends Fragment {
     }
 
     @SuppressLint("MissingPermission")
-    public void updateLocation(float lat, float lng, String desc){
+    public void updateLocation(double lat, double lng, String desc){
         locDesc.setText(desc);
         if(map!=null){
             gmap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat,lng),18));
@@ -134,10 +135,7 @@ public class CitizenTab1 extends Fragment {
                     ServerWorker.fileComplaint(mainActivity,category,desc,imageFile,mainActivity.avglat,mainActivity.avglng,address,userid);
                     ((Spinner)view.findViewById(R.id.spinner)).setSelection(0);
                     ((TextInputEditText)view.findViewById(R.id.id_description)).setText("");
-                    ((ImageView)mainActivity.findViewById(R.id.imageView3)).setImageResource(android.R.color.transparent);
-                    AlertDialog.Builder builder = new AlertDialog.Builder(mainActivity);
-                    builder.setMessage("Complaint has been registered. It will be visible after some time.").setPositiveButton("Ok",(d,w)->{d.dismiss();});
-                    builder.create().show();
+                    ((ImageView)mainActivity.findViewById(R.id.imageView3)).setImageResource(R.mipmap.ic_launcher_round);
                 }
 
             }
@@ -147,9 +145,6 @@ public class CitizenTab1 extends Fragment {
     }
 
 
-    public void complaint_reg_failed(){
-        mainActivity.longToast("Complaint reg failed");
-    }
 
 
     @Override
@@ -172,25 +167,29 @@ public class CitizenTab1 extends Fragment {
         return imageFile;
     }
 
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
         getView().findViewById(R.id.id_registerComplaint).requestFocus();
+        initMap();
+//        map.setDuplicateParentStateEnabled(false);
+    }
 
+    @SuppressLint("MissingPermission")
+    public void initMap(){
         map = ((MapView)getView().findViewById(R.id.mapView));
         map.onCreate(new Bundle());
-        map.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
-                gmap=googleMap;
+        map.getMapAsync(googleMap -> {
+            gmap=googleMap;
+            googleMap.setMyLocationEnabled(true);
 
-            }
         });
         map.setClickable(true);
         map.setFocusable(true);
-        map.setDuplicateParentStateEnabled(false);
     }
+
 
     @Override
     public void onStart() {

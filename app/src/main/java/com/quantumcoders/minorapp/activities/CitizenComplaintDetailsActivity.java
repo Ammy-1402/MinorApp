@@ -19,6 +19,7 @@ import org.w3c.dom.Text;
 import java.io.File;
 
 import static android.view.View.VISIBLE;
+import static com.quantumcoders.minorapp.misc.Constants.CITIZEN;
 import static com.quantumcoders.minorapp.misc.Constants.COMPLT_IMAGE_PREFIX;
 import static com.quantumcoders.minorapp.misc.Constants.PARAM_COMPLT_ID;
 import static com.quantumcoders.minorapp.misc.Constants.RESP_IMAGE_PREFIX;
@@ -44,7 +45,7 @@ public class CitizenComplaintDetailsActivity extends AppCompatActivity {
         compltImage = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + COMPLT_IMAGE_PREFIX + cno + ".jpg");
         respImage = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/" + RESP_IMAGE_PREFIX + cno + ".jpg");
 
-        if(compltImage==null || !compltImage.exists()) ServerWorker.loadComplaintImage(this, cno);
+        if(compltImage==null || !compltImage.exists()) ServerWorker.loadComplaintImage(this, cno,CITIZEN);
         else onLoadComplaintImage();
 
         if(respImage==null || !respImage.exists()) ServerWorker.loadResponseImage(this,cno);
@@ -89,5 +90,6 @@ public class CitizenComplaintDetailsActivity extends AppCompatActivity {
     public void onLoadResponseImage() {
         System.out.println("onLoadResponseImage");
         ((ImageView) respLayout.findViewById(R.id.resp_image)).setImageURI(FileProvider.getUriForFile(this, getPackageName(), respImage));
+        if(respImage.length()<1024)respImage.delete();
     }
 }

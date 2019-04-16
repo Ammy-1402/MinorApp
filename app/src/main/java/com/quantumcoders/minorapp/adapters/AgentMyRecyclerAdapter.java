@@ -1,8 +1,10 @@
 package com.quantumcoders.minorapp.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,14 +17,16 @@ import com.quantumcoders.minorapp.misc.Constants;
 
 import java.util.List;
 
+import static com.quantumcoders.minorapp.misc.Constants.REQ_RELOAD_LIST;
+
 public class AgentMyRecyclerAdapter extends RecyclerView.Adapter<AgentMyRecyclerAdapter.ViewHolder> {
 
     private List<AgentListItemComplaint> listItems;
-    private Context ctxt;
+    private Activity ctxt;
 
 
 
-    public AgentMyRecyclerAdapter(List<AgentListItemComplaint> listItems, Context ctxt) {
+    public AgentMyRecyclerAdapter(List<AgentListItemComplaint> listItems, Activity ctxt) {
         this.listItems = listItems;
         this.ctxt = ctxt;
     }
@@ -70,8 +74,10 @@ public class AgentMyRecyclerAdapter extends RecyclerView.Adapter<AgentMyRecycler
                 Intent intent = new Intent(ctxt, AgentComplaintGroupDetailsActivity.class);
                 intent.putExtra(Constants.PARAM_GROUP_ID,viewHolder.groupIdComplaint.getGroupId());
                 intent.putExtra(Constants.PARAM_CATEGORY,viewHolder.groupIdCategory.getCategory());
+                intent.putExtra(Constants.PARAM_STATUS,viewHolder.groupIdComplaint.getAgentStatus());
+                intent.putExtra(Constants.PARAM_ADDRESS,viewHolder.groupIdComplaint.getLocation());
                 //System.out.println("intent extra : "+viewHolder.groupIdComplaint.getGroupId());
-                ctxt.startActivity(intent);
+                ctxt.startActivityForResult(intent,REQ_RELOAD_LIST);
             }
         });
     }

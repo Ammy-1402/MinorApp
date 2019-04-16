@@ -1,6 +1,7 @@
 package com.quantumcoders.minorapp.fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,10 +15,14 @@ import com.quantumcoders.minorapp.R;
 import com.quantumcoders.minorapp.adapters.AgentListItemComplaint;
 import com.quantumcoders.minorapp.adapters.AgentMyRecyclerAdapter;
 import com.quantumcoders.minorapp.adapters.ListItemComplaint;
+import com.quantumcoders.minorapp.adapters.MyRecyclerAdapter;
 import com.quantumcoders.minorapp.misc.Constants;
+import com.quantumcoders.minorapp.misc.ServerWorker;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.quantumcoders.minorapp.misc.Constants.REQ_RELOAD_LIST;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -66,5 +71,11 @@ public class AgentTab1 extends Fragment {
         return view;
 
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
 
 }

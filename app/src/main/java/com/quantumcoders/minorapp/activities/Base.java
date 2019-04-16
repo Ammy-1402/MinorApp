@@ -1,5 +1,6 @@
 package com.quantumcoders.minorapp.activities;
 
 public interface Base {
-    public abstract void noInternet();
+    void noInternet();
+    void onRequestTimeout();
 }

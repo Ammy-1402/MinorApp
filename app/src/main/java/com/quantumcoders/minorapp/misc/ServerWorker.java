@@ -2,6 +2,7 @@ package com.quantumcoders.minorapp.misc;
 
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.webkit.HttpAuthHandler;
 
 import com.quantumcoders.minorapp.activities.AgentComplaintGroupDetailsActivity;
 import com.quantumcoders.minorapp.activities.CitizenComplaintDetailsActivity;
@@ -37,7 +38,7 @@ public class ServerWorker {
         tsk.execute(Constants.AGT_LOGIN_METHOD,email,password);
     }
 
-    public static void fileComplaint(AppCompatActivity activity, String category, String desc, File image,float lat,float lng, String address,String userid){
+    public static void fileComplaint(AppCompatActivity activity, String category, String desc, File image,double lat,double lng, String address,String userid){
         ServerTask tsk = new ServerTask(activity,new Handler(),image);
         tsk.execute(Constants.FILE_COMPLAINT_METHOD,category,desc,String.valueOf(lat),String.valueOf(lng),address,userid);
     }
@@ -65,13 +66,23 @@ public class ServerWorker {
         tsk.execute(Constants.AGT_LOAD_GROUP_ID_COMPLAINT_DETAILS,groupid);
     }
 
-    public static void loadComplaintImage(AppCompatActivity activity, String complaint_id) {
+    public static void loadComplaintImage(AppCompatActivity activity, String complaint_id,String requester) {
         ServerTask tsk = new ServerTask(activity,new Handler());
-        tsk.execute(Constants.LOAD_COMPLAINT_IMAGE,complaint_id);
+        tsk.execute(Constants.LOAD_COMPLAINT_IMAGE,complaint_id,requester);
     }
 
     public static void loadResponseImage(AppCompatActivity activity, String complaint_id) {
         ServerTask tsk = new ServerTask(activity,new Handler());
         tsk.execute(Constants.LOAD_RESPONSE_IMAGE,complaint_id);
+    }
+
+    public static void loadComplaintDetailsAgent(AppCompatActivity activity, String complaint_id){
+        ServerTask tsk = new ServerTask(activity,new Handler());
+        tsk.execute(Constants.AGT_LOAD_COMPLAINT_DETAILS,complaint_id);
+    }
+
+    public static void sendResponse(AppCompatActivity activity,String grpid,String category,String desc,File image,double lat,double lng,String address,String agentid){
+        ServerTask tsk = new ServerTask(activity,new Handler(),image);
+        tsk.execute(Constants.SEND_RESPONSE_METHOD,grpid,category,desc,String.valueOf(lat),String.valueOf(lng),address,agentid);
     }
 }

@@ -1,9 +1,13 @@
 package com.quantumcoders.minorapp.activities;
 
+import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,13 +28,19 @@ public class AgentComplaintGroupDetailsActivity extends AppCompatActivity {
     public RecyclerView.Adapter adapter;
     public List<AgentListItemGroupIdComplaint> agentListItemGroupIdComplaints;
 
+    //intent parameters
+    String groupid,category;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agent_complaint_group_details);
 
-        String groupid = getIntent().getStringExtra(Constants.PARAM_GROUP_ID);
-        String category = getIntent().getStringExtra(Constants.PARAM_CATEGORY);
+        groupid = getIntent().getStringExtra(Constants.PARAM_GROUP_ID);
+        category = getIntent().getStringExtra(Constants.PARAM_CATEGORY);
+        String status = getIntent().getStringExtra(Constants.PARAM_STATUS);
+
+        if(status.equals(Constants.STATUS_COMPLETED))((Button)findViewById(R.id.btnAgentResponse)).setVisibility(View.GONE);
 
         //System.out.println("AgentComplaintGroupDetailsActivity GROUP ID : "+groupid);
         //System.out.println("AgentComplaintGroupDetailsActivity CATEGORY : "+category);
@@ -68,4 +78,24 @@ public class AgentComplaintGroupDetailsActivity extends AppCompatActivity {
 
         longToast("UPDATED GROUP ID LIST");
     }
+
+
+    public void startResponseActivity(View view){
+        Intent mc = new Intent(this,SendResponseActivity.class);
+        mc.putExtra(Constants.PARAM_CATEGORY,category);
+        mc.putExtra(Constants.PARAM_GRP_ID,groupid);
+        startActivityForResult(mc,8080);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode==8080){
+            if(resultCode==RESULT_OK){
+                ((Button)findViewById(R.id.btnAgentResponse)).setVisibility(View.GONE);
+            }
+        }
+    }
+
 }

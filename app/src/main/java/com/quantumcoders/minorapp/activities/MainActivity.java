@@ -1,11 +1,17 @@
 package com.quantumcoders.minorapp.activities;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.LocationManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -75,7 +81,29 @@ public class MainActivity extends AppCompatActivity implements Base {
             public void onTabReselected(TabLayout.Tab tab) {}
         });
 
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            //request for permissions
+            String permissions[] = {Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION};
+            ActivityCompat.requestPermissions(this,permissions,1);
+        }
+
     }
+
+
+
+    @SuppressLint("MissingPermission")
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if(requestCode==1){
+            if(grantResults[0]==PackageManager.PERMISSION_GRANTED && grantResults[1]==PackageManager.PERMISSION_GRANTED){
+                //do nothing
+            } else {
+                finish();
+            }
+        }
+    }
+
+
 
     @Override
     public void onBackPressed() {
@@ -139,6 +167,9 @@ public class MainActivity extends AppCompatActivity implements Base {
         Toast.makeText(this,msg,Toast.LENGTH_LONG).show();
     }
 
-
+    @Override
+    public void onRequestTimeout(){
+        longToast("Request timed out");
+    }
 }
 

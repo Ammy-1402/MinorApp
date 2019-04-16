@@ -1,5 +1,6 @@
 package com.quantumcoders.minorapp.misc;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -8,6 +9,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
+import com.quantumcoders.minorapp.activities.AgentComplaintDetailsActivity;
 import com.quantumcoders.minorapp.activities.AgentComplaintGroupDetailsActivity;
 import com.quantumcoders.minorapp.activities.AgentMainActivity;
 import com.quantumcoders.minorapp.activities.AgentSignupActivity;
@@ -22,7 +24,6 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -39,8 +40,10 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+import static com.quantumcoders.minorapp.misc.Constants.AGT_COMPLAINT_DETAILS_OBTAINED;
 import static com.quantumcoders.minorapp.misc.Constants.AGT_COMPLAINT_LIST_OBTAINED;
 import static com.quantumcoders.minorapp.misc.Constants.AGT_GROUP_ID_COMPLAINT_DETAILS_OBTAINED;
+import static com.quantumcoders.minorapp.misc.Constants.AGT_LOAD_COMPLAINT_DETAILS;
 import static com.quantumcoders.minorapp.misc.Constants.AGT_LOAD_GROUP_ID_COMPLAINT_DETAILS;
 import static com.quantumcoders.minorapp.misc.Constants.AGT_LOGIN_FAILED;
 import static com.quantumcoders.minorapp.misc.Constants.AGT_LOGIN_METHOD;
@@ -49,7 +52,9 @@ import static com.quantumcoders.minorapp.misc.Constants.AGT_RELOAD_COMPLAINT_LIS
 import static com.quantumcoders.minorapp.misc.Constants.AGT_SIGN_UP_FAILED;
 import static com.quantumcoders.minorapp.misc.Constants.AGT_SIGN_UP_METHOD;
 import static com.quantumcoders.minorapp.misc.Constants.AGT_SIGN_UP_SUCCESS;
+import static com.quantumcoders.minorapp.misc.Constants.CITIZEN;
 import static com.quantumcoders.minorapp.misc.Constants.COMPLAINT_IMAGE_OBTAINED;
+import static com.quantumcoders.minorapp.misc.Constants.COMPLAINT_REG_FAILED;
 import static com.quantumcoders.minorapp.misc.Constants.COMPLAINT_REG_SUCCESS;
 import static com.quantumcoders.minorapp.misc.Constants.COMPLT_IMAGE_PREFIX;
 import static com.quantumcoders.minorapp.misc.Constants.CTZ_COMPLAINT_DETAILS_OBTAINED;
@@ -64,6 +69,7 @@ import static com.quantumcoders.minorapp.misc.Constants.CTZ_SIGN_UP_METHOD;
 import static com.quantumcoders.minorapp.misc.Constants.CTZ_SIGN_UP_SUCCESS;
 import static com.quantumcoders.minorapp.misc.Constants.FILE_COMPLAINT_METHOD;
 import static com.quantumcoders.minorapp.misc.Constants.FILE_COMPLAINT_URL;
+import static com.quantumcoders.minorapp.misc.Constants.LOAD_COMPLAINT_DETAILS_AGENT_URL;
 import static com.quantumcoders.minorapp.misc.Constants.LOAD_COMPLAINT_DETAILS_CITIZEN_URL;
 import static com.quantumcoders.minorapp.misc.Constants.LOAD_COMPLAINT_IMAGE;
 import static com.quantumcoders.minorapp.misc.Constants.LOAD_COMPLAINT_IMAGE_URL;
@@ -71,15 +77,21 @@ import static com.quantumcoders.minorapp.misc.Constants.LOAD_GROUP_ID_COMPLAINT_
 import static com.quantumcoders.minorapp.misc.Constants.LOAD_RESPONSE_IMAGE;
 import static com.quantumcoders.minorapp.misc.Constants.LOAD_RESPONSE_IMAGE_URL;
 import static com.quantumcoders.minorapp.misc.Constants.NO_INTERNET;
+import static com.quantumcoders.minorapp.misc.Constants.PARAM_ADDRESS;
+import static com.quantumcoders.minorapp.misc.Constants.PARAM_CATEGORY;
 import static com.quantumcoders.minorapp.misc.Constants.PARAM_COMPLT_ID;
+import static com.quantumcoders.minorapp.misc.Constants.PARAM_DESC;
 import static com.quantumcoders.minorapp.misc.Constants.PARAM_GROUP_ID;
+import static com.quantumcoders.minorapp.misc.Constants.PARAM_GRP_ID;
 import static com.quantumcoders.minorapp.misc.Constants.RELOAD_COMPLAINTS_AGENT_URL;
 import static com.quantumcoders.minorapp.misc.Constants.RELOAD_COMPLAINTS_CITIZEN_URL;
+import static com.quantumcoders.minorapp.misc.Constants.REQUEST_TIMEOUT;
 import static com.quantumcoders.minorapp.misc.Constants.RESPONSE_IMAGE_OBTAINED;
+import static com.quantumcoders.minorapp.misc.Constants.RESPONSE_SENT;
 import static com.quantumcoders.minorapp.misc.Constants.RESP_IMAGE_PREFIX;
+import static com.quantumcoders.minorapp.misc.Constants.SEND_RESPONSE_METHOD;
+import static com.quantumcoders.minorapp.misc.Constants.SEND_RESPONSE_URL;
 import static com.quantumcoders.minorapp.misc.Constants.STATUS_COMPLETED;
-import static com.quantumcoders.minorapp.misc.Constants.TEMP_IMAGE_FILE_NAME;
-import static com.quantumcoders.minorapp.misc.Constants.TEMP_IMAGE_FILE_NAME_2;
 
 public class ServerTask extends AsyncTask<String, String[], String[]> {
     Handler hnd = null;
@@ -151,6 +163,12 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
             } else if(method.equals(LOAD_RESPONSE_IMAGE)){
 
                 return loadResponseImage(param);
+            } else if(method.equals(AGT_LOAD_COMPLAINT_DETAILS)){
+
+                return loadComplaintDetailsAgent(param);
+            } else if(method.equals(SEND_RESPONSE_METHOD)){
+
+                return sendResponse(param);
             }
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -199,6 +217,16 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
 
             hnd.post(() -> ((MainActivity) activity).loginFailed(response));
 
+        } else if(s.equals(COMPLAINT_REG_SUCCESS)){
+
+            hnd.post(()->{
+                ((CitizenMainActivity)activity).complaintRegSuccess();
+            });
+        } else if(s.equals(COMPLAINT_REG_FAILED)){
+
+            hnd.post(()->{
+                ((CitizenMainActivity)activity).complaintRegFailed();
+            });
         } else if (s.equals(CTZ_COMPLAINT_LIST_OBTAINED)) {
             hnd.post(() -> {
                 ((CitizenMainActivity) activity).complaintListObtainedCitizen(response);
@@ -214,8 +242,8 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
             ((CitizenComplaintDetailsActivity)activity).onLoadComplaintDetails(response);
 
         } else if(s.equals(COMPLAINT_IMAGE_OBTAINED)){
-
-            ((CitizenComplaintDetailsActivity)activity).onLoadComplaintImage();
+            if(response[1]==CITIZEN) ((CitizenComplaintDetailsActivity)activity).onLoadComplaintImage();
+            else ((AgentComplaintDetailsActivity)activity).onLoadComplaintImage();
 
         }else if(s.equals(AGT_GROUP_ID_COMPLAINT_DETAILS_OBTAINED)){
 
@@ -229,8 +257,18 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
                 ((CitizenComplaintDetailsActivity)activity).onLoadResponseImage();
             });
 
+        } else if(s.equals(AGT_COMPLAINT_DETAILS_OBTAINED)){
+
+            hnd.post(()->{
+                ((AgentComplaintDetailsActivity)activity).onLoadComplaintDetails(response);
+            });
+        } else if(s.equals(RESPONSE_SENT)){
+
+            System.out.println("Response sent!!!!!!!!!!!!!");
         } else if (s.equals(NO_INTERNET)) {
             ((Base)activity).noInternet();
+        } else if(s.contains(REQUEST_TIMEOUT)){
+            ((Base)activity).onRequestTimeout();
         } else {
             System.out.println(s);
         }
@@ -380,7 +418,10 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
     }
 
     private String[] fileComplaint(String... param) throws IOException {
-
+        final ProgressDialog[] dialog = {null};
+        hnd.post(()->{
+            dialog[0] = ProgressDialog.show(activity,"Registering complaint","Please wait for the photo to upload",true,false);
+        });
 
         OkHttpClient client = new OkHttpClient();
         RequestBody requestBody = new MultipartBody.Builder()
@@ -396,12 +437,22 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
 
         Request req = new Request.Builder().url(FILE_COMPLAINT_URL).post(requestBody).build();
 
-        Response response = client.newCall(req).execute();
+        Response response=null;
 
-        System.out.println(response.body().string());
+        try{
 
+            response = client.newCall(req).execute();
 
-        return stringArrayOf(COMPLAINT_REG_SUCCESS);
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+
+        hnd.post(()->{
+            dialog[0].dismiss();
+        });
+
+        if(response!=null)return stringArrayOf(response.body().string());
+        else return stringArrayOf(REQUEST_TIMEOUT);
 
     }
 
@@ -494,6 +545,7 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
         Response response = client.newCall(request).execute();
         String body = response.body().string();
 
+        System.out.println(body);
         Scanner sc = new Scanner(body);
         int n = sc.nextInt();
         System.out.println("agent groupId complt num = " + n);
@@ -545,7 +597,7 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
 
         fos.flush();
         fos.close();
-        return stringArrayOf(COMPLAINT_IMAGE_OBTAINED);
+        return stringArrayOf(COMPLAINT_IMAGE_OBTAINED,param[2]);
     }
 
     public String[] loadResponseImage(String...param) throws IOException{
@@ -584,6 +636,64 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
         fos.flush();
         fos.close();
         return stringArrayOf(RESPONSE_IMAGE_OBTAINED);
+    }
+
+    public String[] loadComplaintDetailsAgent(String...param) throws IOException{
+
+        System.out.println("Load complaint details agent");
+        OkHttpClient client = new OkHttpClient();
+        RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                .addFormDataPart(PARAM_COMPLT_ID,param[1]).build();
+        Request request = new Request.Builder().url(LOAD_COMPLAINT_DETAILS_AGENT_URL).post(requestBody).build();
+        Response response = client.newCall(request).execute();
+
+        BufferedReader br = new BufferedReader(response.body().charStream());
+        String result[] = new String[6];
+        result[0]=AGT_COMPLAINT_DETAILS_OBTAINED;
+
+        //get other parameters
+        for(int i=1;i<=5;i++){
+            result[i]=br.readLine();
+        }
+        return result;
+    }
+
+    public String[] sendResponse(String...param) throws IOException{
+        final ProgressDialog[] dialog = {null};
+        hnd.post(()->{
+            dialog[0] = ProgressDialog.show(activity,"Sending Response","Please wait for the photo to upload",true,false);
+        });
+
+
+        OkHttpClient client = new OkHttpClient();
+        RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                .addFormDataPart(PARAM_GRP_ID,param[1])
+                .addFormDataPart(PARAM_CATEGORY,param[2])
+                .addFormDataPart(PARAM_DESC,param[3])
+                .addFormDataPart("image",toUpload.getName(),RequestBody.create(MediaType.parse("image/jpeg"),toUpload))
+                .addFormDataPart("lat",param[4])
+                .addFormDataPart("lng",param[5])
+                .addFormDataPart(PARAM_ADDRESS,param[6])
+                .addFormDataPart("Agent_id",param[7])
+                .build();
+
+//        for(int i=0;i<7;i++) System.out.println("DEBUG RESP - " + param[i]);
+
+        Request request = new Request.Builder().url(SEND_RESPONSE_URL).addHeader("Connection","Keep-Alive").post(requestBody).build();
+        Response response=null;
+        try{
+            response = client.newCall(request).execute();
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+
+
+        hnd.post(()->{
+            dialog[0].dismiss();
+        });
+
+        if(response!=null)return stringArrayOf(response.body().string());
+        else return stringArrayOf(REQUEST_TIMEOUT);
     }
 
 

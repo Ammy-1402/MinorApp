@@ -219,7 +219,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/id_descriptionAgent"
                 app:layout_constraintVertical_bias="1.0"
-                app:srcCompat="@drawable/loading" />
+                app:srcCompat="@drawable/loading"
+                android:adjustViewBounds="true"/>
 
 
         </android.support.constraint.ConstraintLayout>

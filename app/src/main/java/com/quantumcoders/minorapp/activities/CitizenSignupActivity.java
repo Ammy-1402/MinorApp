@@ -106,4 +106,8 @@ public class CitizenSignupActivity extends AppCompatActivity implements Base {
         longToast("Please turn on INTERNET");
     }
 
+    @Override
+    public void onRequestTimeout(){
+        longToast("Request timed out");
+    }
 }
