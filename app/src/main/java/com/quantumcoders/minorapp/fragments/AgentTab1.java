@@ -75,7 +75,7 @@ public class AgentTab1 extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        getView().findViewById(R.id.loadingLayout).setVisibility(View.VISIBLE);
     }
-
 
 }

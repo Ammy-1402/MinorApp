@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import com.quantumcoders.minorapp.R;
@@ -94,6 +95,9 @@ public class AgentMainActivity extends AppCompatActivity implements Base{
         tab1.recyclerView.setAdapter(tab1.adapter);
 
         longToast("AGENT COMPLAINT LIST UPDATED");
+
+
+        tab1.getView().findViewById(R.id.loadingLayout).setVisibility(View.INVISIBLE);
     }
 
     public void noInternet(){

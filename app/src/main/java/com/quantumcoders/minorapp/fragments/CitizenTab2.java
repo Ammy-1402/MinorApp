@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.quantumcoders.minorapp.R;
 import com.quantumcoders.minorapp.adapters.ListItemComplaint;
@@ -50,4 +51,9 @@ public class CitizenTab2 extends Fragment {
         return view;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        getView().findViewById(R.id.loadingLayout).setVisibility(View.VISIBLE);
+    }
 }

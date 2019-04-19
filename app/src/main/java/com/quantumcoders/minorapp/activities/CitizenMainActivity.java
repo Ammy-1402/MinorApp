@@ -17,6 +17,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
@@ -181,6 +182,10 @@ public class CitizenMainActivity extends AppCompatActivity implements LocationLi
         tab2.adapter = new MyRecyclerAdapter(list, this);
         tab2.recyclerView.setAdapter(tab2.adapter);
         longToast("CITIZEN COMPLAINT LIST UPDATED");
+
+        //set LOADING layout as invisible
+        tab2.getView().findViewById(R.id.loadingLayout).setVisibility(View.INVISIBLE);
+
     }
 
 
@@ -188,7 +193,7 @@ public class CitizenMainActivity extends AppCompatActivity implements LocationLi
     public void complaintRegSuccess(){
         System.out.println("Complaint Registration Success");
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Complaint has been registered. It will be visible after some time in the list.").setPositiveButton("Ok",(d,w)->{d.dismiss();});
+        builder.setMessage("Complaint has been registered. It will be visible after some time in the list.").setPositiveButton("OK",(d,w)->{d.dismiss();});
         builder.create().show();
     }
 
