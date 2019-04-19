@@ -55,7 +55,7 @@ public class SendResponseActivity extends AppCompatActivity implements LocationL
     boolean locationPermitted=false;
     boolean locationFetched=false;
     LocationManager lm = null;
-    int TIME_TO_UPDATE=1000;
+    int TIME_TO_UPDATE=0;
     int DIST_TO_UPDATE=0;
     double lat,lng;
 
@@ -73,6 +73,7 @@ public class SendResponseActivity extends AppCompatActivity implements LocationL
 
 
 
+    @SuppressLint("MissingPermission")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,51 +85,22 @@ public class SendResponseActivity extends AppCompatActivity implements LocationL
 
 
         lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            //request for permissions
-            String permissions[] = {Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION};
-            ActivityCompat.requestPermissions(this,permissions,1);
+
+        if(lm.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, TIME_TO_UPDATE, DIST_TO_UPDATE, this);
+            locationPermitted=true;
+            System.out.println("Location - Using GPS Provider");
+        } else if(lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
+            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, TIME_TO_UPDATE, DIST_TO_UPDATE, this);
+            locationPermitted=true;
+            System.out.println("Location - Using Network Provider");
         } else {
-            if(lm.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-                lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, TIME_TO_UPDATE, DIST_TO_UPDATE, this);
-                locationPermitted=true;
-                System.out.println("Location - Using GPS Provider");
-            } else if(lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
-                lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, TIME_TO_UPDATE, DIST_TO_UPDATE, this);
-                locationPermitted=true;
-                System.out.println("Location - Using Network Provider");
-            } else {
-                System.out.println("Location - No provider enabled");
-            }
+            System.out.println("Location - No provider enabled");
+            new android.app.AlertDialog.Builder(this).setMessage("Please turn on location service").setPositiveButton("OK",(d, w)->{d.dismiss();finish();}).create().show();
         }
 
 
-    }
 
-
-
-
-    @SuppressLint("MissingPermission")
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if(requestCode==1){
-            if(grantResults[0]==PackageManager.PERMISSION_GRANTED && grantResults[1]==PackageManager.PERMISSION_GRANTED){
-                if(lm.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-                    lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, TIME_TO_UPDATE, DIST_TO_UPDATE, this);
-                    locationPermitted=true;
-                    System.out.println("Location - Using GPS Provider");
-                } else if(lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
-                    lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, TIME_TO_UPDATE, DIST_TO_UPDATE, this);
-                    locationPermitted=true;
-                    System.out.println("Location - Using Network Provider");
-                } else {
-                    System.out.println("Location - No provider enabled");
-                }
-            } else {
-                setResult(RESULT_CANCELED);
-                finish();
-            }
-        }
     }
 
 
@@ -187,10 +159,12 @@ public class SendResponseActivity extends AppCompatActivity implements LocationL
     }
 
 
+
     /*LOCATION LISTENER METHODS*/
     int skip=0;
     @Override
     public void onLocationChanged(Location location) {
+        System.out.println("SendResponse - LocationListener - onLocationChanged");
         if(skip==0)skip=1;      //skipping first location due to superstition that first location is not accurate :p
         else if(skip==1){
             skip=2;
@@ -202,17 +176,17 @@ public class SendResponseActivity extends AppCompatActivity implements LocationL
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-
+        System.out.println("SendResponse - LocationListener - onStatusChanged");
     }
 
     @Override
     public void onProviderEnabled(String provider) {
-
+        System.out.println("SendResponse - LocationListener - onProviderEnabled");
     }
 
     @Override
     public void onProviderDisabled(String provider) {
-
+        System.out.println("SendResponse - LocationListener - onProviderDisabled");
     }
 
     //Base

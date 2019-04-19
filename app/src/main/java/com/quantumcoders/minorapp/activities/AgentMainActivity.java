@@ -11,11 +11,8 @@ import android.widget.Toast;
 import com.quantumcoders.minorapp.R;
 import com.quantumcoders.minorapp.adapters.AgentListItemComplaint;
 import com.quantumcoders.minorapp.adapters.AgentMyRecyclerAdapter;
-import com.quantumcoders.minorapp.adapters.ListItemComplaint;
-import com.quantumcoders.minorapp.adapters.MyRecyclerAdapter;
 import com.quantumcoders.minorapp.fragments.AgentTab1;
 import com.quantumcoders.minorapp.fragments.AgentTab2;
-import com.quantumcoders.minorapp.fragments.AgentTab3;
 import com.quantumcoders.minorapp.adapters.AgentViewPagerAdapter;
 import com.quantumcoders.minorapp.misc.Constants;
 import com.quantumcoders.minorapp.misc.ServerWorker;
@@ -32,7 +29,6 @@ public class AgentMainActivity extends AppCompatActivity implements Base{
 
     AgentTab1 tab1 = null;
     AgentTab2 tab2 = null;
-    AgentTab3 tab3 = null;
 
     String agentid;
 
@@ -81,8 +77,6 @@ public class AgentMainActivity extends AppCompatActivity implements Base{
             tab1 = (AgentTab1) fragment;
         }else if(fragment instanceof AgentTab2){
             tab2 = (AgentTab2) fragment;
-        }else if(fragment instanceof AgentTab3){
-            tab3 = (AgentTab3) fragment;
         }
     }
 

@@ -41,7 +41,11 @@ public class AgentSignupActivity extends AppCompatActivity implements Base{
     }
 
     public void btnSignupClicked(View view){
-        if(clickedOnce)return;
+        System.out.println("Button Signup Agent Clicked");
+        if(clickedOnce){
+            System.out.println("already clicked");
+            return;
+        }
 
         //if not already clicked
         clickedOnce=true;

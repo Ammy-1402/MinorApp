@@ -6,7 +6,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.quantumcoders.minorapp.fragments.AgentTab1;
 import com.quantumcoders.minorapp.fragments.AgentTab2;
-import com.quantumcoders.minorapp.fragments.AgentTab3;
 
 public class AgentViewPagerAdapter extends FragmentPagerAdapter {
 
@@ -25,9 +24,6 @@ public class AgentViewPagerAdapter extends FragmentPagerAdapter {
             case 1:
                 AgentTab2 tab2 = new AgentTab2();
                 return tab2;
-            case 2:
-                AgentTab3 tab3 = new AgentTab3();
-                return tab3;
             default:
                 tab1 = new AgentTab1();
                 return tab1;

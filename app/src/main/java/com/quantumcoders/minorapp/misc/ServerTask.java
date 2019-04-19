@@ -314,6 +314,7 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
     }
 
     private String[] signUpAgent(String... param) throws IOException {
+        System.out.println("Agent trying to sign up");
         //setup connection
         URL url = new URL(Constants.SIGNUP_URL_AGENT);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -343,6 +344,8 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
         BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
         String response[] = new String[2];
         response[0] = br.readLine();
+
+        //read userid
         if (response[0].equals(AGT_SIGN_UP_SUCCESS)) response[1] = br.readLine();
 
 

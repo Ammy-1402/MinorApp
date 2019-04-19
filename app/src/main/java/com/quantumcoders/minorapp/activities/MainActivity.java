@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -85,6 +86,9 @@ public class MainActivity extends AppCompatActivity implements Base {
             //request for permissions
             String permissions[] = {Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION};
             ActivityCompat.requestPermissions(this,permissions,1);
+        } else {
+            //if permission is already granted
+            checkLocationOnOrNot();
         }
 
     }
@@ -96,13 +100,22 @@ public class MainActivity extends AppCompatActivity implements Base {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if(requestCode==1){
             if(grantResults[0]==PackageManager.PERMISSION_GRANTED && grantResults[1]==PackageManager.PERMISSION_GRANTED){
-                //do nothing
+                checkLocationOnOrNot();
             } else {
                 finish();
             }
         }
     }
 
+    void checkLocationOnOrNot(){
+        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if(lm.isProviderEnabled(LocationManager.GPS_PROVIDER) || lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
+            //both the location providers are enabled
+        } else {
+            //location is not enabled. notify user to turn on the location
+            new AlertDialog.Builder(this).setMessage("Please turn on location service and start the app.").setPositiveButton("OK",(d,w)->{d.dismiss();finish();}).create().show();
+        }
+    }
 
 
     @Override
@@ -138,6 +151,7 @@ public class MainActivity extends AppCompatActivity implements Base {
                 .putString(TYPE_KEY,type).putString(USER_ID_KEY,response[1].trim()).commit();
 
         longToast(response[0]);
+        longToast("UserId-"+response[1]);
         clickedOnce=false;
         System.out.println("------------------->>>>>>>>>><<<<<<<<------------"+response[0]);
         //start logged in activity corresponding to 'response'
