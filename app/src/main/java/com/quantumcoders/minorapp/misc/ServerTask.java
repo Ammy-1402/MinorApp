@@ -18,6 +18,7 @@ import com.quantumcoders.minorapp.activities.CitizenComplaintDetailsActivity;
 import com.quantumcoders.minorapp.activities.CitizenMainActivity;
 import com.quantumcoders.minorapp.activities.CitizenSignupActivity;
 import com.quantumcoders.minorapp.activities.MainActivity;
+import com.quantumcoders.minorapp.activities.SendResponseActivity;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -280,6 +281,9 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
         } else if (s.equals(RESPONSE_SENT)) {
 
             System.out.println("Response sent!!!!!!!!!!!!!");
+            hnd.post(()->{
+                ((SendResponseActivity)activity).onResponseSent();
+            });
         } else if(s.equals(AGT_PROFILE_OBTAINED)){
 
             hnd.post(()->{

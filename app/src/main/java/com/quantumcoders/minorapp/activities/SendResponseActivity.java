@@ -129,14 +129,6 @@ public class SendResponseActivity extends AppCompatActivity implements LocationL
                 String agentid = getSharedPreferences(SESSION_FILE, MODE_PRIVATE).getString(USER_ID_KEY, "");
                 ServerWorker.sendResponse(this, grpid, category, desc, imageFile, lat, lng, address, agentid);
                 clicked = true;
-                new AlertDialog.Builder(this).setMessage("Response sent succesfully").setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        setResult(RESULT_OK);
-                        finish();
-                    }
-                }).create().show();
             }
         }
     }
@@ -175,6 +167,18 @@ public class SendResponseActivity extends AppCompatActivity implements LocationL
     @Override
     public void onProviderDisabled(String provider) {
         System.out.println("SendResponse - LocationListener - onProviderDisabled");
+    }
+
+
+    public void onResponseSent(){
+        new AlertDialog.Builder(this).setMessage("Response sent succesfully").setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                setResult(RESULT_OK);
+                finish();
+            }
+        }).create().show();
     }
 
     //Base

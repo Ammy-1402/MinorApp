@@ -18,7 +18,7 @@ public interface Constants {
     public static final String RESP_IMAGE_PREFIX = "respImage_";
 
 
-    //parameters
+    /*  PARAMETERS  */
     public static final String PARAM_COMPLT_ID = "Complain_no";
     public static final String PARAM_GROUP_ID = "Group_id";
     public static final String PARAM_CATEGORY = "Category";
@@ -32,6 +32,7 @@ public interface Constants {
     public static final String PARAM_AGT_ID = "Agent_d";
     public static final String PARAM_CTZ_ID = "userid";
 
+    /*  URLs  */
     public static final String SERVER_URL = "http://quantumcoders.000webhostapp.com";   //doesn't includes a / at the end
     public static final String SIGNUP_URL_CITIZEN = SERVER_URL + "/citizen_signup.php"; //demo php for citizen
     public static final String SIGNUP_URL_AGENT = SERVER_URL + "/agent_signup.php"; //demo php for agent
@@ -49,6 +50,8 @@ public interface Constants {
     public static final String AGT_PROFILE_URL = SERVER_URL + "/agent_profile.php";
     public static final String CTZ_PROFILE_URL = SERVER_URL + "/citizen_profile.php";
 
+
+    /*  METHOD IDENTIFIERS  for AsyncTask*/
     public static final String CTZ_SIGN_UP_METHOD = "signUpCitizen";
     public static final String AGT_SIGN_UP_METHOD = "signUpAgent";
     public static final String CTZ_LOGIN_METHOD = "loginCitizen";
@@ -65,6 +68,8 @@ public interface Constants {
     public static final String AGT_PROFILE_METHOD = "loadAgentProfile";
     public static final String CTZ_PROFILE_METHOD = "loadCitizenProfile";
 
+
+    /*  RESPONSE KEYWORDS   */
     public static final String CTZ_SIGN_UP_SUCCESS = "CitizenSignupSuccess";
     public static final String AGT_SIGN_UP_SUCCESS = "AgentSignupSuccess";
     public static final String CTZ_LOGIN_SUCCESS = "CitizenLoginSuccess";
@@ -83,19 +88,22 @@ public interface Constants {
     public static final String RESPONSE_IMAGE_OBTAINED = "ResponseImageObtained";
     public static final String RESPONSE_SENT = "AgentResponseAdded";
     public static final String REQUEST_TIMEOUT = "timeout";
-
     public static final String CTZ_SIGN_UP_FAILED = "CitizenSignupFailed";
     public static final String AGT_SIGN_UP_FAILED = "AgentSignupFailed";
     public static final String CTZ_LOGIN_FAILED = "CitizenLoginFailed";
     public static final String AGT_LOGIN_FAILED = "AgentLoginFailed";
-
     public static final String NO_SUCH_USER = "NoSuchUser";
     public static final String INVALID_CREDENTIALS = "InvalidCredentials";
+
+
 
     //activity request codes
     public static final int PICK_IMAGE = 100;
     public static final int REQ_RELOAD_LIST = 9988;
 
+
+
+    //status codes
     public static final String STATUS_PENDING = "PENDING";
     public static final String STATUS_WORK_IN_PROGRESS = "WORK_IN_PROGRESS";
     public static final String STATUS_COMPLETED = "COMPLETED";

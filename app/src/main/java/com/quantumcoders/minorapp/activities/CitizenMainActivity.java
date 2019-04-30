@@ -69,7 +69,7 @@ public class CitizenMainActivity extends AppCompatActivity implements LocationLi
         setContentView(R.layout.activity_citizen_main);
 
         userid = getApplicationContext().getSharedPreferences(Constants.SESSION_FILE, MODE_PRIVATE).getString(Constants.USER_ID_KEY, "");
-
+        checkLocationOnOrNot();
 
         tabLayout = findViewById(R.id.citizenTabLayout);
         viewPager = findViewById(R.id.id_citizenViewPager);
@@ -204,7 +204,7 @@ public class CitizenMainActivity extends AppCompatActivity implements LocationLi
     public void complaintRegFailed() {
         System.out.println("Complaint Registration FAILED");
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Complaint registration failed. Some error occured.").setPositiveButton("Ok", (d, w) -> {
+        builder.setMessage("Complaint registration failed. Some error occurred.").setPositiveButton("Ok", (d, w) -> {
             d.dismiss();
         });
         builder.create().show();
@@ -214,4 +214,17 @@ public class CitizenMainActivity extends AppCompatActivity implements LocationLi
         tab3.setProfileData(data);
     }
 
+
+    void checkLocationOnOrNot() {
+        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER) || lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+            //both the location providers are enabled
+        } else {
+            //location is not enabled. notify user to turn on the location
+            new AlertDialog.Builder(this).setMessage("Please turn on location service and start the app.").setPositiveButton("OK", (d, w) -> {
+                d.dismiss();
+                finish();
+            }).create().show();
+        }
+    }
 }
