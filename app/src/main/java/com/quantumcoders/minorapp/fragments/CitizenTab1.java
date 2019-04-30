@@ -2,8 +2,6 @@ package com.quantumcoders.minorapp.fragments;
 
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -23,14 +21,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.quantumcoders.minorapp.R;
 import com.quantumcoders.minorapp.activities.CitizenMainActivity;
 import com.quantumcoders.minorapp.misc.ServerWorker;
@@ -52,13 +47,13 @@ public class CitizenTab1 extends Fragment {
     CitizenMainActivity mainActivity = null;
 
     Spinner dropDown;
-    TextView locDesc=null;
+    TextView locDesc = null;
     MapView map = null;
     GoogleMap gmap = null;
-    final int IMAGE_CAPTURE_REQ=1;
+    final int IMAGE_CAPTURE_REQ = 1;
     Uri imageUri = null;
     File imageFile = null;
-    boolean imageCaptured=false;
+    boolean imageCaptured = false;
     Handler testHandler = new Handler();
 
     public CitizenTab1() {
@@ -66,10 +61,10 @@ public class CitizenTab1 extends Fragment {
     }
 
     @SuppressLint("MissingPermission")
-    public void updateLocation(double lat, double lng, String desc){
+    public void updateLocation(double lat, double lng, String desc) {
         locDesc.setText(desc);
-        if(map!=null){
-            gmap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat,lng),18));
+        if (map != null) {
+            gmap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(lat, lng), 18));
         }
     }
 
@@ -81,26 +76,26 @@ public class CitizenTab1 extends Fragment {
 
         //set dropdown list
         dropDown = view.findViewById(R.id.spinner);
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_list_item_1,getResources().getStringArray(R.array.dropDownCategory));
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.dropDownCategory));
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         dropDown.setAdapter(arrayAdapter);
 
-        locDesc=view.findViewById(R.id.locDesc);
+        locDesc = view.findViewById(R.id.locDesc);
 
         mainActivity = (CitizenMainActivity) getActivity();
 
         //set button click listener for capture image button
-        ((Button)view.findViewById(R.id.id_captureImage)).setOnClickListener(new View.OnClickListener() {
+        ((Button) view.findViewById(R.id.id_captureImage)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
                     imageFile = createImageFile();
                     System.out.println("Image file created - " + imageFile.getAbsolutePath());
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    imageUri = FileProvider.getUriForFile(mainActivity,getActivity().getApplicationContext().getPackageName(),imageFile);
+                    imageUri = FileProvider.getUriForFile(mainActivity, getActivity().getApplicationContext().getPackageName(), imageFile);
 
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri);
-                    startActivityForResult(intent,IMAGE_CAPTURE_REQ);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                    startActivityForResult(intent, IMAGE_CAPTURE_REQ);
                 } catch (IOException e) {
                     mainActivity.longToast(e.toString());
                 }
@@ -111,31 +106,31 @@ public class CitizenTab1 extends Fragment {
         ((Button) view.findViewById(R.id.id_registerComplaint)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int pos = ((Spinner)view.findViewById(R.id.spinner)).getSelectedItemPosition();
-                String desc = ((TextInputEditText)view.findViewById(R.id.id_description)).getText().toString().trim();
+                int pos = ((Spinner) view.findViewById(R.id.spinner)).getSelectedItemPosition();
+                String desc = ((TextInputEditText) view.findViewById(R.id.id_description)).getText().toString().trim();
 
                 System.out.println("Register complaint button clicked " + pos + "|" + desc);
 
-                if(pos==0)mainActivity.longToast("Choose a category");
-                else if(desc.equals("")){
+                if (pos == 0) mainActivity.longToast("Choose a category");
+                else if (desc.equals("")) {
                     mainActivity.longToast("Describe your problem");
-                } else if(!imageCaptured){
+                } else if (!imageCaptured) {
                     mainActivity.longToast("Image not captured");
-                } else if(mainActivity.count<10 || ((TextView)view.findViewById(R.id.locDesc)).getText().toString().isEmpty()){
+                } else if (mainActivity.count < 10 || ((TextView) view.findViewById(R.id.locDesc)).getText().toString().isEmpty()) {
                     mainActivity.longToast("Location not loaded");
                 } else {
 
                     System.out.println("Filing complaint now");
-                    desc = desc.replace("\n","<br/>");
+                    desc = desc.replace("\n", "<br/>");
 
-                    String category = ((Spinner)view.findViewById(R.id.spinner)).getSelectedItem().toString();
-                    String address = ((TextView)view.findViewById(R.id.locDesc)).getText().toString();
-                    String userid = mainActivity.getApplicationContext().getSharedPreferences(SESSION_FILE, Context.MODE_PRIVATE).getString(USER_ID_KEY,"");
+                    String category = ((Spinner) view.findViewById(R.id.spinner)).getSelectedItem().toString();
+                    String address = ((TextView) view.findViewById(R.id.locDesc)).getText().toString();
+                    String userid = mainActivity.getApplicationContext().getSharedPreferences(SESSION_FILE, Context.MODE_PRIVATE).getString(USER_ID_KEY, "");
 
-                    ServerWorker.fileComplaint(mainActivity,category,desc,imageFile,mainActivity.avglat,mainActivity.avglng,address,userid);
-                    ((Spinner)view.findViewById(R.id.spinner)).setSelection(0);
-                    ((TextInputEditText)view.findViewById(R.id.id_description)).setText("");
-                    ((ImageView)mainActivity.findViewById(R.id.imageView3)).setImageResource(R.mipmap.ic_launcher_round);
+                    ServerWorker.fileComplaint(mainActivity, category, desc, imageFile, mainActivity.avglat, mainActivity.avglng, address, userid);
+                    ((Spinner) view.findViewById(R.id.spinner)).setSelection(0);
+                    ((TextInputEditText) view.findViewById(R.id.id_description)).setText("");
+                    ((ImageView) mainActivity.findViewById(R.id.imageView3)).setImageResource(R.mipmap.ic_launcher_round);
                 }
 
             }
@@ -145,14 +140,12 @@ public class CitizenTab1 extends Fragment {
     }
 
 
-
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode==IMAGE_CAPTURE_REQ){
-            if(resultCode==RESULT_OK){
-                ((ImageView)getView().findViewById(R.id.imageView3)).setImageURI(imageUri);
-                imageCaptured=true;
+        if (requestCode == IMAGE_CAPTURE_REQ) {
+            if (resultCode == RESULT_OK) {
+                ((ImageView) getView().findViewById(R.id.imageView3)).setImageURI(imageUri);
+                imageCaptured = true;
             }
         }
     }
@@ -163,7 +156,7 @@ public class CitizenTab1 extends Fragment {
 
         //get directory to store images
         File storageDirectory = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File imageFile = File.createTempFile("capture_"+timeStamp,".jpg",storageDirectory);
+        File imageFile = File.createTempFile("capture_" + timeStamp, ".jpg", storageDirectory);
         return imageFile;
     }
 
@@ -178,11 +171,11 @@ public class CitizenTab1 extends Fragment {
     }
 
     @SuppressLint("MissingPermission")
-    public void initMap(){
-        map = ((MapView)getView().findViewById(R.id.mapView));
+    public void initMap() {
+        map = ((MapView) getView().findViewById(R.id.mapView));
         map.onCreate(new Bundle());
         map.getMapAsync(googleMap -> {
-            gmap=googleMap;
+            gmap = googleMap;
             googleMap.setMyLocationEnabled(true);
 
         });

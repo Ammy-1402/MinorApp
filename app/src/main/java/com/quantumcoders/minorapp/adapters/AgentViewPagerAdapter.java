@@ -9,7 +9,8 @@ import com.quantumcoders.minorapp.fragments.AgentTab2;
 
 public class AgentViewPagerAdapter extends FragmentPagerAdapter {
 
-    int tabCount ;
+    int tabCount;
+
     public AgentViewPagerAdapter(FragmentManager fm, int tabCount) {
         super(fm);
         this.tabCount = tabCount;
@@ -17,7 +18,7 @@ public class AgentViewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        switch(position){
+        switch (position) {
             case 0:
                 AgentTab1 tab1 = new AgentTab1();
                 return tab1;

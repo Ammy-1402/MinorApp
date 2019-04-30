@@ -1,10 +1,9 @@
 package com.quantumcoders.minorapp.activities;
 
+import android.os.Bundle;
 import android.os.Environment;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -13,8 +12,6 @@ import android.widget.TextView;
 import com.quantumcoders.minorapp.R;
 import com.quantumcoders.minorapp.misc.Constants;
 import com.quantumcoders.minorapp.misc.ServerWorker;
-
-import org.w3c.dom.Text;
 
 import java.io.File;
 
@@ -27,8 +24,8 @@ import static com.quantumcoders.minorapp.misc.Constants.STATUS_COMPLETED;
 
 public class CitizenComplaintDetailsActivity extends AppCompatActivity {
     LinearLayout respLayout = null;
-    File compltImage=null;
-    File respImage=null;
+    File compltImage = null;
+    File respImage = null;
 
 
     @Override
@@ -43,12 +40,13 @@ public class CitizenComplaintDetailsActivity extends AppCompatActivity {
 
         //only load image if doesn't exists
         compltImage = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + COMPLT_IMAGE_PREFIX + cno + ".jpg");
-        respImage = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/" + RESP_IMAGE_PREFIX + cno + ".jpg");
+        respImage = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + RESP_IMAGE_PREFIX + cno + ".jpg");
 
-        if(compltImage==null || !compltImage.exists()) ServerWorker.loadComplaintImage(this, cno,CITIZEN);
+        if (compltImage == null || !compltImage.exists())
+            ServerWorker.loadComplaintImage(this, cno, CITIZEN);
         else onLoadComplaintImage();
 
-        if(respImage==null || !respImage.exists()) ServerWorker.loadResponseImage(this,cno);
+        if (respImage == null || !respImage.exists()) ServerWorker.loadResponseImage(this, cno);
         else onLoadResponseImage();
 
         //response image will be loaded in onLoadComplaintDetails
@@ -90,6 +88,6 @@ public class CitizenComplaintDetailsActivity extends AppCompatActivity {
     public void onLoadResponseImage() {
         System.out.println("onLoadResponseImage");
         ((ImageView) respLayout.findViewById(R.id.resp_image)).setImageURI(FileProvider.getUriForFile(this, getPackageName(), respImage));
-        if(respImage.length()<1024)respImage.delete();
+        if (respImage.length() < 1024) respImage.delete();
     }
 }

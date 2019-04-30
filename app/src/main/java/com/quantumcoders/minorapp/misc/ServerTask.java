@@ -48,6 +48,9 @@ import static com.quantumcoders.minorapp.misc.Constants.AGT_LOAD_GROUP_ID_COMPLA
 import static com.quantumcoders.minorapp.misc.Constants.AGT_LOGIN_FAILED;
 import static com.quantumcoders.minorapp.misc.Constants.AGT_LOGIN_METHOD;
 import static com.quantumcoders.minorapp.misc.Constants.AGT_LOGIN_SUCCESS;
+import static com.quantumcoders.minorapp.misc.Constants.AGT_PROFILE_METHOD;
+import static com.quantumcoders.minorapp.misc.Constants.AGT_PROFILE_OBTAINED;
+import static com.quantumcoders.minorapp.misc.Constants.AGT_PROFILE_URL;
 import static com.quantumcoders.minorapp.misc.Constants.AGT_RELOAD_COMPLAINT_LIST_METHOD;
 import static com.quantumcoders.minorapp.misc.Constants.AGT_SIGN_UP_FAILED;
 import static com.quantumcoders.minorapp.misc.Constants.AGT_SIGN_UP_METHOD;
@@ -63,6 +66,9 @@ import static com.quantumcoders.minorapp.misc.Constants.CTZ_LOAD_COMPLAINT_DETAI
 import static com.quantumcoders.minorapp.misc.Constants.CTZ_LOGIN_FAILED;
 import static com.quantumcoders.minorapp.misc.Constants.CTZ_LOGIN_METHOD;
 import static com.quantumcoders.minorapp.misc.Constants.CTZ_LOGIN_SUCCESS;
+import static com.quantumcoders.minorapp.misc.Constants.CTZ_PROFILE_METHOD;
+import static com.quantumcoders.minorapp.misc.Constants.CTZ_PROFILE_OBTAINED;
+import static com.quantumcoders.minorapp.misc.Constants.CTZ_PROFILE_URL;
 import static com.quantumcoders.minorapp.misc.Constants.CTZ_RELOAD_COMPLAINT_LIST_METHOD;
 import static com.quantumcoders.minorapp.misc.Constants.CTZ_SIGN_UP_FAILED;
 import static com.quantumcoders.minorapp.misc.Constants.CTZ_SIGN_UP_METHOD;
@@ -78,8 +84,10 @@ import static com.quantumcoders.minorapp.misc.Constants.LOAD_RESPONSE_IMAGE;
 import static com.quantumcoders.minorapp.misc.Constants.LOAD_RESPONSE_IMAGE_URL;
 import static com.quantumcoders.minorapp.misc.Constants.NO_INTERNET;
 import static com.quantumcoders.minorapp.misc.Constants.PARAM_ADDRESS;
+import static com.quantumcoders.minorapp.misc.Constants.PARAM_AGT_ID;
 import static com.quantumcoders.minorapp.misc.Constants.PARAM_CATEGORY;
 import static com.quantumcoders.minorapp.misc.Constants.PARAM_COMPLT_ID;
+import static com.quantumcoders.minorapp.misc.Constants.PARAM_CTZ_ID;
 import static com.quantumcoders.minorapp.misc.Constants.PARAM_DESC;
 import static com.quantumcoders.minorapp.misc.Constants.PARAM_GROUP_ID;
 import static com.quantumcoders.minorapp.misc.Constants.PARAM_GRP_ID;
@@ -116,7 +124,7 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
     @Override
     protected String[] doInBackground(String... param) {
         String method = param[0];
-        System.out.println("doInBackground method value: "+method);
+        System.out.println("doInBackground method value: " + method);
         try {
             ConnectivityManager cm = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo networkInfo = cm.getActiveNetworkInfo();
@@ -150,25 +158,31 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
             } else if (method.equals(AGT_RELOAD_COMPLAINT_LIST_METHOD)) {
 
                 return reloadComplaintListAgent(param);
-            } else if(method.equals(CTZ_LOAD_COMPLAINT_DETAILS)){
+            } else if (method.equals(CTZ_LOAD_COMPLAINT_DETAILS)) {
 
                 return loadComplaintDetailsCitizen(param);
-            } else if(method.equals(AGT_LOAD_GROUP_ID_COMPLAINT_DETAILS)){
+            } else if (method.equals(AGT_LOAD_GROUP_ID_COMPLAINT_DETAILS)) {
 
                 return loadGroupIdComplaintDetails(param);
-            } else if(method.equals(LOAD_COMPLAINT_IMAGE)){
+            } else if (method.equals(LOAD_COMPLAINT_IMAGE)) {
 
                 return loadComplaintImage(param);
 
-            } else if(method.equals(LOAD_RESPONSE_IMAGE)){
+            } else if (method.equals(LOAD_RESPONSE_IMAGE)) {
 
                 return loadResponseImage(param);
-            } else if(method.equals(AGT_LOAD_COMPLAINT_DETAILS)){
+            } else if (method.equals(AGT_LOAD_COMPLAINT_DETAILS)) {
 
                 return loadComplaintDetailsAgent(param);
-            } else if(method.equals(SEND_RESPONSE_METHOD)){
+            } else if (method.equals(SEND_RESPONSE_METHOD)) {
 
                 return sendResponse(param);
+            } else if(method.equals(AGT_PROFILE_METHOD)){
+
+                return loadAgentProfile(param);
+            } else if(method.equals(CTZ_PROFILE_METHOD)){
+
+                return loadCitizenProfile(param);
             }
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -217,15 +231,15 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
 
             hnd.post(() -> ((MainActivity) activity).loginFailed(response));
 
-        } else if(s.equals(COMPLAINT_REG_SUCCESS)){
+        } else if (s.equals(COMPLAINT_REG_SUCCESS)) {
 
-            hnd.post(()->{
-                ((CitizenMainActivity)activity).complaintRegSuccess();
+            hnd.post(() -> {
+                ((CitizenMainActivity) activity).complaintRegSuccess();
             });
-        } else if(s.equals(COMPLAINT_REG_FAILED)){
+        } else if (s.equals(COMPLAINT_REG_FAILED)) {
 
-            hnd.post(()->{
-                ((CitizenMainActivity)activity).complaintRegFailed();
+            hnd.post(() -> {
+                ((CitizenMainActivity) activity).complaintRegFailed();
             });
         } else if (s.equals(CTZ_COMPLAINT_LIST_OBTAINED)) {
             hnd.post(() -> {
@@ -237,38 +251,51 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
                 ((AgentMainActivity) activity).complaintListObtainedAgent(response);
             });
 
-        } else if(s.equals(CTZ_COMPLAINT_DETAILS_OBTAINED)){
+        } else if (s.equals(CTZ_COMPLAINT_DETAILS_OBTAINED)) {
 
-            ((CitizenComplaintDetailsActivity)activity).onLoadComplaintDetails(response);
+            ((CitizenComplaintDetailsActivity) activity).onLoadComplaintDetails(response);
 
-        } else if(s.equals(COMPLAINT_IMAGE_OBTAINED)){
-            if(response[1]==CITIZEN) ((CitizenComplaintDetailsActivity)activity).onLoadComplaintImage();
-            else ((AgentComplaintDetailsActivity)activity).onLoadComplaintImage();
+        } else if (s.equals(COMPLAINT_IMAGE_OBTAINED)) {
+            if (response[1] == CITIZEN)
+                ((CitizenComplaintDetailsActivity) activity).onLoadComplaintImage();
+            else ((AgentComplaintDetailsActivity) activity).onLoadComplaintImage();
 
-        }else if(s.equals(AGT_GROUP_ID_COMPLAINT_DETAILS_OBTAINED)){
+        } else if (s.equals(AGT_GROUP_ID_COMPLAINT_DETAILS_OBTAINED)) {
 
-           hnd.post(() ->{
-               ((AgentComplaintGroupDetailsActivity)activity).onLoadGroupIdComplaintDetails(response);
-           });
-
-        } else if(s.equals(RESPONSE_IMAGE_OBTAINED)){
-
-            hnd.post(()->{
-                ((CitizenComplaintDetailsActivity)activity).onLoadResponseImage();
+            hnd.post(() -> {
+                ((AgentComplaintGroupDetailsActivity) activity).onLoadGroupIdComplaintDetails(response);
             });
 
-        } else if(s.equals(AGT_COMPLAINT_DETAILS_OBTAINED)){
+        } else if (s.equals(RESPONSE_IMAGE_OBTAINED)) {
 
-            hnd.post(()->{
-                ((AgentComplaintDetailsActivity)activity).onLoadComplaintDetails(response);
+            hnd.post(() -> {
+                ((CitizenComplaintDetailsActivity) activity).onLoadResponseImage();
             });
-        } else if(s.equals(RESPONSE_SENT)){
+
+        } else if (s.equals(AGT_COMPLAINT_DETAILS_OBTAINED)) {
+
+            hnd.post(() -> {
+                ((AgentComplaintDetailsActivity) activity).onLoadComplaintDetails(response);
+            });
+        } else if (s.equals(RESPONSE_SENT)) {
 
             System.out.println("Response sent!!!!!!!!!!!!!");
+        } else if(s.equals(AGT_PROFILE_OBTAINED)){
+
+            hnd.post(()->{
+                ((AgentMainActivity)activity).profileDataObtained(response);
+            });
+
+        } else if(s.equals(CTZ_PROFILE_OBTAINED)){
+
+            hnd.post(()->{
+                ((CitizenMainActivity)activity).profileDataObtained(response);
+            });
+
         } else if (s.equals(NO_INTERNET)) {
-            ((Base)activity).noInternet();
-        } else if(s.contains(REQUEST_TIMEOUT)){
-            ((Base)activity).onRequestTimeout();
+            ((Base) activity).noInternet();
+        } else if (s.contains(REQUEST_TIMEOUT)) {
+            ((Base) activity).onRequestTimeout();
         } else {
             System.out.println(s);
         }
@@ -422,8 +449,8 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
 
     private String[] fileComplaint(String... param) throws IOException {
         final ProgressDialog[] dialog = {null};
-        hnd.post(()->{
-            dialog[0] = ProgressDialog.show(activity,"Registering complaint","Please wait for the photo to upload",true,false);
+        hnd.post(() -> {
+            dialog[0] = ProgressDialog.show(activity, "Registering complaint", "Please wait for the photo to upload", true, false);
         });
 
         OkHttpClient client = new OkHttpClient();
@@ -440,21 +467,21 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
 
         Request req = new Request.Builder().url(FILE_COMPLAINT_URL).post(requestBody).build();
 
-        Response response=null;
+        Response response = null;
 
-        try{
+        try {
 
             response = client.newCall(req).execute();
 
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        hnd.post(()->{
+        hnd.post(() -> {
             dialog[0].dismiss();
         });
 
-        if(response!=null)return stringArrayOf(response.body().string());
+        if (response != null) return stringArrayOf(response.body().string());
         else return stringArrayOf(REQUEST_TIMEOUT);
 
     }
@@ -488,7 +515,7 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
     }
 
     private String[] reloadComplaintListAgent(String... param) throws IOException {
-        System.out.println("--- > "+param[1]);
+        System.out.println("--- > " + param[1]);
         OkHttpClient client = new OkHttpClient();
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
@@ -520,18 +547,18 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
     private String[] loadComplaintDetailsCitizen(String... param) throws IOException {
         OkHttpClient client = new OkHttpClient();
         RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
-                .addFormDataPart(PARAM_COMPLT_ID,param[1]).build();
+                .addFormDataPart(PARAM_COMPLT_ID, param[1]).build();
         Request request = new Request.Builder().url(LOAD_COMPLAINT_DETAILS_CITIZEN_URL).post(requestBody).build();
         Response response = client.newCall(request).execute();
 
         BufferedReader br = new BufferedReader(response.body().charStream());
         String result[] = new String[9];
-        result[0]=CTZ_COMPLAINT_DETAILS_OBTAINED;
+        result[0] = CTZ_COMPLAINT_DETAILS_OBTAINED;
 
         //get other parameters
-        for(int i=1;i<=7;i++)result[i]=br.readLine();
+        for (int i = 1; i <= 7; i++) result[i] = br.readLine();
 
-        if(result[5].equals(STATUS_COMPLETED))result[8]=br.readLine();
+        if (result[5].equals(STATUS_COMPLETED)) result[8] = br.readLine();
 
 
         return result;
@@ -539,11 +566,11 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
     }
 
 
-    private String[] loadGroupIdComplaintDetails(String... param) throws IOException{
-        System.out.println("loadGroupIdComplaintDetails param[1] value : "+param[1]);
+    private String[] loadGroupIdComplaintDetails(String... param) throws IOException {
+        System.out.println("loadGroupIdComplaintDetails param[1] value : " + param[1]);
         OkHttpClient client = new OkHttpClient();
         RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
-                .addFormDataPart(PARAM_GROUP_ID,param[1]).build();
+                .addFormDataPart(PARAM_GROUP_ID, param[1]).build();
         Request request = new Request.Builder().url(LOAD_GROUP_ID_COMPLAINT_DETAILS_AGENT_URL).post(requestBody).build();
         Response response = client.newCall(request).execute();
         String body = response.body().string();
@@ -555,22 +582,22 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
         sc.nextLine();
 
         String[] ret = new String[3 * n + 1];
-        ret[0]=AGT_GROUP_ID_COMPLAINT_DETAILS_OBTAINED;
+        ret[0] = AGT_GROUP_ID_COMPLAINT_DETAILS_OBTAINED;
 
-        for(int i=1;i < 3*n+1 ;i++){
+        for (int i = 1; i < 3 * n + 1; i++) {
             ret[i] = sc.nextLine();
-            System.out.println("--here -- "+ret[i]);
+            System.out.println("--here -- " + ret[i]);
         }
 
         return ret;
     }
 
-    public String[] loadComplaintImage(String...param) throws IOException {
+    public String[] loadComplaintImage(String... param) throws IOException {
         System.out.println("Load complaint image " + param[1]);
 
         OkHttpClient client = new OkHttpClient();
         RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
-                .addFormDataPart(PARAM_COMPLT_ID,param[1]).build();
+                .addFormDataPart(PARAM_COMPLT_ID, param[1]).build();
 
         Request request = new Request.Builder().url(LOAD_COMPLAINT_IMAGE_URL).post(requestBody).build();
         Response response = client.newCall(request).execute();
@@ -579,36 +606,37 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
         BufferedInputStream bis = new BufferedInputStream(is);
 
         File storage = activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File imageFile = new File(storage.getAbsolutePath()+"/"+COMPLT_IMAGE_PREFIX + param[1]+".jpg");
-        System.out.println("Writing image to file "+imageFile.getName());
+        File imageFile = new File(storage.getAbsolutePath() + "/" + COMPLT_IMAGE_PREFIX + param[1] + ".jpg");
+        System.out.println("Writing image to file " + imageFile.getName());
 
         FileOutputStream fos = new FileOutputStream(imageFile);
 
         byte bytearr[] = new byte[100];
-        long bcount=0;
+        long bcount = 0;
 
-        try{
-            while(true){
+        try {
+            while (true) {
                 int read = bis.read(bytearr);
-                if(read<=0)break;
-                bcount+=read;
-                fos.write(bytearr,0,read);
+                if (read <= 0) break;
+                bcount += read;
+                fos.write(bytearr, 0, read);
             }
-        }catch(Exception ex){}
+        } catch (Exception ex) {
+        }
 
         System.out.println("Written " + bcount + " bytes");
 
         fos.flush();
         fos.close();
-        return stringArrayOf(COMPLAINT_IMAGE_OBTAINED,param[2]);
+        return stringArrayOf(COMPLAINT_IMAGE_OBTAINED, param[2]);
     }
 
-    public String[] loadResponseImage(String...param) throws IOException{
+    public String[] loadResponseImage(String... param) throws IOException {
         System.out.println("Load response image " + param[1]);
 
         OkHttpClient client = new OkHttpClient();
         RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
-                .addFormDataPart(PARAM_COMPLT_ID,param[1]).build();
+                .addFormDataPart(PARAM_COMPLT_ID, param[1]).build();
 
         Request request = new Request.Builder().url(LOAD_RESPONSE_IMAGE_URL).post(requestBody).build();
         Response response = client.newCall(request).execute();
@@ -617,22 +645,23 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
         BufferedInputStream bis = new BufferedInputStream(is);
 
         File storage = activity.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File imageFile = new File(storage.getAbsolutePath()+"/"+RESP_IMAGE_PREFIX + param[1]+".jpg");
-        System.out.println("Writing image to file "+imageFile.getName());
+        File imageFile = new File(storage.getAbsolutePath() + "/" + RESP_IMAGE_PREFIX + param[1] + ".jpg");
+        System.out.println("Writing image to file " + imageFile.getName());
 
         FileOutputStream fos = new FileOutputStream(imageFile);
 
         byte bytearr[] = new byte[100];
-        long bcount=0;
+        long bcount = 0;
 
-        try{
-            while(true){
+        try {
+            while (true) {
                 int read = bis.read(bytearr);
-                if(read<=0)break;
-                bcount+=read;
-                fos.write(bytearr,0,read);
+                if (read <= 0) break;
+                bcount += read;
+                fos.write(bytearr, 0, read);
             }
-        }catch(Exception ex){}
+        } catch (Exception ex) {
+        }
 
         System.out.println("Written " + bcount + " bytes");
 
@@ -641,62 +670,103 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
         return stringArrayOf(RESPONSE_IMAGE_OBTAINED);
     }
 
-    public String[] loadComplaintDetailsAgent(String...param) throws IOException{
+    public String[] loadComplaintDetailsAgent(String... param) throws IOException {
 
         System.out.println("Load complaint details agent");
         OkHttpClient client = new OkHttpClient();
         RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
-                .addFormDataPart(PARAM_COMPLT_ID,param[1]).build();
+                .addFormDataPart(PARAM_COMPLT_ID, param[1]).build();
         Request request = new Request.Builder().url(LOAD_COMPLAINT_DETAILS_AGENT_URL).post(requestBody).build();
         Response response = client.newCall(request).execute();
 
         BufferedReader br = new BufferedReader(response.body().charStream());
         String result[] = new String[6];
-        result[0]=AGT_COMPLAINT_DETAILS_OBTAINED;
+        result[0] = AGT_COMPLAINT_DETAILS_OBTAINED;
 
         //get other parameters
-        for(int i=1;i<=5;i++){
-            result[i]=br.readLine();
+        for (int i = 1; i <= 5; i++) {
+            result[i] = br.readLine();
         }
         return result;
     }
 
-    public String[] sendResponse(String...param) throws IOException{
+    public String[] sendResponse(String... param) throws IOException {
         final ProgressDialog[] dialog = {null};
-        hnd.post(()->{
-            dialog[0] = ProgressDialog.show(activity,"Sending Response","Please wait for the photo to upload",true,false);
+        hnd.post(() -> {
+            dialog[0] = ProgressDialog.show(activity, "Sending Response", "Please wait for the photo to upload", true, false);
         });
 
 
         OkHttpClient client = new OkHttpClient();
         RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
-                .addFormDataPart(PARAM_GRP_ID,param[1])
-                .addFormDataPart(PARAM_CATEGORY,param[2])
-                .addFormDataPart(PARAM_DESC,param[3])
-                .addFormDataPart("image",toUpload.getName(),RequestBody.create(MediaType.parse("image/jpeg"),toUpload))
-                .addFormDataPart("lat",param[4])
-                .addFormDataPart("lng",param[5])
-                .addFormDataPart(PARAM_ADDRESS,param[6])
-                .addFormDataPart("Agent_id",param[7])
+                .addFormDataPart(PARAM_GRP_ID, param[1])
+                .addFormDataPart(PARAM_CATEGORY, param[2])
+                .addFormDataPart(PARAM_DESC, param[3])
+                .addFormDataPart("image", toUpload.getName(), RequestBody.create(MediaType.parse("image/jpeg"), toUpload))
+                .addFormDataPart("lat", param[4])
+                .addFormDataPart("lng", param[5])
+                .addFormDataPart(PARAM_ADDRESS, param[6])
+                .addFormDataPart("Agent_id", param[7])
                 .build();
 
 //        for(int i=0;i<7;i++) System.out.println("DEBUG RESP - " + param[i]);
 
-        Request request = new Request.Builder().url(SEND_RESPONSE_URL).addHeader("Connection","Keep-Alive").post(requestBody).build();
-        Response response=null;
-        try{
+        Request request = new Request.Builder().url(SEND_RESPONSE_URL).addHeader("Connection", "Keep-Alive").post(requestBody).build();
+        Response response = null;
+        try {
             response = client.newCall(request).execute();
-        } catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
 
-        hnd.post(()->{
+        hnd.post(() -> {
             dialog[0].dismiss();
         });
 
-        if(response!=null)return stringArrayOf(response.body().string());
+        if (response != null) return stringArrayOf(response.body().string());
         else return stringArrayOf(REQUEST_TIMEOUT);
+    }
+
+    public String[] loadAgentProfile(String...param) throws IOException{
+        OkHttpClient client = new OkHttpClient();
+        RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                .addFormDataPart(PARAM_AGT_ID,param[1]).build();
+
+        Request request = new Request.Builder().url(AGT_PROFILE_URL).post(requestBody).build();
+        Response rsp = client.newCall(request).execute();
+
+        String[] retdata = new String[4];
+        retdata[0] = AGT_PROFILE_OBTAINED;
+
+        Scanner sc = new Scanner(rsp.body().string());
+        retdata[1] = sc.nextLine();
+        retdata[2] = sc.nextLine();
+        retdata[3] = sc.nextLine();
+
+        return retdata;
+
+    }
+
+    public String[] loadCitizenProfile(String...param) throws IOException{
+        OkHttpClient client = new OkHttpClient();
+        RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                .addFormDataPart(PARAM_CTZ_ID,param[1]).build();
+
+        Request request = new Request.Builder().url(CTZ_PROFILE_URL).post(requestBody).build();
+        Response rsp = client.newCall(request).execute();
+
+        String[] retdata = new String[4];
+        retdata[0] = CTZ_PROFILE_OBTAINED;
+
+        String rstr = rsp.body().string();
+        Scanner sc = new Scanner(rstr);
+        retdata[1] = sc.nextLine();
+        retdata[2] = sc.nextLine();
+        retdata[3] = sc.nextLine();
+
+        return retdata;
+
     }
 
 

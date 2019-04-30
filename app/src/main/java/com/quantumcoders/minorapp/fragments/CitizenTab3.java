@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.quantumcoders.minorapp.R;
 import com.quantumcoders.minorapp.misc.Constants;
@@ -22,13 +23,12 @@ import static android.app.Activity.RESULT_OK;
  */
 public class CitizenTab3 extends Fragment {
 
-    Uri imageUri = null;
-    ImageView profilePic = null ,imageButton = null;
 
 
     public CitizenTab3() {
         // Required empty public constructor
     }
+
     TextInputEditText name, email, contact;
 
     @Override
@@ -41,39 +41,16 @@ public class CitizenTab3 extends Fragment {
         email = view.findViewById(R.id.id_email);
         contact = view.findViewById(R.id.id_contact);
 
-        //DEMO DATA FOR name, email, contact FIELDS
-
-        name.setText("First Name Here");
-        email.setText("Email Here");
-        contact.setText("Contact Here");
-
-        profilePic = view.findViewById(R.id.imageView);
-        imageButton = view.findViewById(R.id.id_changeProfilePicture);
-
-        imageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new Thread(()->{
-                    OpenGallery();
-                }).start();
-            }
-        });
 
         return view;
     }
 
 
-    public void OpenGallery(){
-        Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-        startActivityForResult(gallery, Constants.PICK_IMAGE);
-    }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_OK && requestCode == Constants.PICK_IMAGE){
-            imageUri = data.getData();
-            profilePic.setImageURI(imageUri);
-        }
+
+    public void setProfileData(String...data){
+        ((TextInputEditText)getView().findViewById(R.id.id_name)).setText(data[1]);
+        ((TextInputEditText)getView().findViewById(R.id.id_email)).setText(data[2]);
+        ((TextInputEditText)getView().findViewById(R.id.id_contact)).setText(data[3]);
     }
 }

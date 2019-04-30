@@ -20,7 +20,8 @@ import com.quantumcoders.minorapp.misc.ServerWorker;
 
 public class Tab1 extends Fragment {
 
-    public Tab1() {}
+    public Tab1() {
+    }
 
 
     @Override
@@ -36,7 +37,7 @@ public class Tab1 extends Fragment {
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(),CitizenSignupActivity.class));
+                startActivity(new Intent(getActivity(), CitizenSignupActivity.class));
             }
         });
 
@@ -44,21 +45,21 @@ public class Tab1 extends Fragment {
             @Override
             public void onClick(View view) {
                 //login code here
-                if(!((MainActivity)getActivity()).clickedOnce){     //if not already clicked on this button
-                    ((MainActivity)getActivity()).clickedOnce=true;
-                    String email = ((TextInputEditText)getView().findViewById(R.id.email)).getText().toString();
-                    String password = ((TextInputEditText)getView().findViewById(R.id.password)).getText().toString();
+                if (!((MainActivity) getActivity()).clickedOnce) {     //if not already clicked on this button
+                    ((MainActivity) getActivity()).clickedOnce = true;
+                    String email = ((TextInputEditText) getView().findViewById(R.id.email)).getText().toString();
+                    String password = ((TextInputEditText) getView().findViewById(R.id.password)).getText().toString();
 
-                    if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+                    if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                         longToast("Invalid Email");
-                    } else if(!password.matches(Constants.PWD_REGEX)) {
+                    } else if (!password.matches(Constants.PWD_REGEX)) {
                         longToast("Invalid password");
                     } else {
-                        ((MainActivity)getActivity()).email=email;
-                        ((MainActivity)getActivity()).password=password;
-                        ((MainActivity)getActivity()).type=Constants.CITIZEN;
+                        ((MainActivity) getActivity()).email = email;
+                        ((MainActivity) getActivity()).password = password;
+                        ((MainActivity) getActivity()).type = Constants.CITIZEN;
 
-                        ServerWorker.loginCitizen((AppCompatActivity) getActivity(),email,password);
+                        ServerWorker.loginCitizen((AppCompatActivity) getActivity(), email, password);
                     }
                 } else System.out.println("Already clicked");
             }
@@ -67,8 +68,8 @@ public class Tab1 extends Fragment {
         return view;
     }
 
-    public void longToast(String msg){
-        Toast.makeText(getActivity(),msg,Toast.LENGTH_LONG).show();
+    public void longToast(String msg) {
+        Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
     }
 
 

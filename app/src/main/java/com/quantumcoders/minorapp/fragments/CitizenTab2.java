@@ -8,12 +8,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 
 import com.quantumcoders.minorapp.R;
 import com.quantumcoders.minorapp.adapters.ListItemComplaint;
 import com.quantumcoders.minorapp.adapters.MyRecyclerAdapter;
-import com.quantumcoders.minorapp.misc.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +43,7 @@ public class CitizenTab2 extends Fragment {
         listItemComplaint = new ArrayList<>();
 
 
-        adapter = new MyRecyclerAdapter(listItemComplaint,getActivity());
+        adapter = new MyRecyclerAdapter(listItemComplaint, getActivity());
         recyclerView.setAdapter(adapter);
 
         return view;
@@ -54,6 +52,5 @@ public class CitizenTab2 extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        getView().findViewById(R.id.loadingLayout).setVisibility(View.VISIBLE);
     }
 }

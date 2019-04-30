@@ -15,6 +15,7 @@ import java.util.List;
 public class FetchAddressIntentService extends IntentService {
 
     static ResultReceiver receiver = null;
+
     public FetchAddressIntentService() {
         super("FetchAddressIntentService");
     }
@@ -31,25 +32,25 @@ public class FetchAddressIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         if (intent != null) {
-            double lat = intent.getDoubleExtra("LATITUDE",0.0f);
-            double lng = intent.getDoubleExtra("LONGITUDE",0.0f);
+            double lat = intent.getDoubleExtra("LATITUDE", 0.0f);
+            double lng = intent.getDoubleExtra("LONGITUDE", 0.0f);
 
-            if(lat!=0.0f && lng!=0.0f){
+            if (lat != 0.0f && lng != 0.0f) {
 
 
                 Geocoder coder = new Geocoder(this);
                 try {
-                    List<Address> addrList = coder.getFromLocation(lat,lng,1);
-                    StringBuilder address=new StringBuilder();
+                    List<Address> addrList = coder.getFromLocation(lat, lng, 1);
+                    StringBuilder address = new StringBuilder();
 
                     Address a = addrList.get(0);
-                    for(int i=0;i<=a.getMaxAddressLineIndex();i++){
+                    for (int i = 0; i <= a.getMaxAddressLineIndex(); i++) {
                         address.append(a.getAddressLine(i));
                     }
 
                     Bundle bundle = new Bundle();
                     bundle.putString("address", address.toString());
-                    receiver.send(1,bundle);
+                    receiver.send(1, bundle);
                     receiver = null;
 
                 } catch (IOException e) {

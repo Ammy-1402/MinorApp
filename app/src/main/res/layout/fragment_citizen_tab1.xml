@@ -114,37 +114,37 @@
                 app:layout_constraintStart_toStartOf="@+id/imageView3"
                 app:layout_constraintTop_toBottomOf="@+id/imageView3">
 
-                    <LinearLayout
-                        android:padding="8dp"
+                <LinearLayout
+                    android:padding="8dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:id="@+id/locDesc"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:background="#FFFF00"
+                        android:inputType="textMultiLine"
+                        android:padding="8dp"
+                        android:text="Location - Loading... "
+                        android:textAlignment="center"
+                        android:textColor="#000000"
+                        android:textSize="18sp" />
+
+                    <com.google.android.gms.maps.MapView
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:id="@+id/mapView"
+                        android:clickable="false"
+                        android:apiKey="AIzaSyDyKLBQWEbWLva8J2oFfeFgP_Ro5XfM9_M">
+
+                    </com.google.android.gms.maps.MapView>
 
 
-                        <TextView
-                            android:id="@+id/locDesc"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="8dp"
-                            android:background="#FFFF00"
-                            android:inputType="textMultiLine"
-                            android:padding="8dp"
-                            android:text="Location - Loading... "
-                            android:textAlignment="center"
-                            android:textColor="#000000"
-                            android:textSize="18sp" />
-
-                        <com.google.android.gms.maps.MapView
-                            android:layout_width="match_parent"
-                            android:layout_height="200dp"
-                            android:id="@+id/mapView"
-                            android:clickable="false"
-                            android:apiKey="AIzaSyDyKLBQWEbWLva8J2oFfeFgP_Ro5XfM9_M">
-
-                        </com.google.android.gms.maps.MapView>
-
-
-                    </LinearLayout>
+                </LinearLayout>
 
             </android.support.v7.widget.CardView>
 
@@ -153,8 +153,6 @@
 
 
     </ScrollView>
-
-
 
 
 </android.support.constraint.ConstraintLayout>

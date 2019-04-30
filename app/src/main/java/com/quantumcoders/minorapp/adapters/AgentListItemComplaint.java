@@ -15,13 +15,23 @@ public class AgentListItemComplaint {
         this.agentStatus = agentStatus;
     }
 
-    public String getGroupId() { return groupId; }
+    public String getGroupId() {
+        return groupId;
+    }
 
-    public String getNoOfComplaints() { return noOfComplaints; }
+    public String getNoOfComplaints() {
+        return noOfComplaints;
+    }
 
-    public String getCategory() { return category; }
+    public String getCategory() {
+        return category;
+    }
 
-    public String getLocation() { return location; }
+    public String getLocation() {
+        return location;
+    }
 
-    public  String getAgentStatus(){ return agentStatus; }
+    public String getAgentStatus() {
+        return agentStatus;
+    }
 }

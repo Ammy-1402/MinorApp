@@ -12,8 +12,8 @@ public class ListItemComplaint {
         this.complaintNo = complaintNo;
         this.registeredOn = registeredOn;
         this.category = category;
-        this.description = description.replace("<br/>","\n");
-        this.status=status;
+        this.description = description.replace("<br/>", "\n");
+        this.status = status;
     }
 
     public String getComplaintNo() { //complaintNo is the complaintId AND getComplaintNo is the getComplaintId
@@ -32,5 +32,7 @@ public class ListItemComplaint {
         return description;
     }
 
-    public String getStatus(){ return  status; }
+    public String getStatus() {
+        return status;
+    }
 }

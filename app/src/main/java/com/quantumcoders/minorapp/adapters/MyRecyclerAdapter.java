@@ -30,7 +30,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.itemlist_cardview,parent,false);
+                .inflate(R.layout.itemlist_cardview, parent, false);
 
         return new ViewHolder(view);
     }
@@ -45,11 +45,11 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
         viewHolder.textViewDescription.setText(listItemComplaint.getDescription());
         viewHolder.complaint = listItemComplaint;
 
-        if(listItemComplaint.getStatus().equals(Constants.STATUS_PENDING)){
+        if (listItemComplaint.getStatus().equals(Constants.STATUS_PENDING)) {
 
             viewHolder.textViewStatus.setBackgroundResource(R.drawable.status_pending);
 
-        } else if(listItemComplaint.getStatus().equals(Constants.STATUS_WORK_IN_PROGRESS)){
+        } else if (listItemComplaint.getStatus().equals(Constants.STATUS_WORK_IN_PROGRESS)) {
 
             viewHolder.textViewStatus.setBackgroundResource(R.drawable.status_wip);
 
@@ -63,7 +63,7 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ctxt, CitizenComplaintDetailsActivity.class);
-                intent.putExtra(Constants.PARAM_COMPLT_ID,viewHolder.complaint.getComplaintNo());
+                intent.putExtra(Constants.PARAM_COMPLT_ID, viewHolder.complaint.getComplaintNo());
                 System.out.println("intent extra " + viewHolder.complaint.getComplaintNo());
                 ctxt.startActivity(intent);
             }
@@ -81,17 +81,17 @@ public class MyRecyclerAdapter extends RecyclerView.Adapter<MyRecyclerAdapter.Vi
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView textViewComplaintId , textViewRegisteredOn , textViewCategory , textViewDescription, textViewStatus;
-        public ListItemComplaint complaint=null;
+        public TextView textViewComplaintId, textViewRegisteredOn, textViewCategory, textViewDescription, textViewStatus;
+        public ListItemComplaint complaint = null;
         public View itemView = null;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            textViewCategory = (TextView)itemView.findViewById(R.id.id_category);
-            textViewComplaintId = (TextView)itemView.findViewById(R.id.id_complaintNo);  //complaintNo is the complaintId
-            textViewRegisteredOn = (TextView)itemView.findViewById(R.id.id_complaintRegistrationTime);
-            textViewDescription = (TextView)itemView.findViewById(R.id.id_descriptionDetails);
+            textViewCategory = (TextView) itemView.findViewById(R.id.id_category);
+            textViewComplaintId = (TextView) itemView.findViewById(R.id.id_complaintNo);  //complaintNo is the complaintId
+            textViewRegisteredOn = (TextView) itemView.findViewById(R.id.id_complaintRegistrationTime);
+            textViewDescription = (TextView) itemView.findViewById(R.id.id_descriptionDetails);
             textViewStatus = (TextView) itemView.findViewById(R.id.id_status);
 
             this.itemView = itemView;

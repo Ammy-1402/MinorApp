@@ -8,32 +8,19 @@
 
     <!-- TODO: Update blank fragment layout -->
 
-    <ImageView
-        android:id="@+id/agentImageView"
-        android:layout_width="match_parent"
-        android:layout_height="155dp"
-        android:layout_marginStart="2dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="2dp"
-        android:src="@mipmap/ic_launcher"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
 
     <ScrollView
         android:id="@+id/agentScrollView3"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/agentImageView"
-        app:layout_constraintVertical_bias="0.154">
+        app:layout_constraintTop_toTopOf="parent">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -44,7 +31,7 @@
                 android:layout_width="300dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="15dp"
                 android:layout_marginEnd="8dp"
                 android:text="Name"
                 android:textAlignment="center"
@@ -57,10 +44,10 @@
             <android.support.design.widget.TextInputEditText
                 android:id="@+id/id_agentName"
                 android:layout_width="300dp"
-                android:textSize="20dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="15dp"
                 android:editable="false"
+                android:textSize="20dp"
                 app:layout_constraintEnd_toEndOf="@+id/textView2"
                 app:layout_constraintStart_toStartOf="@+id/textView2"
                 app:layout_constraintTop_toBottomOf="@+id/textView2" />
@@ -82,9 +69,9 @@
                 android:id="@+id/id_agentEmail"
                 android:layout_width="300dp"
                 android:layout_height="50dp"
-                android:textSize="20dp"
                 android:layout_marginTop="15dp"
                 android:editable="false"
+                android:textSize="20dp"
                 app:layout_constraintEnd_toEndOf="@+id/textView4"
                 app:layout_constraintStart_toStartOf="@+id/textView4"
                 app:layout_constraintTop_toBottomOf="@+id/textView4">
@@ -110,7 +97,7 @@
                 android:layout_width="300dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="15dp"
-                android:layout_marginBottom="250dp"
+                android:layout_marginBottom="25dp"
                 android:editable="false"
                 android:textSize="20dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -124,22 +111,6 @@
 
 
     </ScrollView>
-
-    <ImageView
-        android:id="@+id/id_changeProfilePicture"
-        android:layout_width="53dp"
-        android:layout_height="58dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:clickable="true"
-        android:src="@drawable/ic_camera_alt_black_24dp"
-        app:layout_constraintBottom_toTopOf="@+id/agentScrollView3"
-        app:layout_constraintEnd_toEndOf="@+id/agentImageView"
-        app:layout_constraintHorizontal_bias="0.674"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/agentScrollView3"
-        app:layout_constraintVertical_bias="0.469" />
 
 
 </android.support.constraint.ConstraintLayout>

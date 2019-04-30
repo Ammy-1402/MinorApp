@@ -29,7 +29,7 @@ public class AgentGroupIdRecyclerAdapter extends RecyclerView.Adapter<AgentGroup
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.agentgroupiditemlist_cardview,parent,false);
+                .inflate(R.layout.agentgroupiditemlist_cardview, parent, false);
 
         return new ViewHolder(view);
     }
@@ -46,9 +46,9 @@ public class AgentGroupIdRecyclerAdapter extends RecyclerView.Adapter<AgentGroup
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ctxt, AgentComplaintDetailsActivity.class);
-                intent.putExtra(Constants.PARAM_COMPLNT_NO,viewHolder.complaintNo.getGroupIdComplaintNo());
-                intent.putExtra(Constants.PARAM_REGISTERED_BY,viewHolder.complaintNo.getRegisteredBy());
-                intent.putExtra(Constants.PARAM_REGISTERED_ON,viewHolder.complaintNo.getRegisteredOn());
+                intent.putExtra(Constants.PARAM_COMPLNT_NO, viewHolder.complaintNo.getGroupIdComplaintNo());
+                intent.putExtra(Constants.PARAM_REGISTERED_BY, viewHolder.complaintNo.getRegisteredBy());
+                intent.putExtra(Constants.PARAM_REGISTERED_ON, viewHolder.complaintNo.getRegisteredOn());
                 //System.out.println("AgentGroupIdRecyclerAdapter intent extra: "+viewHolder.complaintNo.groupIdComplaintNo);
                 ctxt.startActivity(intent);
             }
@@ -61,15 +61,16 @@ public class AgentGroupIdRecyclerAdapter extends RecyclerView.Adapter<AgentGroup
         return listItems.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView textViewComplaintNo , textViewRegisteredBy , textViewRegisteredOn ;
+        public TextView textViewComplaintNo, textViewRegisteredBy, textViewRegisteredOn;
         public AgentListItemGroupIdComplaint complaintNo;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             textViewComplaintNo = itemView.findViewById(R.id.id_complaintNoInGroupId);
             textViewRegisteredBy = itemView.findViewById(R.id.id_registeredByInGroupId);
-            textViewRegisteredOn =  itemView.findViewById(R.id.id_registeredOnInGroupId);
+            textViewRegisteredOn = itemView.findViewById(R.id.id_registeredOnInGroupId);
 
         }
     }

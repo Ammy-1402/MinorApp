@@ -1,10 +1,8 @@
 package com.quantumcoders.minorapp.adapters;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +23,6 @@ public class AgentMyRecyclerAdapter extends RecyclerView.Adapter<AgentMyRecycler
     private Activity ctxt;
 
 
-
     public AgentMyRecyclerAdapter(List<AgentListItemComplaint> listItems, Activity ctxt) {
         this.listItems = listItems;
         this.ctxt = ctxt;
@@ -35,7 +32,7 @@ public class AgentMyRecyclerAdapter extends RecyclerView.Adapter<AgentMyRecycler
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.agentitemlist_cardview,parent,false);
+                .inflate(R.layout.agentitemlist_cardview, parent, false);
 
         return new ViewHolder(view);
     }
@@ -54,15 +51,15 @@ public class AgentMyRecyclerAdapter extends RecyclerView.Adapter<AgentMyRecycler
         viewHolder.groupIdCategory = agentListItemComplaint;
 
 
-        if(agentListItemComplaint.getAgentStatus().equals(Constants.STATUS_PENDING)){
+        if (agentListItemComplaint.getAgentStatus().equals(Constants.STATUS_PENDING)) {
 
             viewHolder.textViewAgentStatus.setBackgroundResource(R.drawable.status_pending);
 
-        }else if(agentListItemComplaint.getAgentStatus().equals(Constants.STATUS_WORK_IN_PROGRESS)){
+        } else if (agentListItemComplaint.getAgentStatus().equals(Constants.STATUS_WORK_IN_PROGRESS)) {
 
             viewHolder.textViewAgentStatus.setBackgroundResource(R.drawable.status_wip);
 
-        }else{
+        } else {
 
             viewHolder.textViewAgentStatus.setBackgroundResource(R.drawable.status_complete);
 
@@ -72,12 +69,12 @@ public class AgentMyRecyclerAdapter extends RecyclerView.Adapter<AgentMyRecycler
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ctxt, AgentComplaintGroupDetailsActivity.class);
-                intent.putExtra(Constants.PARAM_GROUP_ID,viewHolder.groupIdComplaint.getGroupId());
-                intent.putExtra(Constants.PARAM_CATEGORY,viewHolder.groupIdCategory.getCategory());
-                intent.putExtra(Constants.PARAM_STATUS,viewHolder.groupIdComplaint.getAgentStatus());
-                intent.putExtra(Constants.PARAM_ADDRESS,viewHolder.groupIdComplaint.getLocation());
+                intent.putExtra(Constants.PARAM_GROUP_ID, viewHolder.groupIdComplaint.getGroupId());
+                intent.putExtra(Constants.PARAM_CATEGORY, viewHolder.groupIdCategory.getCategory());
+                intent.putExtra(Constants.PARAM_STATUS, viewHolder.groupIdComplaint.getAgentStatus());
+                intent.putExtra(Constants.PARAM_ADDRESS, viewHolder.groupIdComplaint.getLocation());
                 //System.out.println("intent extra : "+viewHolder.groupIdComplaint.getGroupId());
-                ctxt.startActivityForResult(intent,REQ_RELOAD_LIST);
+                ctxt.startActivityForResult(intent, REQ_RELOAD_LIST);
             }
         });
     }
@@ -89,8 +86,8 @@ public class AgentMyRecyclerAdapter extends RecyclerView.Adapter<AgentMyRecycler
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView textViewGroupId , textViewNoOfComplaints , textViewCategory , textViewLocation, textViewAgentStatus;
-        public AgentListItemComplaint groupIdComplaint=null,groupIdCategory=null;
+        public TextView textViewGroupId, textViewNoOfComplaints, textViewCategory, textViewLocation, textViewAgentStatus;
+        public AgentListItemComplaint groupIdComplaint = null, groupIdCategory = null;
         public View itemView = null;
 
         public ViewHolder(@NonNull View itemView) {

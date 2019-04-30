@@ -7,20 +7,18 @@ import android.support.v4.app.FragmentPagerAdapter;
 import com.quantumcoders.minorapp.fragments.CitizenTab1;
 import com.quantumcoders.minorapp.fragments.CitizenTab2;
 import com.quantumcoders.minorapp.fragments.CitizenTab3;
-import com.quantumcoders.minorapp.fragments.Tab1;
-import com.quantumcoders.minorapp.fragments.Tab2;
 
 public class CitizenViewPagerAdapter extends FragmentPagerAdapter {
     int tabCount;
 
-    public CitizenViewPagerAdapter(FragmentManager fm,int tabCount) {
+    public CitizenViewPagerAdapter(FragmentManager fm, int tabCount) {
         super(fm);
         this.tabCount = tabCount;
     }
 
     @Override
     public Fragment getItem(int position) {
-        switch (position){
+        switch (position) {
             case 0:
                 CitizenTab1 tab1 = new CitizenTab1();
                 return tab1;

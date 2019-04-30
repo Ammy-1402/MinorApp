@@ -234,7 +234,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="20sp"
                     android:textColor="@color/colorBlack"
-                    android:text="Complaint Resolved"/>
+                    android:text="Complaint Resolved" />
 
                 <ImageView
                     android:id="@+id/resp_image"
