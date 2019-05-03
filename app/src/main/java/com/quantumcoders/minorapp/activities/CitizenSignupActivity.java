@@ -1,6 +1,7 @@
 package com.quantumcoders.minorapp.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -21,6 +22,8 @@ import static com.quantumcoders.minorapp.misc.Constants.PWD_KEY;
 import static com.quantumcoders.minorapp.misc.Constants.SESSION_FILE;
 import static com.quantumcoders.minorapp.misc.Constants.TYPE_KEY;
 import static com.quantumcoders.minorapp.misc.Constants.USER_ID_KEY;
+import static com.quantumcoders.minorapp.misc.Constants.VAL_NO;
+import static com.quantumcoders.minorapp.misc.Constants.VERIFIED_KEY;
 
 public class CitizenSignupActivity extends AppCompatActivity implements Base {
 
@@ -49,8 +52,6 @@ public class CitizenSignupActivity extends AppCompatActivity implements Base {
     public void btnSignupClicked(View view) {
         if (clickedOnce) return;
 
-        //else if not already clicked
-        clickedOnce = true;
 
         String fname = ((TextInputEditText) findViewById(R.id.fname)).getText().toString();
         String lname = ((TextInputEditText) findViewById(R.id.lname)).getText().toString();
@@ -68,11 +69,11 @@ public class CitizenSignupActivity extends AppCompatActivity implements Base {
             longToast("Invalid/Small Password");
         } else if (!password.equals(cpassword)) longToast("Passwords do not match");
         else {
+            //else if not already clicked
+            clickedOnce = true;
             this.email = email;
             this.password = password;
             ServerWorker.signUpCitizen(CitizenSignupActivity.this, fname, lname, phone, email, password);
-            //...
-            //...
         }
 
     }
@@ -82,21 +83,27 @@ public class CitizenSignupActivity extends AppCompatActivity implements Base {
     }
 
     public void signUpSuccess(String[] response) {
-        longToast("Welcome Citizen");
+        System.out.println("signUpSuccess - userid = " + response[1]);
 
         //save session code
         SharedPreferences pref = getApplicationContext().getSharedPreferences(SESSION_FILE, MODE_PRIVATE);
         SharedPreferences.Editor edit = pref.edit();
-        edit.putString(TYPE_KEY, CITIZEN).putString(EMAIL_ID_KEY, email).putString(PWD_KEY, password).putString(USER_ID_KEY, response[1].trim()).commit();
-
-        //code to start CitizenActivity (auto login)
-        startActivity(new Intent(this, CitizenMainActivity.class));
+        edit.putString(TYPE_KEY, CITIZEN).putString(EMAIL_ID_KEY, email).putString(PWD_KEY, password)
+                .putString(USER_ID_KEY, response[1].trim()).putString(VERIFIED_KEY,VAL_NO).commit();
 
 
         //send signal to stop the MainActivity
         setResult(Activity.RESULT_OK);
 
-        finish();   //END THIS ACTIVITY
+        //show a message
+        new AlertDialog.Builder(this).setTitle("Verify Email ID")
+                .setMessage("Please check your inbox for a verification mail to verify your email id.")
+                .setPositiveButton("Ok",(d,w)->{
+                    d.dismiss();
+                    //code to start CitizenActivity (auto login)
+                    CitizenSignupActivity.this.finish();
+                    startActivity(new Intent(this, CitizenMainActivity.class));
+                }).create().show();
 
         clickedOnce = false;
     }

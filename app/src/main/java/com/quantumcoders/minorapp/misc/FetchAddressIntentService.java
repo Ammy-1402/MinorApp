@@ -50,7 +50,8 @@ public class FetchAddressIntentService extends IntentService {
 
                     Bundle bundle = new Bundle();
                     bundle.putString("address", address.toString());
-                    receiver.send(1, bundle);
+                    if(receiver!=null)receiver.send(1, bundle);
+                    else System.out.println("FetchAddressIntentService receiver is null");
                     receiver = null;
 
                 } catch (IOException e) {

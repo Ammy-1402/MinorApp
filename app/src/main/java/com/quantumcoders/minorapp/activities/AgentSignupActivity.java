@@ -52,8 +52,6 @@ public class AgentSignupActivity extends AppCompatActivity implements Base {
             return;
         }
 
-        //if not already clicked
-        clickedOnce = true;
 
         String fname = ((TextInputEditText) findViewById(R.id.fname)).getText().toString();
         String lname = ((TextInputEditText) findViewById(R.id.lname)).getText().toString();
@@ -72,6 +70,8 @@ public class AgentSignupActivity extends AppCompatActivity implements Base {
         } else if (!password.equals(cpassword)) longToast("Passwords do not match");
 
         else {
+            //if not already clicked
+            clickedOnce = true;
             this.email = email;
             this.password = password;
             ServerWorker.signUpAgent(AgentSignupActivity.this, fname, lname, phone, email, password);

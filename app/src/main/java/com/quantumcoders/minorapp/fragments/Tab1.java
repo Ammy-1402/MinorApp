@@ -1,7 +1,9 @@
 package com.quantumcoders.minorapp.fragments;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +19,8 @@ import com.quantumcoders.minorapp.activities.CitizenSignupActivity;
 import com.quantumcoders.minorapp.activities.MainActivity;
 import com.quantumcoders.minorapp.misc.Constants;
 import com.quantumcoders.minorapp.misc.ServerWorker;
+
+import static com.quantumcoders.minorapp.misc.Constants.REQ_SIGNUP;
 
 public class Tab1 extends Fragment {
 
@@ -37,7 +41,7 @@ public class Tab1 extends Fragment {
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(), CitizenSignupActivity.class));
+                startActivityForResult(new Intent(getActivity(), CitizenSignupActivity.class),REQ_SIGNUP);
             }
         });
 
@@ -66,6 +70,18 @@ public class Tab1 extends Fragment {
         });
 
         return view;
+    }
+
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == REQ_SIGNUP) {     //whether sign up was successful so as to finish this activity or not
+            if (resultCode == Activity.RESULT_OK) {
+                System.out.println("Finishing MainActivity from TAB 1");
+                getActivity().finish();
+            }
+        }
     }
 
     public void longToast(String msg) {

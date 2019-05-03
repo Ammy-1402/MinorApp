@@ -27,6 +27,7 @@ import static com.quantumcoders.minorapp.misc.Constants.CTZ_LOGIN_SUCCESS;
 import static com.quantumcoders.minorapp.misc.Constants.EMAIL_ID_KEY;
 import static com.quantumcoders.minorapp.misc.Constants.NO_SUCH_USER;
 import static com.quantumcoders.minorapp.misc.Constants.PWD_KEY;
+import static com.quantumcoders.minorapp.misc.Constants.REQ_SIGNUP;
 import static com.quantumcoders.minorapp.misc.Constants.SESSION_FILE;
 import static com.quantumcoders.minorapp.misc.Constants.TYPE_KEY;
 import static com.quantumcoders.minorapp.misc.Constants.USER_ID_KEY;
@@ -58,9 +59,9 @@ public class MainActivity extends AppCompatActivity implements Base {
 
             // go to logged in activity on the bases of the type
             if (pref.getString(TYPE_KEY, "").equals(CITIZEN)) {
-                startActivityForResult(new Intent(this, CitizenMainActivity.class), 1);
+                startActivity(new Intent(this, CitizenMainActivity.class));
             } else {
-                startActivityForResult(new Intent(this, AgentMainActivity.class), 1);
+                startActivity(new Intent(this, AgentMainActivity.class));
             }
 
             //finish this activity
@@ -91,7 +92,8 @@ public class MainActivity extends AppCompatActivity implements Base {
             }
         });
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             //request for permissions
             String permissions[] = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
             ActivityCompat.requestPermissions(this, permissions, 1);
@@ -146,15 +148,7 @@ public class MainActivity extends AppCompatActivity implements Base {
     }
 
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == 1) {     //whether sign up was successful so as to finish this activity or not
-            if (resultCode == Activity.RESULT_OK) {
-                System.out.println("Finishing MainActivity");
-                finish();
-            }
-        }
-    }
+
 
     public void loginSuccess(String[] response) {
         getApplicationContext().getSharedPreferences(SESSION_FILE, MODE_PRIVATE).edit()

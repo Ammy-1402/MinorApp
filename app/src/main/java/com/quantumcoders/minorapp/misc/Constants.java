@@ -1,112 +1,119 @@
 package com.quantumcoders.minorapp.misc;
 
 public interface Constants {
-    public static final String NAME_REGEX = "[a-zA-Z]+";    //name contains only letters
-    public static final String PWD_REGEX = "[a-zA-Z0-9!@#$%^&*.]{8,}";   //password consists of letter, number,atleast 8 character length
+    String NAME_REGEX = "[a-zA-Z]+";    //name contains only letters
+    String PWD_REGEX = "[a-zA-Z0-9!@#$%^&*.]{8,}";   //password consists of letter, number,atleast 8 character length
 
-    public static final String SESSION_FILE = "SessionFile";
-    public static final String TYPE_KEY = "Type";
-    public static final String EMAIL_ID_KEY = "Email";
-    public static final String PWD_KEY = "Password";
-    public static final String USER_ID_KEY = "UserId";
-    public static final String CITIZEN = "Citizen";
-    public static final String AGENT = "Agent";
+    String SESSION_FILE = "SessionFile";
+    String TYPE_KEY = "Type";
+    String EMAIL_ID_KEY = "Email";
+    String PWD_KEY = "Password";
+    String USER_ID_KEY = "UserId";
+    String VERIFIED_KEY="Verified";
+    String VAL_YES="YES";
+    String VAL_NO="NO";
+    String CITIZEN = "Citizen";
+    String AGENT = "Agent";
 
-    public static final String TEMP_IMAGE_FILE_NAME = "tempImageFile";
-    public static final String TEMP_IMAGE_FILE_NAME_2 = "tempImageFile2";
-    public static final String COMPLT_IMAGE_PREFIX = "compltImage_";
-    public static final String RESP_IMAGE_PREFIX = "respImage_";
+    String TEMP_IMAGE_FILE_NAME = "tempImageFile";
+    String TEMP_IMAGE_FILE_NAME_2 = "tempImageFile2";
+    String COMPLT_IMAGE_PREFIX = "compltImage_";
+    String RESP_IMAGE_PREFIX = "respImage_";
 
 
     /*  PARAMETERS  */
-    public static final String PARAM_COMPLT_ID = "Complain_no";
-    public static final String PARAM_GROUP_ID = "Group_id";
-    public static final String PARAM_CATEGORY = "Category";
-    public static final String PARAM_DESC = "desc";
-    public static final String PARAM_COMPLNT_NO = "COMPLNT_NO";
-    public static final String PARAM_GRP_ID = "Grp_id";
-    public static final String PARAM_REGISTERED_BY = "Registered_by";
-    public static final String PARAM_REGISTERED_ON = "Registered_on";
-    public static final String PARAM_STATUS = "Status";
-    public static final String PARAM_ADDRESS = "Address";
-    public static final String PARAM_AGT_ID = "Agent_d";
-    public static final String PARAM_CTZ_ID = "userid";
+    String PARAM_COMPLT_ID = "Complain_no";
+    String PARAM_GROUP_ID = "Group_id";
+    String PARAM_CATEGORY = "Category";
+    String PARAM_DESC = "desc";
+    String PARAM_COMPLNT_NO = "COMPLNT_NO";
+    String PARAM_GRP_ID = "Grp_id";
+    String PARAM_REGISTERED_BY = "Registered_by";
+    String PARAM_REGISTERED_ON = "Registered_on";
+    String PARAM_STATUS = "Status";
+    String PARAM_ADDRESS = "Address";
+    String PARAM_AGT_ID = "Agent_d";
+    String PARAM_CTZ_ID = "userid";
 
     /*  URLs  */
-    public static final String SERVER_URL = "http://quantumcoders.000webhostapp.com";   //doesn't includes a / at the end
-    public static final String SIGNUP_URL_CITIZEN = SERVER_URL + "/citizen_signup.php"; //demo php for citizen
-    public static final String SIGNUP_URL_AGENT = SERVER_URL + "/agent_signup.php"; //demo php for agent
-    public static final String LOGIN_URL_AGENT = SERVER_URL + "/agent_login.php";
-    public static final String LOGIN_URL_CITIZEN = SERVER_URL + "/citizen_login.php";
-    public static final String FILE_COMPLAINT_URL = SERVER_URL + "/complaint_register.php";
-    public static final String RELOAD_COMPLAINTS_CITIZEN_URL = SERVER_URL + "/citizen_complaint_list.php";
-    public static final String RELOAD_COMPLAINTS_AGENT_URL = SERVER_URL + "/agent_complaint_list.php";
-    public static final String LOAD_COMPLAINT_DETAILS_CITIZEN_URL = SERVER_URL + "/complaint_details_citizen.php";
-    public static final String LOAD_GROUP_ID_COMPLAINT_DETAILS_AGENT_URL = SERVER_URL + "/demo_GroupId_details.php";
-    public static final String LOAD_COMPLAINT_IMAGE_URL = SERVER_URL + "/complaint_image.php";
-    public static final String LOAD_RESPONSE_IMAGE_URL = SERVER_URL + "/response_image.php";
-    public static final String LOAD_COMPLAINT_DETAILS_AGENT_URL = SERVER_URL + "/demo_complaintdetailsAgent.php";
-    public static final String SEND_RESPONSE_URL = SERVER_URL + "/Add_response.php";
-    public static final String AGT_PROFILE_URL = SERVER_URL + "/agent_profile.php";
-    public static final String CTZ_PROFILE_URL = SERVER_URL + "/citizen_profile.php";
+    String SERVER_URL = "http://quantumcoders.000webhostapp.com";   //doesn't includes a / at the end
+    String SIGNUP_URL_CITIZEN = SERVER_URL + "/user_signup.php"; //demo php for citizen
+    String SIGNUP_URL_AGENT = SERVER_URL + "/agent_signup.php"; //demo php for agent
+    String LOGIN_URL_AGENT = SERVER_URL + "/agent_login.php";
+    String LOGIN_URL_CITIZEN = SERVER_URL + "/citizen_login.php";
+    String FILE_COMPLAINT_URL = SERVER_URL + "/complaint_register.php";
+    String RELOAD_COMPLAINTS_CITIZEN_URL = SERVER_URL + "/citizen_complaint_list.php";
+    String RELOAD_COMPLAINTS_AGENT_URL = SERVER_URL + "/agent_complaint_list.php";
+    String LOAD_COMPLAINT_DETAILS_CITIZEN_URL = SERVER_URL + "/complaint_details_citizen.php";
+    String LOAD_GROUP_ID_COMPLAINT_DETAILS_AGENT_URL = SERVER_URL + "/demo_GroupId_details.php";
+    String LOAD_COMPLAINT_IMAGE_URL = SERVER_URL + "/complaint_image.php";
+    String LOAD_RESPONSE_IMAGE_URL = SERVER_URL + "/response_image.php";
+    String LOAD_COMPLAINT_DETAILS_AGENT_URL = SERVER_URL + "/demo_complaintdetailsAgent.php";
+    String SEND_RESPONSE_URL = SERVER_URL + "/Add_response.php";
+    String AGT_PROFILE_URL = SERVER_URL + "/agent_profile.php";
+    String CTZ_PROFILE_URL = SERVER_URL + "/citizen_profile.php";
+    String CTZ_EMAIL_VERIFICATION_URL = SERVER_URL + "/verified.php";
 
 
     /*  METHOD IDENTIFIERS  for AsyncTask*/
-    public static final String CTZ_SIGN_UP_METHOD = "signUpCitizen";
-    public static final String AGT_SIGN_UP_METHOD = "signUpAgent";
-    public static final String CTZ_LOGIN_METHOD = "loginCitizen";
-    public static final String AGT_LOGIN_METHOD = "loginAgent";
-    public static final String FILE_COMPLAINT_METHOD = "fileComplaint";
-    public static final String CTZ_RELOAD_COMPLAINT_LIST_METHOD = "reloadComplaintListCitizen";
-    public static final String AGT_RELOAD_COMPLAINT_LIST_METHOD = "reloadComplaintListAgent";
-    public static final String CTZ_LOAD_COMPLAINT_DETAILS = "loadComplaintDetailsCitizen";
-    public static final String AGT_LOAD_COMPLAINT_DETAILS = "loadComplaintDetailsAgent";
-    public static final String LOAD_COMPLAINT_IMAGE = "loadComplaintImage";
-    public static final String LOAD_RESPONSE_IMAGE = "loadResponseImage";
-    public static final String AGT_LOAD_GROUP_ID_COMPLAINT_DETAILS = "loadGroupIdComplaintDetailsAgent";
-    public static final String SEND_RESPONSE_METHOD = "sendResponseForComplaint";
-    public static final String AGT_PROFILE_METHOD = "loadAgentProfile";
-    public static final String CTZ_PROFILE_METHOD = "loadCitizenProfile";
+    String CTZ_SIGN_UP_METHOD = "signUpCitizen";
+    String AGT_SIGN_UP_METHOD = "signUpAgent";
+    String CTZ_LOGIN_METHOD = "loginCitizen";
+    String AGT_LOGIN_METHOD = "loginAgent";
+    String FILE_COMPLAINT_METHOD = "fileComplaint";
+    String CTZ_RELOAD_COMPLAINT_LIST_METHOD = "reloadComplaintListCitizen";
+    String AGT_RELOAD_COMPLAINT_LIST_METHOD = "reloadComplaintListAgent";
+    String CTZ_LOAD_COMPLAINT_DETAILS = "loadComplaintDetailsCitizen";
+    String AGT_LOAD_COMPLAINT_DETAILS = "loadComplaintDetailsAgent";
+    String LOAD_COMPLAINT_IMAGE = "loadComplaintImage";
+    String LOAD_RESPONSE_IMAGE = "loadResponseImage";
+    String AGT_LOAD_GROUP_ID_COMPLAINT_DETAILS = "loadGroupIdComplaintDetailsAgent";
+    String SEND_RESPONSE_METHOD = "sendResponseForComplaint";
+    String AGT_PROFILE_METHOD = "loadAgentProfile";
+    String CTZ_PROFILE_METHOD = "loadCitizenProfile";
+    String CTZ_EMAIL_VERIFICATION_STATUS ="checkEmailVerificationStatus";
 
 
-    /*  RESPONSE KEYWORDS   */
-    public static final String CTZ_SIGN_UP_SUCCESS = "CitizenSignupSuccess";
-    public static final String AGT_SIGN_UP_SUCCESS = "AgentSignupSuccess";
-    public static final String CTZ_LOGIN_SUCCESS = "CitizenLoginSuccess";
-    public static final String AGT_LOGIN_SUCCESS = "AgentLoginSuccess";
-    public static final String NO_INTERNET = "NoInternet";
-    public static final String COMPLAINT_REG_SUCCESS = "UserComplaintRegistered";
-    public static final String COMPLAINT_REG_FAILED = "UserComplaintNotRegistered";
-    public static final String CTZ_COMPLAINT_LIST_OBTAINED = "ComplaintListObtainedCitizen";
-    public static final String AGT_COMPLAINT_LIST_OBTAINED = "ComplaintListObtainedAgent";
-    public static final String CTZ_COMPLAINT_DETAILS_OBTAINED = "ComplaintDetailsObtainedCitizen";
-    public static final String AGT_COMPLAINT_DETAILS_OBTAINED = "ComplaintDetailsObtainedAgent";
-    public static final String AGT_GROUP_ID_COMPLAINT_DETAILS_OBTAINED = "ComplaintGroupDetailsObtainedAgent";
-    public static final String COMPLAINT_IMAGE_OBTAINED = "ComplaintImageObtained";
-    public static final String AGT_PROFILE_OBTAINED = "AgentProfileObtained";
-    public static final String CTZ_PROFILE_OBTAINED = "CitizenProfileObtained";
-    public static final String RESPONSE_IMAGE_OBTAINED = "ResponseImageObtained";
-    public static final String RESPONSE_SENT = "AgentResponseAdded";
-    public static final String REQUEST_TIMEOUT = "timeout";
-    public static final String CTZ_SIGN_UP_FAILED = "CitizenSignupFailed";
-    public static final String AGT_SIGN_UP_FAILED = "AgentSignupFailed";
-    public static final String CTZ_LOGIN_FAILED = "CitizenLoginFailed";
-    public static final String AGT_LOGIN_FAILED = "AgentLoginFailed";
-    public static final String NO_SUCH_USER = "NoSuchUser";
-    public static final String INVALID_CREDENTIALS = "InvalidCredentials";
+    /*  RESPONSE IDENTIFICATION KEYWORDS   */
+    String CTZ_SIGN_UP_SUCCESS = "CitizenSignupSuccess";
+    String AGT_SIGN_UP_SUCCESS = "AgentSignupSuccess";
+    String CTZ_LOGIN_SUCCESS = "CitizenLoginSuccess";
+    String AGT_LOGIN_SUCCESS = "AgentLoginSuccess";
+    String NO_INTERNET = "NoInternet";
+    String COMPLAINT_REG_SUCCESS = "UserComplaintRegistered";
+    String COMPLAINT_REG_FAILED = "UserComplaintNotRegistered";
+    String CTZ_COMPLAINT_LIST_OBTAINED = "ComplaintListObtainedCitizen";
+    String AGT_COMPLAINT_LIST_OBTAINED = "ComplaintListObtainedAgent";
+    String CTZ_COMPLAINT_DETAILS_OBTAINED = "ComplaintDetailsObtainedCitizen";
+    String AGT_COMPLAINT_DETAILS_OBTAINED = "ComplaintDetailsObtainedAgent";
+    String AGT_GROUP_ID_COMPLAINT_DETAILS_OBTAINED = "ComplaintGroupDetailsObtainedAgent";
+    String COMPLAINT_IMAGE_OBTAINED = "ComplaintImageObtained";
+    String AGT_PROFILE_OBTAINED = "AgentProfileObtained";
+    String CTZ_PROFILE_OBTAINED = "CitizenProfileObtained";
+    String RESPONSE_IMAGE_OBTAINED = "ResponseImageObtained";
+    String RESPONSE_SENT = "AgentResponseAdded";
+    String REQUEST_TIMEOUT = "timeout";
+    String CTZ_SIGN_UP_FAILED = "CitizenSignupFailed";
+    String AGT_SIGN_UP_FAILED = "AgentSignupFailed";
+    String CTZ_LOGIN_FAILED = "CitizenLoginFailed";
+    String AGT_LOGIN_FAILED = "AgentLoginFailed";
+    String NO_SUCH_USER = "NoSuchUser";
+    String INVALID_CREDENTIALS = "InvalidCredentials";
+    String CTZ_EMAIL_VER_STATUS_OBTAINED ="EmailVerificationStatus";
 
 
 
     //activity request codes
-    public static final int PICK_IMAGE = 100;
-    public static final int REQ_RELOAD_LIST = 9988;
+    int PICK_IMAGE = 100;
+    int REQ_RELOAD_LIST = 9988;
+    int REQ_SIGNUP=8574;
 
 
 
     //status codes
-    public static final String STATUS_PENDING = "PENDING";
-    public static final String STATUS_WORK_IN_PROGRESS = "WORK_IN_PROGRESS";
-    public static final String STATUS_COMPLETED = "COMPLETED";
+    String STATUS_PENDING = "PENDING";
+    String STATUS_WORK_IN_PROGRESS = "WORK_IN_PROGRESS";
+    String STATUS_COMPLETED = "COMPLETED";
 
 
 }

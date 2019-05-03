@@ -28,6 +28,7 @@ import com.quantumcoders.minorapp.misc.FetchAddressIntentService;
 import com.quantumcoders.minorapp.misc.ServerWorker;
 
 import java.util.ArrayList;
+import static com.quantumcoders.minorapp.misc.Constants.*;
 
 public class CitizenMainActivity extends AppCompatActivity implements LocationListener, Base {
 
@@ -41,7 +42,7 @@ public class CitizenMainActivity extends AppCompatActivity implements LocationLi
     public int count = 0;
     public double avglat = 0.0f, avglng = 0.0f;
 
-    int TIME_TO_UPDATE = 1000;
+    int TIME_TO_UPDATE = 1;
     int DIST_TO_UPDATE = 0;
 
     CitizenTab1 tab1 = null;
@@ -69,6 +70,9 @@ public class CitizenMainActivity extends AppCompatActivity implements LocationLi
         setContentView(R.layout.activity_citizen_main);
 
         userid = getApplicationContext().getSharedPreferences(Constants.SESSION_FILE, MODE_PRIVATE).getString(Constants.USER_ID_KEY, "");
+
+        checkVerifiedOrNot();
+
         checkLocationOnOrNot();
 
         tabLayout = findViewById(R.id.citizenTabLayout);
@@ -106,17 +110,20 @@ public class CitizenMainActivity extends AppCompatActivity implements LocationLi
         });
 
         lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, TIME_TO_UPDATE, DIST_TO_UPDATE, this);
-            locationPermitted = true;
-            System.out.println("Location - Using GPS Provider");
-        } else if (lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, TIME_TO_UPDATE, DIST_TO_UPDATE, this);
-            locationPermitted = true;
-            System.out.println("Location - Using Network Provider");
-        } else {
-            System.out.println("Location - No provider enabled");
-        }
+//        if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+//            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, TIME_TO_UPDATE, DIST_TO_UPDATE, this);
+//            locationPermitted = true;
+//            System.out.println("Location - Using GPS Provider");
+//        } else if (lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+//            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, TIME_TO_UPDATE, DIST_TO_UPDATE, this);
+//            locationPermitted = true;
+//            System.out.println("Location - Using Network Provider");
+//        } else {
+//            System.out.println("Location - No provider enabled");
+//        }
+        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, TIME_TO_UPDATE, DIST_TO_UPDATE, this);
+        locationPermitted = true;
+        System.out.println("Location - Using Network Provider");
 
     }
 
@@ -134,6 +141,7 @@ public class CitizenMainActivity extends AppCompatActivity implements LocationLi
 
     @Override
     public void onLocationChanged(Location location) {
+        System.out.println("onLocationChanged");
         if (count != 0 && count <= 10) {   //skipping first location, because i think that first location is very inaccurate
             System.out.println("Location changed " + count);
             latsum += location.getLatitude();
@@ -214,6 +222,18 @@ public class CitizenMainActivity extends AppCompatActivity implements LocationLi
         tab3.setProfileData(data);
     }
 
+    public void verificationStatusObtained(String status){
+        System.out.println("Email verification status (obtained) = "+status);
+        if(status.equals(VAL_YES)){
+            getSharedPreferences(SESSION_FILE,MODE_PRIVATE).edit().putString(VERIFIED_KEY,VAL_YES).commit();
+        } else {
+            new AlertDialog.Builder(this).setTitle("Email ID not verified")
+                    .setMessage("Please verify your email ID first. The verification mail is already sent.")
+                    .setPositiveButton("Ok",(d,w)->{d.dismiss();finish();})
+                    .create().show();
+        }
+    }
+
 
     void checkLocationOnOrNot() {
         LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -227,4 +247,15 @@ public class CitizenMainActivity extends AppCompatActivity implements LocationLi
             }).create().show();
         }
     }
+
+    void checkVerifiedOrNot(){
+        String verified = getSharedPreferences(SESSION_FILE,MODE_PRIVATE).getString(VERIFIED_KEY,VAL_NO);
+        System.out.println("Email verification status (stored) = "+verified);
+        if(verified.equals(VAL_NO)){
+            //confirm from server
+            ServerWorker.checkEmailVerifictionStatus(this,userid);
+        }
+    }
+
+
 }

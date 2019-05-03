@@ -92,5 +92,8 @@ public class ServerWorker {
         tsk.execute(Constants.CTZ_PROFILE_METHOD, id);
     }
 
-
+    public static void checkEmailVerifictionStatus(AppCompatActivity activity, String userid){
+        ServerTask tsk = new ServerTask(activity,new Handler());
+        tsk.execute(Constants.CTZ_EMAIL_VERIFICATION_STATUS,userid);
+    }
 }

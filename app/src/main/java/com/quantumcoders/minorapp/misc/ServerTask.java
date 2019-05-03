@@ -56,6 +56,7 @@ import static com.quantumcoders.minorapp.misc.Constants.AGT_RELOAD_COMPLAINT_LIS
 import static com.quantumcoders.minorapp.misc.Constants.AGT_SIGN_UP_FAILED;
 import static com.quantumcoders.minorapp.misc.Constants.AGT_SIGN_UP_METHOD;
 import static com.quantumcoders.minorapp.misc.Constants.AGT_SIGN_UP_SUCCESS;
+import static com.quantumcoders.minorapp.misc.Constants.CTZ_EMAIL_VERIFICATION_STATUS;
 import static com.quantumcoders.minorapp.misc.Constants.CITIZEN;
 import static com.quantumcoders.minorapp.misc.Constants.COMPLAINT_IMAGE_OBTAINED;
 import static com.quantumcoders.minorapp.misc.Constants.COMPLAINT_REG_FAILED;
@@ -63,6 +64,7 @@ import static com.quantumcoders.minorapp.misc.Constants.COMPLAINT_REG_SUCCESS;
 import static com.quantumcoders.minorapp.misc.Constants.COMPLT_IMAGE_PREFIX;
 import static com.quantumcoders.minorapp.misc.Constants.CTZ_COMPLAINT_DETAILS_OBTAINED;
 import static com.quantumcoders.minorapp.misc.Constants.CTZ_COMPLAINT_LIST_OBTAINED;
+import static com.quantumcoders.minorapp.misc.Constants.CTZ_EMAIL_VERIFICATION_URL;
 import static com.quantumcoders.minorapp.misc.Constants.CTZ_LOAD_COMPLAINT_DETAILS;
 import static com.quantumcoders.minorapp.misc.Constants.CTZ_LOGIN_FAILED;
 import static com.quantumcoders.minorapp.misc.Constants.CTZ_LOGIN_METHOD;
@@ -74,6 +76,7 @@ import static com.quantumcoders.minorapp.misc.Constants.CTZ_RELOAD_COMPLAINT_LIS
 import static com.quantumcoders.minorapp.misc.Constants.CTZ_SIGN_UP_FAILED;
 import static com.quantumcoders.minorapp.misc.Constants.CTZ_SIGN_UP_METHOD;
 import static com.quantumcoders.minorapp.misc.Constants.CTZ_SIGN_UP_SUCCESS;
+import static com.quantumcoders.minorapp.misc.Constants.CTZ_EMAIL_VER_STATUS_OBTAINED;
 import static com.quantumcoders.minorapp.misc.Constants.FILE_COMPLAINT_METHOD;
 import static com.quantumcoders.minorapp.misc.Constants.FILE_COMPLAINT_URL;
 import static com.quantumcoders.minorapp.misc.Constants.LOAD_COMPLAINT_DETAILS_AGENT_URL;
@@ -184,6 +187,9 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
             } else if(method.equals(CTZ_PROFILE_METHOD)){
 
                 return loadCitizenProfile(param);
+            } else if(method.equals(CTZ_EMAIL_VERIFICATION_STATUS)){
+
+                return checkEmailVerificationStatus(param);
             }
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -280,7 +286,6 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
             });
         } else if (s.equals(RESPONSE_SENT)) {
 
-            System.out.println("Response sent!!!!!!!!!!!!!");
             hnd.post(()->{
                 ((SendResponseActivity)activity).onResponseSent();
             });
@@ -296,6 +301,11 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
                 ((CitizenMainActivity)activity).profileDataObtained(response);
             });
 
+        } else if(s.equals(CTZ_EMAIL_VER_STATUS_OBTAINED)){
+
+            hnd.post(()->{
+                ((CitizenMainActivity)activity).verificationStatusObtained(response[1]);
+            });
         } else if (s.equals(NO_INTERNET)) {
             ((Base) activity).noInternet();
         } else if (s.contains(REQUEST_TIMEOUT)) {
@@ -771,6 +781,18 @@ public class ServerTask extends AsyncTask<String, String[], String[]> {
 
         return retdata;
 
+    }
+
+    public String[] checkEmailVerificationStatus(String... param) throws IOException{
+        OkHttpClient client = new OkHttpClient();
+        RequestBody requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                .addFormDataPart(PARAM_CTZ_ID,param[1]).build();
+
+        Request request = new Request.Builder().url(CTZ_EMAIL_VERIFICATION_URL).post(requestBody).build();
+        Response rsp = client.newCall(request).execute();
+
+        String str = rsp.body().string();
+        return stringArrayOf(CTZ_EMAIL_VER_STATUS_OBTAINED,str.trim());
     }
 
 
